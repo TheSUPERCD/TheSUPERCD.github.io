@@ -546,7 +546,7 @@ button {
     transform: translate3d(0, 0, 1px);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    background-color: #ff895d; }
+    background-color: black; }
     @media screen and (min-width: 768px) {
       .portfolio__item-preview {
         background-size: 115% auto; } }
@@ -731,29 +731,29 @@ button {
       .hero__content {
         padding-bottom: 10rem; } }
   .hero__logo {
-    width: 6.667rem;
+    width: 10rem;
     height: auto;
-    margin-bottom: 4rem;
+    margin-bottom: 0.8rem;
     position: relative; }
     @media screen and (min-width: 768px) {
       .hero__logo {
-        width: 5rem;
-        margin-bottom: 3rem; } }
+        width: 8rem;
+        margin-bottom: 1rem; } }
     .hero__logo-img {
       width: 100%;
       height: auto; }
     .hero__logo:after {
       content: "";
       position: absolute;
-      bottom: -2.5rem;
+      bottom: -1rem;
       left: 0;
-      width: 6.667rem;
+      width: 9rem;
       height: 5px;
       background-color: #c94747; }
       @media screen and (min-width: 768px) {
         .hero__logo:after {
-          width: 5rem;
-          bottom: -1.5rem; } }
+          width: 7.5rem;
+          bottom: -1rem; } }
   .hero__links {
     margin-top: 2.5rem; }
     @media screen and (min-width: 768px) {
