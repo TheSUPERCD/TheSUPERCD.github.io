@@ -534,7 +534,7 @@ button {
   .portfolio__item-preview {
     position: relative;
     background-repeat: no-repeat;
-    background-size: 125% auto;
+    background-size: 100% 100%;
     background-position: center top;
     -o-object-fit: cover;
     object-fit: cover;
@@ -549,15 +549,15 @@ button {
     background-color: black; }
     @media screen and (min-width: 768px) {
       .portfolio__item-preview {
-        background-size: 115% auto; } }
+        background-size: 115% 115%; } }
     @media screen and (min-width: 1200px) {
       .portfolio__item-preview {
         height: 30rem; } }
     .portfolio__item-preview:hover {
-      background-size: 140% auto; }
+      background-size: 120% 120%; }
       @media screen and (min-width: 768px) {
         .portfolio__item-preview:hover {
-          background-size: 130% auto; } }
+          background-size: 125% 125%; } }
     .portfolio__item-preview--is-open {
       -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, 0.125);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.125); }
