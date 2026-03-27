@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JD Portfolio | EEE & CS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- THEME VARIABLES --- */
+        :root {
+            --bg-color: #fafafa;
+            --text-color: #1a1a1a;
+            --text-muted: #555555;
+            --accent-color: #0070f3;
+            --card-bg: #ffffff;
+            --card-shadow: 0 8px 16px rgba(0,0,0,0.05);
+            --transition-speed: 0.3s;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f1115; 
+            --text-color: #f1f1f1;
+            --text-muted: #8b949e;
+            --accent-color: #64ffda; 
+            --card-bg: #161b22;
+            --card-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+
+        /* --- GLOBAL STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%; 
+            overscroll-behavior-y: none; 
+        }
+
+        a { text-decoration: none; color: var(--accent-color); transition: opacity 0.3s; }
+        a:hover { opacity: 0.8; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; 
+            padding: 20px 10%; display: flex;
+            justify-content: space-between; align-items: center; flex-wrap: wrap;
+            background-color: rgba(var(--bg-color), 0.9); 
+            
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
+            transform: translate3d(0, 0, 0); -webkit-transform: translate3d(0, 0, 0);
+            backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            will-change: transform, background-color;
+            
+            z-index: 1000; transition: background-color var(--transition-speed); 
+        }
+
+        .nav-links { list-style: none; display: flex; gap: 25px; }
+        .nav-links a {
+            color: var(--text-color); font-weight: 600; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 1px; transition: color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
+
+        #theme-toggle {
+            background: transparent; 
+            border: 2px solid var(--accent-color); 
+            color: var(--accent-color);
+            width: 42px; 
+            height: 42px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+        
+        #theme-toggle svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: currentColor; 
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        #theme-toggle:hover { 
+            background: var(--accent-color); 
+            color: var(--bg-color); 
+            transform: scale(1.1); 
+        }
+
+        [data-theme="dark"] #theme-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        /* --- PAGE LAYOUT & SMOOTH 3D ANIMATIONS --- */
+        .page-section {
+            min-height: 100vh; min-height: 100dvh; 
+            padding: 100px 10%; display: flex; flex-direction: column; justify-content: center;
+            
+            transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 1s ease;
+            transform-style: preserve-3d; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+            opacity: 0; will-change: transform, opacity;
+        }
+
+        .section-hidden-top { transform: perspective(1500px) rotateX(45deg) scale(0.9); transform-origin: bottom center; }
+        .section-hidden-bottom { transform: perspective(1500px) rotateX(-45deg) scale(0.9); transform-origin: top center; }
+        .section-visible { transform: perspective(1500px) rotateX(0deg) scale(1); opacity: 1; }
+
+        .section-content { width: 100%; max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; }
+        .hero-content-wrapper { display: flex; justify-content: space-between; align-items: center; gap: 40px; }
+
+        /* --- SCI-FI TEXT & TYPOGRAPHY --- */
+        .scifi-text { font-family: monospace; overflow-wrap: break-word; }
+        
+        .hero-text h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 10px; }
+        .hero-text h2 { font-size: 2rem; color: var(--text-muted); margin-bottom: 20px; }
+        .section-title { font-size: 2.5rem; margin-bottom: 20px; color: var(--accent-color); }
+
+        .btn-primary {
+            display: inline-block; padding: 12px 30px; border: 2px solid var(--accent-color);
+            border-radius: 4px; font-weight: 600; margin-top: 10px; cursor: pointer; transition: all 0.3s;
+        }
+        .btn-primary:hover { background-color: var(--accent-color); color: var(--bg-color); }
+
+        /* --- THE CANVAS FLIPBOOK STYLES --- */
+        .profile-pic-container {
+            width: 350px; height: 350px; border-radius: 50%; 
+            border: 2px solid var(--accent-color);
+            background-color: var(--card-bg); 
+            display: flex; align-items: center; justify-content: center; 
+            color: var(--text-muted); flex-shrink: 0; 
+            overflow: hidden; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        #theme-canvas { width: 100%; height: 100%; }
+
+        /* --- CAROUSEL (PROJECTS & EXPERIENCE) --- */
+        .carousel-wrapper { position: relative; display: flex; align-items: flex-start; margin-top: 40px; }
+
+        .projects-carousel {
+            display: flex; overflow-x: auto; gap: 40px; padding: 20px 10px 150px 10px;
+            scroll-snap-type: x mandatory; scroll-behavior: smooth; width: 100%;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .projects-carousel::-webkit-scrollbar { display: none; }
+
+        .carousel-btn {
+            position: absolute; top: 180px; transform: translateY(-50%);
+            background-color: var(--card-bg); color: var(--accent-color); border: 2px solid var(--accent-color);
+            width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+            z-index: 100; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: all 0.3s ease;
+        }
+        .carousel-btn:hover { background-color: var(--accent-color); color: var(--bg-color); transform: translateY(-50%) scale(1.1); }
+        .left-btn { left: -25px; } .right-btn { right: -25px; }
+
+        .project-card {
+            flex: 0 0 350px; scroll-snap-align: center; background-color: var(--card-bg);
+            border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease; align-self: flex-start;
+        }
+        .project-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+
+        .project-thumb {
+            width: 100%; height: 200px; background: linear-gradient(45deg, var(--bg-color), var(--card-bg));
+            border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-weight: 600;
+        }
+
+        .project-info { padding: 25px; display: flex; flex-direction: column; }
+        .project-info h3 { font-size: 1.4rem; margin-bottom: 10px; }
+        .tech-stack {
+            margin-top: 15px; font-family: monospace; color: var(--accent-color); font-size: 0.85rem;
+            display: flex; flex-wrap: wrap; gap: 8px;
+        }
+
+        .project-details {
+            max-height: 0; opacity: 0; overflow: hidden; padding: 0 25px; 
+            transition: max-height 0.5s ease, opacity 0.4s ease, padding 0.5s ease;
+        }
+        .project-card:hover .project-details { max-height: 500px; opacity: 1; padding: 0 25px 30px 25px; }
+
+        .custom-list { list-style-type: none; color: var(--text-muted); }
+        .custom-list li { position: relative; padding-left: 20px; margin-bottom: 10px; }
+        .custom-list li::before { content: "▹"; position: absolute; left: 0; color: var(--accent-color); }
+
+        /* --- CONTACT & SOCIALS --- */
+        .social-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; margin: 40px auto 0; }
+        .social-card {
+            display: flex; align-items: center; justify-content: center; gap: 12px; padding: 15px;
+            background-color: var(--card-bg); border: 1px solid var(--text-muted); border-radius: 8px;
+            color: var(--text-color); font-weight: 600; transition: all 0.3s;
+        }
+        
+        /* Smooth scale for the icons on hover */
+        .social-card svg { transition: transform 0.3s ease; }
+        .social-card:hover { border-color: var(--accent-color); color: var(--accent-color); transform: translateY(-3px); }
+        .social-card:hover svg { transform: scale(1.15); }
+
+        /* =========================================
+           RESPONSIVE DESIGN (MEDIA QUERIES)
+           ========================================= */
+
+        @media (max-width: 992px) {
+            .hero-text h1 { font-size: 3rem; }
+            .hero-text h2 { font-size: 1.5rem; }
+            .profile-pic-container { width: 280px; height: 280px; }
+            .page-section { padding: 100px 5%; } 
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 5%; gap: 15px; }
+            .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 5px; }
+            .nav-links a { font-size: 0.75rem; } 
+            
+            .hero-content-wrapper { flex-direction: column-reverse; text-align: center; gap: 30px; }
+            .profile-pic-container { width: 220px; height: 220px; margin: 0 auto; }
+            .hero-text p { margin: 0 auto 30px auto; }
+            
+            .hero-text h1 { font-size: 2.5rem; }
+            .section-title { font-size: 2rem; }
+            .page-section { padding: 120px 5% 80px 5%; } 
+            
+            .project-card { flex: 0 0 300px; } 
+            .carousel-btn { display: none; } 
+
+            .social-grid { grid-template-columns: 1fr; max-width: 350px; margin: 40px auto 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#home" style="font-size: 1.5rem; font-weight: 700;">JD.</a>
+        <ul class="nav-links">
+            <li><a href="#home" class="nav-item active">Home</a></li>
+            <li><a href="#about" class="nav-item">About</a></li>
+            <li><a href="#experience" class="nav-item">Experience</a></li>
+            <li><a href="#projects" class="nav-item">Projects</a></li>
+            <li><a href="#contact" class="nav-item">Contact</a></li>
+        </ul>
+        
+        <button id="theme-toggle" aria-label="Toggle Theme">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+        </button>
+    </nav>
+
+    <section id="home" class="page-section section-hidden-bottom">
+        <div class="section-content">
+            <div class="hero-content-wrapper">
+                <div class="hero-text">
+                    <p class="scifi-text" style="color: var(--accent-color); margin-bottom: 10px; display: block;">Hi, my name is</p>
+                    <h1 class="scifi-text" style="display: block;">John Doe.</h1>
+                    <h2 class="scifi-text" style="display: block;">Hardware Logic. Software Brains.</h2>
+                    <p class="scifi-text" style="max-width: 600px; margin-bottom: 30px; color: var(--text-muted); display: block;">I'm an Electronics & Electrical Engineer with a minor in CS. I specialize in building scalable embedded systems, robust algorithms, and the PCBs that tie them together.</p>
+                    <a href="#projects" class="btn-primary scifi-text">View Projects</a>
+                </div>
+                
+                <div class="profile-pic-container">
+                    <canvas id="theme-canvas" width="350" height="350"></canvas>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="page-section section-hidden-bottom">
+        <div class="section-content">
+            <h2 class="section-title scifi-text" style="display: block;">About Me</h2>
+            <p class="scifi-text" style="max-width: 800px; color: var(--text-muted); font-size: 1.1rem; margin-bottom: 40px; display: block;">
+                My interest in engineering started with tearing apart radios and evolved into designing custom PCBs and writing the C++ backend services that process their data. My dual background in EEE and CS allows me to understand systems from the transistor level all the way up to the cloud.
+            </p>
+
+            <h3 class="scifi-text" style="font-size: 1.8rem; margin-bottom: 20px; color: var(--accent-color); display: block;">Technical Arsenal</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
+                <div>
+                    <h4 class="scifi-text" style="margin-bottom: 15px; display: block;">Hardware & Electronics</h4>
+                    <ul class="custom-list">
+                        <li class="scifi-text">Circuit Design & Analysis</li>
+                        <li class="scifi-text">PCB Layout (Altium, KiCad)</li>
+                        <li class="scifi-text">Microcontrollers (STM32, ESP32)</li>
+                        <li class="scifi-text">FPGA & HDL (Verilog)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="scifi-text" style="margin-bottom: 15px; display: block;">Software & CS</h4>
+                    <ul class="custom-list">
+                        <li class="scifi-text">C / C++ (Embedded Systems)</li>
+                        <li class="scifi-text">Python (Data Analysis)</li>
+                        <li class="scifi-text">Data Structures & Algorithms</li>
+                        <li class="scifi-text">RTOS (FreeRTOS)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="page-section section-hidden-bottom">
+        <div class="section-content" style="max-width: 100%;">
+            <h2 class="section-title scifi-text" style="display: block;">Where I've Worked</h2>
+            <p class="scifi-text" style="color: var(--text-muted); padding-left: 10px; display: block;">Scroll horizontally to view. Hover to expand details.</p>
+
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left-btn">❮</button>
+                <button class="carousel-btn right-btn">❯</button>
+
+                <div class="projects-carousel">
+                    <div class="project-card">
+                        <div class="project-thumb"><span class="scifi-text">[ Company Logo 1 ]</span></div>
+                        <div class="project-info">
+                            <h3 class="scifi-text" style="display: block;">Hardware Engineer Intern</h3>
+                            <p class="scifi-text" style="color: var(--text-muted); font-size: 0.95rem; display: block;">TechNova Solutions | Jun 2024 - Aug 2024</p>
+                            <div class="tech-stack">
+                                <span class="scifi-text">Altium</span> <span class="scifi-text">C++</span> <span class="scifi-text">Oscilloscopes</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <hr style="border-top: 1px solid var(--text-muted); opacity: 0.3; margin-bottom: 15px;">
+                            <ul class="custom-list">
+                                <li class="scifi-text">Assisted in schematic capture and layout of a 6-layer high-speed PCB.</li>
+                                <li class="scifi-text">Developed automated testing scripts in Python for hardware validation.</li>
+                                <li class="scifi-text">Diagnosed EMI issues during EMI/EMC compliance testing.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-thumb"><span class="scifi-text">[ Company Logo 2 ]</span></div>
+                        <div class="project-info">
+                            <h3 class="scifi-text" style="display: block;">Embedded Systems Researcher</h3>
+                            <p class="scifi-text" style="color: var(--text-muted); font-size: 0.95rem; display: block;">University Robotics Lab | Jan 2023 - Present</p>
+                            <div class="tech-stack">
+                                <span class="scifi-text">ROS</span> <span class="scifi-text">ARM Cortex-M</span> <span class="scifi-text">FreeRTOS</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <hr style="border-top: 1px solid var(--text-muted); opacity: 0.3; margin-bottom: 15px;">
+                            <ul class="custom-list">
+                                <li class="scifi-text">Programmed motor control algorithms for an autonomous ground vehicle.</li>
+                                <li class="scifi-text">Integrated LiDAR and IMU sensors via I2C and SPI buses.</li>
+                                <li class="scifi-text">Co-authored a paper on low-power sensor fusion techniques.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="page-section section-hidden-bottom">
+        <div class="section-content" style="max-width: 100%;">
+            <h2 class="section-title scifi-text" style="display: block;">My Projects</h2>
+            <p class="scifi-text" style="color: var(--text-muted); padding-left: 10px; display: block;">Scroll horizontally to view. Hover to expand details.</p>
+
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left-btn">❮</button>
+                <button class="carousel-btn right-btn">❯</button>
+
+                <div class="projects-carousel">
+                    <div class="project-card">
+                        <div class="project-thumb"><span class="scifi-text">[ Drone Thumbnail ]</span></div>
+                        <div class="project-info">
+                            <h3 class="scifi-text" style="display: block;">Autonomous Flight Controller</h3>
+                            <p class="scifi-text" style="color: var(--text-muted); font-size: 0.95rem; display: block;">Custom STM32 PCB with C++ firmware implementing PID control loops.</p>
+                            <div class="tech-stack">
+                                <span class="scifi-text">C++</span> <span class="scifi-text">STM32</span> <span class="scifi-text">KiCad</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <hr style="border-top: 1px solid var(--text-muted); opacity: 0.3; margin-bottom: 15px;">
+                            <ul class="custom-list">
+                                <li class="scifi-text">Designed 4-layer PCB handling 20A current peaks.</li>
+                                <li class="scifi-text">Wrote custom I2C drivers for the MPU6050 IMU.</li>
+                                <li class="scifi-text">Achieved stable hover in wind speeds up to 15mph.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-thumb"><span class="scifi-text">[ FPGA Thumbnail ]</span></div>
+                        <div class="project-info">
+                            <h3 class="scifi-text" style="display: block;">FPGA Audio Synthesizer</h3>
+                            <p class="scifi-text" style="color: var(--text-muted); font-size: 0.95rem; display: block;">Polyphonic audio synthesizer on an Artix-7 handling I2S protocols.</p>
+                            <div class="tech-stack">
+                                <span class="scifi-text">Verilog</span> <span class="scifi-text">Vivado</span> <span class="scifi-text">DSP</span>
+                            </div>
+                        </div>
+                        <div class="project-details">
+                            <hr style="border-top: 1px solid var(--text-muted); opacity: 0.3; margin-bottom: 15px;">
+                            <ul class="custom-list">
+                                <li class="scifi-text">Implemented 16-voice polyphony entirely in hardware logic.</li>
+                                <li class="scifi-text">Designed custom FIR digital filters for audio shaping.</li>
+                                <li class="scifi-text">Interfaced with external DAC via custom SPI protocol.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="page-section section-hidden-bottom">
+        <div class="section-content" style="text-align: center;">
+            <h2 class="section-title scifi-text" style="justify-content: center; display: block;">Get In Touch</h2>
+            <p class="scifi-text" style="max-width: 500px; color: var(--text-muted); margin: 0 auto 30px; display: block;">
+                I'm currently looking for new opportunities. Whether you have a question, a project idea, or just want to say hi, my inbox is open!
+            </p>
+
+            <div class="social-grid">
+                <a href="https://github.com" target="_blank" class="social-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                    </svg>
+                    <span class="scifi-text">GitHub</span>
+                </a>
+                
+                <a href="https://linkedin.com" target="_blank" class="social-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
+                    <span class="scifi-text">LinkedIn</span>
+                </a>
+
+                <a href="mailto:hello@example.com" class="social-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span class="scifi-text">Email Me</span>
+                </a>
+
+                <a href="#" target="_blank" class="social-card">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span class="scifi-text">Resume / CV</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. PRE-SCRAMBLE ENGINE ---
+            const hackerChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!<>-_\\/[]{}—=+*^?#_";
+            
+            function scrambleText(element) {
+                if (!element.dataset.original) return;
+                let scrambled = "";
+                const text = element.dataset.original;
+                for(let i = 0; i < text.length; i++) {
+                    if(text[i] === " " || text[i] === "\n") {
+                        scrambled += text[i];
+                    } else {
+                        scrambled += hackerChars[Math.floor(Math.random() * hackerChars.length)];
+                    }
+                }
+                element.innerText = scrambled;
+            }
+
+            document.querySelectorAll('.scifi-text').forEach(el => {
+                el.dataset.original = el.innerText;
+                scrambleText(el);
+            });
+
+            // --- 2. THE CANVAS FLIPBOOK ENGINE ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const htmlElement = document.documentElement;
+            const canvas = document.getElementById('theme-canvas');
+            const ctx = canvas ? canvas.getContext('2d') : null;
+
+            // === CONFIGURATION ===
+            const TOTAL_FRAMES = 160; 
+            const FRAME_FOLDER = "frames"; 
+            const FRAME_PREFIX = "ezgif-frame-"; 
+            const FRAME_EXT = ".jpg"; 
+            
+            const frames = [];
+            let currentFrameIndex = 0; 
+            let flipbookPlayId = null;
+            let targetFrame = 0;
+
+            if (ctx) {
+                for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                    const img = new Image();
+                    img.src = `${FRAME_FOLDER}/${FRAME_PREFIX}${i.toString().padStart(3, "0")}${FRAME_EXT}`;
+                    frames.push(img);
+                }
+                frames[0].onload = () => drawImageCover(frames[0]);
+            }
+
+            function drawImageCover(img) {
+                if (!ctx) return;
+                const hRatio = canvas.width / img.width;
+                const vRatio = canvas.height / img.height;
+                const ratio  = Math.max(hRatio, vRatio); 
+                
+                const centerShift_x = (canvas.width - img.width * ratio) / 2;
+                const centerShift_y = (canvas.height - img.height * ratio) / 2;
+                
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, img.width, img.height, centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+            }
+
+            function updateFlipbook() {
+                if (currentFrameIndex === targetFrame) {
+                    cancelAnimationFrame(flipbookPlayId);
+                    return;
+                }
+
+                if (currentFrameIndex < targetFrame) currentFrameIndex++;
+                if (currentFrameIndex > targetFrame) currentFrameIndex--;
+
+                if (frames[currentFrameIndex] && frames[currentFrameIndex].complete) {
+                    drawImageCover(frames[currentFrameIndex]);
+                }
+
+                flipbookPlayId = requestAnimationFrame(updateFlipbook);
+            }
+
+            const savedTheme = localStorage.getItem('portfolioTheme') || 'dark';
+            htmlElement.setAttribute('data-theme', savedTheme);
+
+            if (savedTheme === 'light') {
+                currentFrameIndex = TOTAL_FRAMES - 1; 
+                targetFrame = TOTAL_FRAMES - 1;
+            } else {
+                currentFrameIndex = 0; 
+                targetFrame = 0;
+            }
+
+            themeToggleBtn.addEventListener('click', () => {
+                const newTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('portfolioTheme', newTheme);
+
+                cancelAnimationFrame(flipbookPlayId);
+
+                if (newTheme === 'light') {
+                    targetFrame = TOTAL_FRAMES - 1; 
+                } else {
+                    targetFrame = 0; 
+                }
+
+                updateFlipbook();
+            });
+
+            // --- 3. MULTI-CAROUSEL ENGINE ---
+            document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+                const carousel = wrapper.querySelector('.projects-carousel');
+                const scrollLeftBtn = wrapper.querySelector('.left-btn');
+                const scrollRightBtn = wrapper.querySelector('.right-btn');
+
+                if (carousel && scrollLeftBtn && scrollRightBtn) {
+                    scrollLeftBtn.addEventListener('click', () => { carousel.scrollBy({ left: -390, behavior: 'smooth' }); });
+                    scrollRightBtn.addEventListener('click', () => { carousel.scrollBy({ left: 390, behavior: 'smooth' }); });
+                }
+            });
+
+            // --- 4. NAVBAR SCROLL INTERCEPTOR ---
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if(targetId.startsWith('#')) {
+                        e.preventDefault();
+                        const targetSection = document.getElementById(targetId.substring(1));
+                        if (targetSection) {
+                            history.pushState(null, null, targetId);
+                            window.scrollTo({ top: targetSection.offsetTop, behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+
+            // --- 5. SCI-FI DECRYPTION ENGINE ---
+            const SCIFI_SPEEDUP = 1.0; 
+            const BASE_DURATION_MS = 1200; 
+            const INTERVAL_MS = 30; 
+
+            function playSciFiAnimation(element) {
+                if(element.dataset.animating === "true") return;
+                
+                const originalText = element.dataset.original;
+                if(!originalText || originalText.length === 0) return;
+
+                element.dataset.animating = "true";
+                let iteration = 0;
+                
+                const totalFrames = BASE_DURATION_MS / INTERVAL_MS;
+                const dynamicIncrement = (originalText.length / totalFrames) * SCIFI_SPEEDUP;
+                
+                const interval = setInterval(() => {
+                    element.innerText = originalText
+                        .split("")
+                        .map((letter, index) => {
+                            if (letter === " " || letter === "\n") return letter;
+                            if (index < Math.floor(iteration)) return originalText[index];
+                            return hackerChars[Math.floor(Math.random() * hackerChars.length)];
+                        })
+                        .join("");
+                    
+                    if (iteration >= originalText.length) {
+                        clearInterval(interval);
+                        element.dataset.animating = "false";
+                        element.innerText = originalText; 
+                    }
+                    
+                    iteration += dynamicIncrement; 
+                }, INTERVAL_MS);
+
+                element.dataset.intervalId = interval;
+            }
+
+            // --- 6. THE DUAL-OBSERVER PATTERN ---
+            const sections = document.querySelectorAll('.page-section');
+            const navLinks = document.querySelectorAll('.nav-item');
+
+            const layoutObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const section = entry.target;
+
+                    if (entry.isIntersecting) {
+                        section.classList.remove('section-hidden-top', 'section-hidden-bottom');
+                        section.classList.add('section-visible');
+
+                        const id = section.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    } else {
+                        section.classList.remove('section-visible');
+                        if (entry.boundingClientRect.y < 0) {
+                            section.classList.add('section-hidden-top');
+                        } else {
+                            section.classList.add('section-hidden-bottom');
+                        }
+
+                        const scifiTexts = section.querySelectorAll('.scifi-text');
+                        scifiTexts.forEach(el => {
+                            if (el.dataset.intervalId) {
+                                clearInterval(el.dataset.intervalId);
+                                el.dataset.animating = "false";
+                            }
+                            scrambleText(el);
+                        });
+                    }
+                });
+            }, { root: null, threshold: 0.05, rootMargin: "0px" });
+
+            const textObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const scifiTexts = entry.target.querySelectorAll('.scifi-text');
+                        scifiTexts.forEach(textEl => playSciFiAnimation(textEl));
+                    }
+                });
+            }, { root: null, threshold: 0, rootMargin: "-25% 0px -25% 0px" });
+
+            sections.forEach(section => { 
+                layoutObserver.observe(section); 
+                textObserver.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
