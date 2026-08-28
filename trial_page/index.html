@@ -510,7 +510,7 @@
             let targetFrame = 0;
 
             if (ctx) {
-                for (let i = 1; i <= TOTAL_FRAMES; i++) {
+                for (let i = 2; i <= TOTAL_FRAMES; i++) {
                     const img = new Image();
                     img.src = `${FRAME_FOLDER}/${FRAME_PREFIX}${i.toString().padStart(4, "0")}${FRAME_EXT}`;
                     frames.push(img);
