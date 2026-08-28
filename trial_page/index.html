@@ -499,9 +499,9 @@
             const ctx = canvas ? canvas.getContext('2d') : null;
 
             // === CONFIGURATION ===
-            const TOTAL_FRAMES = 160; 
+            const TOTAL_FRAMES = 127; 
             const FRAME_FOLDER = "frames"; 
-            const FRAME_PREFIX = "ezgif-frame-"; 
+            const FRAME_PREFIX = "output-"; 
             const FRAME_EXT = ".jpg"; 
             
             const frames = [];
@@ -512,7 +512,7 @@
             if (ctx) {
                 for (let i = 1; i <= TOTAL_FRAMES; i++) {
                     const img = new Image();
-                    img.src = `${FRAME_FOLDER}/${FRAME_PREFIX}${i.toString().padStart(3, "0")}${FRAME_EXT}`;
+                    img.src = `${FRAME_FOLDER}/${FRAME_PREFIX}${i.toString().padStart(4, "0")}${FRAME_EXT}`;
                     frames.push(img);
                 }
                 frames[0].onload = () => drawImageCover(frames[0]);
