@@ -1,34 +1,64 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" class="is-loading">
 	<head>
 		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="alternate icon" type="image/png" href="/favicon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+		<link rel="apple-touch-icon" href="/favicon.png" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
-		<link href="/_app/immutable/entry/start.BGXmDDN8.js" rel="modulepreload">
-		<link href="/_app/immutable/chunks/C5SgzOVz.js" rel="modulepreload">
+		<script>
+			(function () {
+				try {
+					var t = localStorage.getItem('portfolioTheme');
+					if (t === 'light' || t === 'dark') {
+						document.documentElement.setAttribute('data-theme', t);
+					}
+				} catch (e) {}
+			})();
+		</script>
+		<link href="/_app/immutable/entry/start.CbjIzFtb.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/CgG47mmE.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/Czbms1iO.js" rel="modulepreload">
-		<link href="/_app/immutable/entry/app.Bl4jWru9.js" rel="modulepreload">
+		<link href="/_app/immutable/entry/app.CXjCUhOR.js" rel="modulepreload">
 		<link href="/_app/immutable/chunks/xihTtKlq.js" rel="modulepreload">
-		<link href="/_app/immutable/nodes/0.D7e3WRKy.js" rel="modulepreload">
-		<link href="/_app/immutable/chunks/hR_oLFja.js" rel="modulepreload">
+		<link href="/_app/immutable/nodes/0.ByWh7Yvk.js" rel="modulepreload">
+		<link href="/_app/immutable/chunks/DKOJeSf7.js" rel="modulepreload">
 		
-		<link href="/_app/immutable/assets/0.Bc68hwWd.css" rel="stylesheet">
+		<link href="/_app/immutable/assets/Navbar.CXyU_8cf.css" rel="stylesheet">
+		<link href="/_app/immutable/assets/0.FW61VMqs.css" rel="stylesheet">
+		<noscript>
+			<style>
+				html.is-loading,
+				html.is-loading body {
+					overflow: auto !important;
+					height: auto !important;
+				}
+				html.is-loading #page-content {
+					opacity: 1 !important;
+					visibility: visible !important;
+					pointer-events: auto !important;
+				}
+				.loading-screen {
+					display: none !important;
+				}
+			</style>
+		</noscript>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">
 			<script>
 				{
-					__sveltekit_1dms3vi = {
+					__sveltekit_m7nx9w = {
 						base: ""
 					};
 
 					const element = document.currentScript.parentElement;
 
 					Promise.all([
-						import("/_app/immutable/entry/start.BGXmDDN8.js"),
-						import("/_app/immutable/entry/app.Bl4jWru9.js")
+						import("/_app/immutable/entry/start.CbjIzFtb.js"),
+						import("/_app/immutable/entry/app.CXjCUhOR.js")
 					]).then(([kit, app]) => {
 						kit.start(app, element);
 					});
