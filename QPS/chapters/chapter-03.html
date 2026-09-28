@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>PDE Discretization (FDM/FEM) & Sparse Storage Schemes | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-03" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-02.html" class="btn-nav-control" title="Previous: Mathematical Foundations: Linear Algebra & Vector Spaces">← Prev</a>
+      <a href="chapter-04.html" class="btn-nav-control" title="Next: Direct Solvers, Factorization & TDMA">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 03</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">PDE Discretization (FDM/FEM) & Sparse Storage Schemes</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-03" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-03-discretization-of-pdes--sparse-matrix-assembly">Chapter 03: Discretization of PDEs &amp; Sparse Matrix Assembly</h1>
+<hr/>
+<h2 id="1-physical-governing-equations-and-problem-formulation">1. Physical Governing Equations and Problem Formulation</h2>
+<p>In scientific computing, physical conservation laws (mass, momentum, energy) are expressed as Partial Differential Equations (PDEs):</p>
+<h3 id="11-one-dimensional-steady-heat-conduction">1.1 One-Dimensional Steady Heat Conduction</h3>
+<p>For a 1D heat conducting rod of thermal conductivity <span class="math inline">\(k\)</span>: <span class="math display">\[\frac{d}{dx} \left( k \frac{dT}{dx} \right) = 0 \quad \xrightarrow{\text{constant } k} \quad \frac{d^2 T}{dx^2} = 0, \quad 0 \le x \le L\]</span> Subject to boundary conditions: <span class="math display">\[T(0) = T_A, \quad T(L) = T_B\]</span></p>
+<h3 id="12-two-dimensional-laplace-and-poisson-equations">1.2 Two-Dimensional Laplace and Poisson Equations</h3>
+<p>In a 2D planar domain <span class="math inline">\(\Omega \subset \mathbb{R}^2\)</span>: <span class="math display">\[\nabla^2 T = \frac{\partial^2 T}{\partial x^2} + \frac{\partial^2 T}{\partial y^2} = f(x, y)\]</span></p>
+<ul>
+<li>If <span class="math inline">\(f(x, y) = 0\)</span>: <strong>Laplace Equation</strong> (steady potential flow, electrostatics, source-free heat conduction).</li>
+<li>If <span class="math inline">\(f(x, y) \ne 0\)</span>: <strong>Poisson Equation</strong> (heat conduction with internal volumetric heat generation, pressure Poisson equation in incompressible CFD).</li>
+</ul>
+<h3 id="13-classification-of-linear-boundary-conditions">1.3 Classification of Linear Boundary Conditions</h3>
+<p>Any linear boundary condition on <span class="math inline">\(\Gamma = \partial \Omega\)</span> belongs to one of three types:</p>
+<ol type="1">
+<li><strong>Dirichlet Boundary Condition (Type I / Essential)</strong>:
+<ul>
+<li>Prescribes the value of the variable itself: <span class="math display">\[T = T_0 \quad \text{on } \Gamma_1\]</span></li>
+</ul></li>
+<li><strong>Neumann Boundary Condition (Type II / Natural)</strong>:
+<ul>
+<li>Prescribes the normal gradient (heat flux): <span class="math display">\[-k \frac{\partial T}{\partial n} = -k (\nabla T \cdot \mathbf{n}) = q_0 \quad \text{on } \Gamma_2\]</span></li>
+<li>Insulated / adiabatic wall: <span class="math inline">\(\frac{\partial T}{\partial n} = 0\)</span>.</li>
+</ul></li>
+<li><strong>Robin Boundary Condition (Type III / Mixed)</strong>:
+<ul>
+<li>Prescribes a linear combination of the variable and its normal flux (e.g., convective heat transfer into surrounding fluid): <span class="math display">\[-k \frac{\partial T}{\partial n} = h (T - T_\infty) \quad \text{on } \Gamma_3\]</span></li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="2-analytical-solution-of-the-2d-laplace-equation-separation-of-variables">2. Analytical Solution of the 2D Laplace Equation (Separation of Variables)</h2>
+<p>Understanding the exact analytical solution provides the baseline for verifying numerical solvers.</p>
+<h3 id="21-boundary-value-problem-formulation">2.1 Boundary Value Problem Formulation</h3>
+<p>Consider a rectangular domain <span class="math inline">\(\Omega = [0, L] \times [0, H]\)</span> governed by: <span class="math display">\[\frac{\partial^2 T}{\partial x^2} + \frac{\partial^2 T}{\partial y^2} = 0\]</span> Subject to Dirichlet boundary conditions:</p>
+<ul>
+<li>Left wall: <span class="math inline">\(T(0, y) = 0\)</span></li>
+<li>Right wall: <span class="math inline">\(T(L, y) = 0\)</span></li>
+<li>Bottom wall: <span class="math inline">\(T(x, 0) = 0\)</span></li>
+<li>Top wall: <span class="math inline">\(T(x, H) = f(x)\)</span> (e.g., <span class="math inline">\(f(x) = T_0 = \text{constant}\)</span>)</li>
+</ul>
+<pre><code>                      T(x, H) = f(x)
+               (0, H) ┌──────────────┐ (L, H)
+                      │              │
+       T(0, y) = 0    │   ∇²T = 0    │   T(L, y) = 0
+                      │              │
+               (0, 0) └──────────────┘ (L, 0)
+                      T(x, 0) = 0</code></pre>
+<h3 id="22-complete-step-by-step-derivation">2.2 Complete Step-by-Step Derivation</h3>
+<ol type="1">
+<li><p><strong>Separation of Variables Hypothesis</strong>: Assume the solution decomposes into a product of single-variable functions: <span class="math display">\[T(x, y) = F(x) G(y)\]</span> Differentiating: <span class="math display">\[\frac{\partial^2 T}{\partial x^2} = F''(x) G(y), \quad \frac{\partial^2 T}{\partial y^2} = F(x) G''(y)\]</span> Substituting into Laplace's equation: <span class="math display">\[F''(x) G(y) + F(x) G''(y) = 0\]</span> Dividing across by <span class="math inline">\(F(x) G(y)\)</span>: <span class="math display">\[\frac{F''(x)}{F(x)} = -\frac{G''(y)}{G(y)} = k \quad (\text{Separation Constant})\]</span></p></li>
+<li><p><strong>Choice of Separation Constant <span class="math inline">\(k\)</span></strong>: Since <span class="math inline">\(F(x)\)</span> must satisfy homogeneous boundary conditions at both ends (<span class="math inline">\(x = 0\)</span> and <span class="math inline">\(x = L\)</span>), it must possess an oscillatory (trigonometric) solution.</p>
+<ul>
+<li>If <span class="math inline">\(k &gt; 0\)</span>: <span class="math inline">\(F(x) = c_1 e^{\sqrt{k}x} + c_2 e^{-\sqrt{k}x}\)</span>, which cannot satisfy <span class="math inline">\(F(0) = F(L) = 0\)</span> without being identically zero.</li>
+<li>If <span class="math inline">\(k = 0\)</span>: <span class="math inline">\(F(x) = c_1 x + c_2 \implies c_1 = c_2 = 0\)</span> (trivial).</li>
+<li>Therefore, <span class="math inline">\(k\)</span> must be strictly negative: <span class="math display">\[k = -\lambda^2 \quad (\lambda &gt; 0)\]</span></li>
+</ul></li>
+<li><p><strong>Solving for <span class="math inline">\(F(x)\)</span> (The <span class="math inline">\(x\)</span>-Direction Eigenvalue Problem)</strong>: <span class="math display">\[F''(x) + \lambda^2 F(x) = 0\]</span> General solution: <span class="math display">\[F(x) = A \cos(\lambda x) + B \sin(\lambda x)\]</span> Applying boundary conditions:</p>
+<ul>
+<li>At <span class="math inline">\(x = 0\)</span>: <span class="math inline">\(F(0) = A (1) + B (0) = 0 \implies A = 0\)</span>.</li>
+<li>At <span class="math inline">\(x = L\)</span>: <span class="math inline">\(F(L) = B \sin(\lambda L) = 0\)</span>. For a non-trivial solution (<span class="math inline">\(B \ne 0\)</span>), we obtain the <strong>quantized eigenvalues</strong>: <span class="math display">\[\sin(\lambda L) = 0 \implies \lambda_n = \frac{n \pi}{L}, \quad n = 1, 2, 3, \dots\]</span> The corresponding eigenfunctions are: <span class="math display">\[F_n(x) = \sin\left(\frac{n \pi x}{L}\right)\]</span></li>
+</ul></li>
+<li><p><strong>Solving for <span class="math inline">\(G(y)\)</span> (The <span class="math inline">\(y\)</span>-Direction ODE)</strong>: <span class="math display">\[-\frac{G''(y)}{G(y)} = -\lambda_n^2 \implies G''(y) - \lambda_n^2 G(y) = 0\]</span> General solution expressed in hyperbolic functions: <span class="math display">\[G(y) = C \cosh(\lambda_n y) + D \sinh(\lambda_n y)\]</span> Applying boundary condition at <span class="math inline">\(y = 0\)</span>: <span class="math display">\[G(0) = C \cosh(0) + D \sinh(0) = C (1) + 0 = 0 \implies C = 0\]</span> Therefore: <span class="math display">\[G_n(y) = D_n \sinh\left(\frac{n \pi y}{L}\right)\]</span></p></li>
+<li><p><strong>Principle of Linear Superposition</strong>: By linearity, the general solution is the infinite series: <span class="math display">\[T(x, y) = \sum_{n=1}^\infty B_n \sin\left(\frac{n \pi x}{L}\right) \sinh\left(\frac{n \pi y}{L}\right)\]</span> where <span class="math inline">\(B_n\)</span> represents the combined constant.</p></li>
+<li><p><strong>Determining Fourier Coefficients via Top Boundary Condition</strong>: At <span class="math inline">\(y = H\)</span>: <span class="math display">\[T(x, H) = \sum_{n=1}^\infty \left[ B_n \sinh\left(\frac{n \pi H}{L}\right) \right] \sin\left(\frac{n \pi x}{L}\right) = f(x)\]</span> This is a classical <strong>Fourier Sine Series</strong>. Exploiting the orthogonality of sine functions over <span class="math inline">\([0, L]\)</span>: <span class="math display">\[\int_0^L \sin\left(\frac{n \pi x}{L}\right) \sin\left(\frac{m \pi x}{L}\right) dx = \begin{cases} 0 &amp; n \ne m \\ \frac{L}{2} &amp; n = m \end{cases}\]</span> Multiplying both sides by <span class="math inline">\(\sin\left(\frac{m \pi x}{L}\right)\)</span> and integrating: <span class="math display">\[B_n \sinh\left(\frac{n \pi H}{L}\right) \frac{L}{2} = \int_0^L f(x) \sin\left(\frac{n \pi x}{L}\right) dx\]</span> <span class="math display">\[\mathbf{B_n = \frac{2}{L \sinh\left(\frac{n \pi H}{L}\right)} \int_0^L f(x) \sin\left(\frac{n \pi x}{L}\right) dx}\]</span></p></li>
+<li><p><strong>Special Case: Uniform Temperature at Top Wall (<span class="math inline">\(f(x) = T_0 = \text{const}\)</span>)</strong>: <span class="math display">\[\int_0^L T_0 \sin\left(\frac{n \pi x}{L}\right) dx = T_0 \left[ -\frac{L}{n \pi} \cos\left(\frac{n \pi x}{L}\right) \right]_0^L = \frac{L T_0}{n \pi} [1 - (-1)^n]\]</span></p>
+<ul>
+<li>For even <span class="math inline">\(n\)</span> (<span class="math inline">\(n = 2, 4, 6, \dots\)</span>): <span class="math inline">\(1 - (-1)^n = 0 \implies B_n = 0\)</span>.</li>
+<li>For odd <span class="math inline">\(n\)</span> (<span class="math inline">\(n = 1, 3, 5, \dots\)</span>): <span class="math inline">\(1 - (-1)^n = 2 \implies \int = \frac{2 L T_0}{n \pi}\)</span>. Thus: <span class="math display">\[B_n = \frac{4 T_0}{n \pi \sinh\left(\frac{n \pi H}{L}\right)} \quad (\text{for odd } n)\]</span> <span class="math display">\[\mathbf{T(x, y) = \frac{4 T_0}{\pi} \sum_{n=1, 3, 5, \dots}^\infty \frac{1}{n} \frac{\sinh\left(\frac{n \pi y}{L}\right)}{\sinh\left(\frac{n \pi H}{L}\right)} \sin\left(\frac{n \pi x}{L}\right)}\]</span></li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="3-finite-difference-method-fdm-discretization">3. Finite Difference Method (FDM) Discretization</h2>
+<h3 id="31-taylor-series-derivation-of-central-differences">3.1 Taylor Series Derivation of Central Differences</h3>
+<p>Let a 1D grid have uniform spacing <span class="math inline">\(\Delta x\)</span>. Expanding <span class="math inline">\(T(x + \Delta x)\)</span> and <span class="math inline">\(T(x - \Delta x)\)</span> around <span class="math inline">\(x\)</span>: <span class="math display">\[T(x + \Delta x) = T(x) + \Delta x T'(x) + \frac{\Delta x^2}{2} T''(x) + \frac{\Delta x^3}{6} T'''(x) + \frac{\Delta x^4}{24} T^{(4)}(x) + O(\Delta x^5) \quad \text{--- (A)}\]</span> <span class="math display">\[T(x - \Delta x) = T(x) - \Delta x T'(x) + \frac{\Delta x^2}{2} T''(x) - \frac{\Delta x^3}{6} T'''(x) + \frac{\Delta x^4}{24} T^{(4)}(x) - O(\Delta x^5) \quad \text{--- (B)}\]</span></p>
+<p>Adding (A) and (B): <span class="math display">\[T(x + \Delta x) + T(x - \Delta x) = 2 T(x) + \Delta x^2 T''(x) + \frac{\Delta x^4}{12} T^{(4)}(x) + O(\Delta x^6)\]</span> Rearranging for <span class="math inline">\(T''(x)\)</span>: <span class="math display">\[\left.\frac{d^2 T}{dx^2}\right|_i = \frac{T_{i+1} - 2 T_i + T_{i-1}}{\Delta x^2} - \frac{\Delta x^2}{12} T^{(4)}(\xi) = \frac{T_{i+1} - 2 T_i + T_{i-1}}{\Delta x^2} + O(\Delta x^2)\]</span> The truncation error is strictly of order <span class="math inline">\(O(\Delta x^2)\)</span> (second-order accurate).</p>
+<h3 id="32-2d-laplace-discretization-the-5-point-stencil">3.2 2D Laplace Discretization (The 5-Point Stencil)</h3>
+<p>On a 2D Cartesian grid with spacings <span class="math inline">\(\Delta x\)</span> and <span class="math inline">\(\Delta y\)</span>: <span class="math display">\[\left.\nabla^2 T\right|_{i, j} = \frac{T_{i+1, j} - 2 T_{i, j} + T_{i-1, j}}{\Delta x^2} + \frac{T_{i, j+1} - 2 T_{i, j} + T_{i, j-1}}{\Delta y^2} = 0\]</span> Assuming an isotropic grid (<span class="math inline">\(\Delta x = \Delta y\)</span>): <span class="math display">\[T_{i+1, j} + T_{i-1, j} + T_{i, j+1} + T_{i, j-1} - 4 T_{i, j} = 0\]</span></p>
+<pre><code>                           (i, j+1)  [North]
+                              │
+                              │
+       (i-1, j) [West] ───────┼─────── (i+1, j) [East]
+                              │  (i, j)
+                              │  [Center, weight = -4]
+                           (i, j-1)  [South]</code></pre>
+<h3 id="33-lexicographical-ordering-and-matrix-formulation">3.3 Lexicographical Ordering and Matrix Formulation</h3>
+<p>To transform the 2D grid values <span class="math inline">\(T(i, j)\)</span> into a 1D column vector <span class="math inline">\(\mathbf{T}\)</span>, we use lexicographical (row-by-row) indexing: <span class="math display">\[\text{ipt}(i, j) = (j - 1) N_x + i\]</span> where <span class="math inline">\(i \in \{1, 2, \dots, N_x\}\)</span> and <span class="math inline">\(j \in \{1, 2, \dots, N_y\}\)</span>. Under this linear indexing:</p>
+<ul>
+<li>North neighbor <span class="math inline">\((i, j+1) \implies \text{ipt} + N_x\)</span></li>
+<li>South neighbor <span class="math inline">\((i, j-1) \implies \text{ipt} - N_x\)</span></li>
+<li>East neighbor <span class="math inline">\((i+1, j) \implies \text{ipt} + 1\)</span></li>
+<li>West neighbor <span class="math inline">\((i-1, j) \implies \text{ipt} - 1\)</span></li>
+</ul>
+<p>The algebraic equation becomes: <span class="math display">\[4 T_{\text{ipt}} - T_{\text{ipt}-1} - T_{\text{ipt}+1} - T_{\text{ipt}-N_x} - T_{\text{ipt}+N_x} = 0\]</span> When assembled into <span class="math inline">\(A \mathbf{T} = \mathbf{b}\)</span>, matrix <span class="math inline">\(A\)</span> is:</p>
+<ul>
+<li><strong>Pentadiagonal</strong>: Non-zeros exist only on 5 diagonals: the main diagonal (<span class="math inline">\(+4\)</span>), sub- and super-diagonals (<span class="math inline">\(-1\)</span>), and far diagonals shifted by <span class="math inline">\(\pm N_x\)</span> (<span class="math inline">\(-1\)</span>).</li>
+<li><strong>Symmetric</strong>: <span class="math inline">\(A = A^T\)</span>.</li>
+<li><strong>Strictly / Irreducibly Diagonally Dominant</strong>: On interior nodes: <span class="math inline">\(|a_{ii}| = 4 = \sum_{j \ne i} |a_{ij}|\)</span>. On boundary-adjacent nodes, Dirichlet values move to the right-hand side, making <span class="math inline">\(|a_{ii}| &gt; \sum |a_{ij}|\)</span>.</li>
+<li><strong>Positive Definite</strong>: All eigenvalues <span class="math inline">\(\lambda_k &gt; 0\)</span>.</li>
+</ul>
+<h3 id="34-3d-poisson-discretization-the-7-point-stencil">3.4 3D Poisson Discretization (The 7-Point Stencil)</h3>
+<p>In 3D with isotropic grid spacing <span class="math inline">\(\Delta x = \Delta y = \Delta z\)</span>: <span class="math display">\[\text{ipt}(i, j, k) = i + (j - 1) N_x + (k - 1) N_x N_y\]</span> The resulting stencil connects 7 points (Center, East, West, North, South, Top, Bottom): <span class="math display">\[6 T_{\text{ipt}} - T_{\text{ipt}-1} - T_{\text{ipt}+1} - T_{\text{ipt}-N_x} - T_{\text{ipt}+N_x} - T_{\text{ipt}-N_x N_y} - T_{\text{ipt}+N_x N_y} = \Delta x^2 f_{\text{ipt}}\]</span> Assembled matrix <span class="math inline">\(A\)</span> is <strong>septadiagonal</strong>.</p>
+<hr/>
+<h2 id="4-finite-volume-method-fvm">4. Finite Volume Method (FVM)</h2>
+<p>In FVM, the domain is subdivided into contiguous control volumes. The PDE is integrated over control volume <span class="math inline">\(V_P\)</span>: <span class="math display">\[\int_{V_P} \nabla \cdot (k \nabla T) \, dV = \int_{\partial V_P} (k \nabla T) \cdot \mathbf{n} \, dA = \sum_{f \in \{e, w, n, s\}} Q_f = 0\]</span> Evaluating conductive heat fluxes across faces: <span class="math display">\[Q_e = k \left( \frac{T_E - T_P}{\Delta x} \right) \Delta y, \quad Q_w = k \left( \frac{T_W - T_P}{\Delta x} \right) \Delta y\]</span> <span class="math display">\[Q_n = k \left( \frac{T_N - T_P}{\Delta y} \right) \Delta x, \quad Q_s = k \left( \frac{T_S - T_P}{\Delta y} \right) \Delta x\]</span> For uniform Cartesian grids (<span class="math inline">\(\Delta x = \Delta y\)</span>), summing fluxes directly yields: <span class="math display">\[T_E + T_W + T_N + T_S - 4 T_P = 0\]</span> <strong>Key Invariance</strong>: On uniform orthogonal meshes, FVM and FDM produce mathematically identical algebraic stencils. However, FVM guarantees exact local and global conservation on arbitrary meshes.</p>
+<hr/>
+<h2 id="5-finite-element-method-fem--stiffness-matrix-assembly">5. Finite Element Method (FEM) &amp; Stiffness Matrix Assembly</h2>
+<h3 id="51-weak-formulation-1d-conduction-example">5.1 Weak Formulation (1D Conduction Example)</h3>
+<p>Consider: <span class="math display">\[-\frac{d^2 \phi}{dx^2} = 0, \quad 0 \le x \le 1, \quad \phi(0) = 0, \phi(1) = 1\]</span> Multiply by an arbitrary test (weighting) function <span class="math inline">\(w(x)\)</span> with <span class="math inline">\(w(0) = w(1) = 0\)</span> and integrate: <span class="math display">\[-\int_0^1 w \frac{d^2 \phi}{dx^2} \, dx = 0\]</span> Applying integration by parts: <span class="math display">\[\left[ -w \frac{d\phi}{dx} \right]_0^1 + \int_0^1 \frac{dw}{dx} \frac{d\phi}{dx} \, dx = 0\]</span> Since <span class="math inline">\(w\)</span> vanishes at boundaries, the <strong>weak form</strong> is: <span class="math display">\[\int_0^1 \frac{dw}{dx} \frac{d\phi}{dx} \, dx = 0\]</span></p>
+<h3 id="52-galerkin-approximation-with-1d-linear-elements">5.2 Galerkin Approximation with 1D Linear Elements</h3>
+<p>Discretize <span class="math inline">\([0, 1]\)</span> into elements of size <span class="math inline">\(\Delta x\)</span>. Within element <span class="math inline">\(m\)</span> with local coordinate <span class="math inline">\(\xi = \frac{x - x_m}{\Delta x} \in [0, 1]\)</span>: <span class="math display">\[\phi(\xi) = \phi_m N_1(\xi) + \phi_{m+1} N_2(\xi)\]</span> where the <strong>linear shape functions</strong> are: <span class="math display">\[N_1(\xi) = 1 - \xi, \quad N_2(\xi) = \xi\]</span> Derivatives: <span class="math display">\[\frac{dN_1}{dx} = \frac{1}{\Delta x} \frac{dN_1}{d\xi} = -\frac{1}{\Delta x}, \quad \frac{dN_2}{dx} = \frac{1}{\Delta x} \frac{dN_2}{d\xi} = \frac{1}{\Delta x}\]</span></p>
+<h3 id="53-derivation-of-element-stiffness-matrix-ke">5.3 Derivation of Element Stiffness Matrix (<span class="math inline">\(k^e\)</span>)</h3>
+<p>The element integral is: <span class="math display">\[k_{ij}^e = \int_{x_m}^{x_{m+1}} \frac{dN_i}{dx} \frac{dN_j}{dx} \, dx = \int_0^1 \left(\frac{dN_i}{dx}\right) \left(\frac{dN_j}{dx}\right) \Delta x \, d\xi\]</span></p>
+<ul>
+<li><span class="math inline">\(k_{11}^e = \int_0^1 \left(-\frac{1}{\Delta x}\right) \left(-\frac{1}{\Delta x}\right) \Delta x \, d\xi = \frac{1}{\Delta x}\)</span></li>
+<li><span class="math inline">\(k_{12}^e = \int_0^1 \left(-\frac{1}{\Delta x}\right) \left(\frac{1}{\Delta x}\right) \Delta x \, d\xi = -\frac{1}{\Delta x}\)</span></li>
+<li><span class="math inline">\(k_{21}^e = -\frac{1}{\Delta x}\)</span></li>
+<li><span class="math inline">\(k_{22}^e = \frac{1}{\Delta x}\)</span></li>
+</ul>
+<p><span class="math display">\[\mathbf{k^e = \frac{1}{\Delta x} \begin{bmatrix} 1 &amp; -1 \\ -1 &amp; 1 \end{bmatrix}}\]</span></p>
+<h3 id="54-global-assembly">5.4 Global Assembly</h3>
+<p>Assembling adjacent elements <span class="math inline">\(m-1\)</span> and <span class="math inline">\(m\)</span> at shared node <span class="math inline">\(m\)</span>: <span class="math display">\[\left( k_{22}^{e(m-1)} + k_{11}^{e(m)} \right) \phi_m + k_{21}^{e(m-1)} \phi_{m-1} + k_{12}^{e(m)} \phi_{m+1} = 0\]</span> <span class="math display">\[\left( \frac{1}{\Delta x} + \frac{1}{\Delta x} \right) \phi_m - \frac{1}{\Delta x} \phi_{m-1} - \frac{1}{\Delta x} \phi_{m+1} = 0\]</span> <span class="math display">\[\frac{-\phi_{m-1} + 2\phi_m - \phi_{m+1}}{\Delta x} = 0 \iff \mathbf{\frac{\phi_{m-1} - 2\phi_m + \phi_{m+1}}{\Delta x^2} = 0}\]</span> FEM recovers the exact second-order central difference stencil!</p>
+<h3 id="55-2d-triangular-elements-unstructured-meshes">5.5 2D Triangular Elements (Unstructured Meshes)</h3>
+<p>For 2D complex geometries, triangular elements with 3 nodes <span class="math inline">\((x_1, y_1), (x_2, y_2), (x_3, y_3)\)</span> are used:</p>
+<ul>
+<li>Area of triangle: <span class="math display">\[A = \frac{1}{2} \det \begin{bmatrix} 1 &amp; x_1 &amp; y_1 \\ 1 &amp; x_2 &amp; y_2 \\ 1 &amp; x_3 &amp; y_3 \end{bmatrix}\]</span></li>
+<li>Linear shape functions <span class="math inline">\(N_i(x, y) = \frac{1}{2A} (a_i + b_i x + c_i y)\)</span>, where: <span class="math display">\[a_1 = x_2 y_3 - x_3 y_2, \quad b_1 = y_2 - y_3, \quad c_1 = x_3 - x_2\]</span></li>
+<li>Gradient matrix <span class="math inline">\(B\)</span>: <span class="math display">\[B = \begin{bmatrix} \frac{\partial N_1}{\partial x} &amp; \frac{\partial N_2}{\partial x} &amp; \frac{\partial N_3}{\partial x} \\ \frac{\partial N_1}{\partial y} &amp; \frac{\partial N_2}{\partial y} &amp; \frac{\partial N_3}{\partial y} \end{bmatrix} = \frac{1}{2A} \begin{bmatrix} b_1 &amp; b_2 &amp; b_3 \\ c_1 &amp; c_2 &amp; c_3 \end{bmatrix}\]</span></li>
+<li>Element stiffness matrix: <span class="math display">\[A^e = \iint_A B^T B \, dx dy = A (B^T B)\]</span></li>
+<li><strong>Crucial Distinction</strong>: The resulting global assembled matrix is <strong>sparse, symmetric, positive definite, but UNSTRUCTURED</strong> (non-zeros do not follow constant diagonal bands). This necessitates dedicated sparse storage formats.</li>
+</ul>
+<hr/>
+<h2 id="6-sparse-matrix-storage-schemes-saads-canonical-formats">6. Sparse Matrix Storage Schemes (Saad's Canonical Formats)</h2>
+<p>In an <span class="math inline">\(N \times N\)</span> matrix derived from a PDE (<span class="math inline">\(N = 10^6\)</span>):</p>
+<ul>
+<li>Storing full dense matrix: <span class="math inline">\(N^2 \times 8\text{ bytes} = 10^{12} \times 8\text{ B} = 8\text{ Terabytes}\)</span> of memory!</li>
+<li>Number of non-zero entries (<span class="math inline">\(N_{nz}\)</span>): Each row has only 5 non-zeros <span class="math inline">\(\implies N_{nz} \approx 5 \times 10^6\)</span> entries.</li>
+<li>Storing only non-zeros: <span class="math inline">\(5 \times 10^6 \times 8\text{ B} = 40\text{ Megabytes}\)</span> (a <span class="math inline">\(200,000\times\)</span> reduction in RAM!).</li>
+</ul>
+<p>To illustrate the sparse storage schemes, we use the <strong>canonical <span class="math inline">\(5 \times 5\)</span> unstructured matrix (<span class="math inline">\(N = 5, N_z = 12\)</span>)</strong> presented in the course lectures (<em>Yousef Saad, Iterative Methods for Sparse Linear Systems</em>):</p>
+<p><span class="math display">\[A = \begin{bmatrix}
+1. &amp; 0. &amp; 0. &amp; 2. &amp; 0. \\
+3. &amp; 4. &amp; 0. &amp; 5. &amp; 0. \\
+6. &amp; 0. &amp; 7. &amp; 8. &amp; 9. \\
+0. &amp; 0. &amp; 10. &amp; 11. &amp; 0. \\
+0. &amp; 0. &amp; 0. &amp; 0. &amp; 12.
+\end{bmatrix}\]</span></p>
+<h3 id="61-coordinate-format-coo">6.1 Coordinate Format (COO)</h3>
+<p>Stores triplets <span class="math inline">\((i, j, A_{ij})\)</span> in arbitrary order:</p>
+<ul>
+<li><code>AA</code>: Real array containing all non-zero entries (size <span class="math inline">\(N_z\)</span>).</li>
+<li><code>JR</code>: Integer array containing 1-based row indices (size <span class="math inline">\(N_z\)</span>).</li>
+<li><code>JC</code>: Integer array containing 1-based column indices (size <span class="math inline">\(N_z\)</span>).</li>
+<li><strong>Total Storage</strong>: <span class="math inline">\(3 N_z\)</span> words (<span class="math inline">\(3 \times 12 = 36\)</span> elements).</li>
+</ul>
+<pre><code>Index:   1    2    3    4    5    6    7    8    9   10   11   12
+───────────────────────────────────────────────────────────────────
+AA:   [12.   9.   7.   5.   1.   2.  11.   3.   6.   4.   8.  10.]
+JR:   [ 5    3    3    2    1    1    4    2    3    2    3    4 ]
+JC:   [ 5    5    3    4    1    4    4    1    1    2    4    3 ]</code></pre>
+<h3 id="62-compressed-sparse-row-csr--crs">6.2 Compressed Sparse Row (CSR / CRS)</h3>
+<p>Eliminates redundant row storage by using row pointers:</p>
+<ul>
+<li><code>AA</code>: Real values of non-zeros, stored row-by-row, left-to-right (size <span class="math inline">\(N_z = 12\)</span>).</li>
+<li><code>JA</code>: Integer array containing column indices corresponding to <code>AA</code> (size <span class="math inline">\(N_z = 12\)</span>).</li>
+<li><code>IA</code>: Integer pointers to the beginning of each row in <code>AA</code> and <code>JA</code> (size <span class="math inline">\(n + 1 = 6\)</span>).
+<ul>
+<li><code>IA(i)</code> gives the starting position of row <span class="math inline">\(i\)</span>.</li>
+<li>Number of non-zeros in row <span class="math inline">\(i\)</span> = <code>IA(i+1) - IA(i)</code>.</li>
+<li><code>IA(n+1) = IA(1) + N_z = 13</code> (points to fictitious row <span class="math inline">\(n+1\)</span>).</li>
+</ul></li>
+<li><strong>Total Storage</strong>: <span class="math inline">\(2 N_z + n + 1 = 2(12) + 5 + 1 = 30\)</span> words.</li>
+</ul>
+<pre><code>Index:   1    2    3    4    5    6    7    8    9   10   11   12
+───────────────────────────────────────────────────────────────────
+AA:   [ 1.   2.   3.   4.   5.   6.   7.   8.   9.  10.  11.  12.]
+JA:   [ 1    4    1    2    4    1    3    4    5    3    4    5 ]
+
+IA:   [ 1    3    6   10   12   13]  (length n + 1 = 6)</code></pre>
+<h3 id="63-compressed-sparse-column-csc--ccs">6.3 Compressed Sparse Column (CSC / CCS)</h3>
+<p>Column-oriented counterpart of CSR:</p>
+<ul>
+<li><code>AA</code>: Non-zeros stored column-by-column.</li>
+<li><code>JA</code>: Row indices for each entry in <code>AA</code>.</li>
+<li><code>IA</code>: Column pointers (size <span class="math inline">\(n + 1\)</span>).</li>
+<li>Native storage standard for MATLAB and Fortran sparse routines.</li>
+</ul>
+<h3 id="64-modified-sparse-row-msr">6.4 Modified Sparse Row (MSR)</h3>
+<p>Exploits the fact that diagonal elements are always non-zero and accessed most frequently. Reduces storage to <strong>exactly two arrays</strong> (<code>AA</code> and <code>JA</code>), each of length <span class="math inline">\(N_z + 1 = 13\)</span>:</p>
+<ul>
+<li><strong><code>AA</code> Array</strong>:
+<ul>
+<li>Positions <span class="math inline">\(1 \dots n\)</span>: Main diagonal elements in order (<code>AA(1:5) = [1., 4., 7., 11., 12.]</code>).</li>
+<li>Position <span class="math inline">\(n + 1\)</span>: Unused dummy position (marked <code>*</code>).</li>
+<li>Positions <span class="math inline">\(n + 2 \dots N_z + 1\)</span>: Strictly off-diagonal non-zeros stored row-by-row (<code>[2., 3., 5., 6., 8., 9., 10.]</code>).</li>
+</ul></li>
+<li><strong><code>JA</code> Array</strong>:
+<ul>
+<li>Positions <span class="math inline">\(1 \dots n + 1\)</span>: Pointers to the start of each row's off-diagonals in <code>AA</code>.
+<ul>
+<li><code>JA(1:6) = [7, 8, 10, 13, 14, 14]</code>.</li>
+<li><em>Exam Note</em>: <span class="math inline">\(JA(5) = JA(6) = 14\)</span> indicates that row 5 has NO off-diagonal entries!</li>
+</ul></li>
+<li>Positions <span class="math inline">\(n + 2 \dots N_z + 1\)</span>: Column indices of the off-diagonal entries (<code>[4, 1, 4, 1, 4, 5, 3]</code>).</li>
+</ul></li>
+</ul>
+<pre><code>Index:   1    2    3    4    5    6    7    8    9   10   11   12   13
+──────────────────────────────────────────────────────────────────────────
+AA:   [ 1.   4.   7.  11.  12.   *    2.   3.   5.   6.   8.   9.  10.]
+       └──────────┬──────────┘        └─────────────────┬────────────────┘
+          Diagonal Elements                 Off-Diagonal Elements
+
+JA:   [ 7    8   10   13   14   14    4    1    4    1    4    5    3 ]
+       └──────────┬──────────┘        └─────────────────┬────────────────┘
+       Row Off-Diagonal Pointers            Off-Diagonal Column Indices</code></pre>
+<hr/>
+<h2 id="7-storage-schemes-for-structured-matrices-dia--ellpack">7. Storage Schemes for Structured Matrices (DIA &amp; ELLPACK)</h2>
+<p>For banded matrices originating from structured stencils, specialized formats eliminate pointer lookups:</p>
+<p>Consider the <span class="math inline">\(5 \times 5\)</span> tridiagonal/banded matrix (<em>Slide 306</em>):</p>
+<p><span class="math display">\[A = \begin{bmatrix}
+1. &amp; 0. &amp; 2. &amp; 0. &amp; 0. \\
+3. &amp; 4. &amp; 0. &amp; 5. &amp; 0. \\
+0. &amp; 6. &amp; 7. &amp; 0. &amp; 8. \\
+0. &amp; 0. &amp; 9. &amp; 10. &amp; 0. \\
+0. &amp; 0. &amp; 0. &amp; 11. &amp; 12.
+\end{bmatrix}\]</span></p>
+<h3 id="71-diagonal-storage-format-dia">7.1 Diagonal Storage Format (DIA)</h3>
+<p>Non-zero diagonals are packed into a 2D dense array <code>DIAG(n, N_diag)</code>:</p>
+<ul>
+<li>Mapping: <span class="math inline">\(\text{DIAG}(i, j) \leftarrow a_{i, i + \text{IOFF}(j)}\)</span></li>
+<li><code>IOFF</code>: Array of diagonal offsets relative to main diagonal (<span class="math inline">\(0\)</span>). Here, active diagonals are sub-diagonal (<span class="math inline">\(-1\)</span>), main diagonal (<span class="math inline">\(0\)</span>), and second super-diagonal (<span class="math inline">\(+2\)</span>): <span class="math display">\[\text{IOFF} = [-1, \quad 0, \quad +2]\]</span></li>
+<li><code>DIAG</code> Array (dimension <span class="math inline">\(5 \times 3\)</span>, where <code>*</code> denotes zero padding outside matrix boundaries):
+<span class="math display">\[\text{DIAG} = \begin{bmatrix}
+* &amp; 1. &amp; 2. \\
+3. &amp; 4. &amp; 5. \\
+6. &amp; 7. &amp; 8. \\
+9. &amp; 10. &amp; * \\
+11. &amp; 12. &amp; *
+\end{bmatrix}\]</span></li>
+<li><strong>Advantage</strong>: Stride-1 sequential memory streaming with zero indirection. Reduces 2D Laplacian Jacobi solve time from <span class="math inline">\(11.57\text{ s}\)</span> to <span class="math inline">\(7.12\text{ s}\)</span>!</li>
+</ul>
+<h3 id="72-ellpack-itpack-format">7.2 ELLPACK-ITPACK Format</h3>
+<p>Designed for SIMD vector processors and GPUs where each row has at most <span class="math inline">\(Nd\)</span> non-zeros (<span class="math inline">\(Nd = 3\)</span> in this example):</p>
+<ul>
+<li>Stores two rectangular arrays of dimension <span class="math inline">\(n \times Nd\)</span> (<span class="math inline">\(5 \times 3\)</span>):
+<ul>
+<li><code>COEF</code>: Non-zero values of each row, padded with zeros as necessary.</li>
+<li><code>JCOEF</code>: Column indices of each entry in <code>COEF</code> (zero-padded positions duplicate valid column indices):</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[\text{COEF} = \begin{bmatrix}
+1. &amp; 2. &amp; 0. \\
+3. &amp; 4. &amp; 5. \\
+6. &amp; 7. &amp; 8. \\
+9. &amp; 10. &amp; 0. \\
+11. &amp; 12. &amp; 0.
+\end{bmatrix}, \qquad \text{JCOEF} = \begin{bmatrix}
+1 &amp; 3 &amp; 1 \\
+1 &amp; 2 &amp; 4 \\
+2 &amp; 3 &amp; 5 \\
+3 &amp; 4 &amp; 4 \\
+4 &amp; 5 &amp; 5
+\end{bmatrix}\]</span></p>
+<ul>
+<li><strong>Advantage</strong>: Column-major layout allows GPU warps to access non-zero elements across parallel threads simultaneously without thread divergence or memory uncoalescing.</li>
+</ul>
+<hr/>
+<h2 id="8-comparative-summary-of-sparse-storage-formats">8. Comparative Summary of Sparse Storage Formats</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Format</th>
+<th style="text-align: left;">Storage Footprint</th>
+<th style="text-align: left;">SpMV Memory Efficiency</th>
+<th style="text-align: left;">Best Hardware Target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>COO</strong></td>
+<td style="text-align: left;"><span class="math inline">\(3 N_z\)</span></td>
+<td style="text-align: left;">Poor (random indirect reads)</td>
+<td style="text-align: left;">Matrix generation, FEM assembly, Matrix Market I/O</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CSR</strong></td>
+<td style="text-align: left;"><span class="math inline">\(2 N_z + n + 1\)</span></td>
+<td style="text-align: left;">High (row-contiguous streaming)</td>
+<td style="text-align: left;">General unstructured sparse solvers (Multicore CPU)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CSC</strong></td>
+<td style="text-align: left;"><span class="math inline">\(2 N_z + n + 1\)</span></td>
+<td style="text-align: left;">High (column-contiguous streaming)</td>
+<td style="text-align: left;">Direct column-oriented solvers (MATLAB, Fortran)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>MSR</strong></td>
+<td style="text-align: left;"><span class="math inline">\(2 N_z + 1\)</span> (2 arrays)</td>
+<td style="text-align: left;">Very High (direct diagonal access)</td>
+<td style="text-align: left;">Relaxation solvers (Jacobi, GS, SSOR) needing <span class="math inline">\(a_{ii}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>DIA</strong></td>
+<td style="text-align: left;"><span class="math inline">\(n \times N_{diag}\)</span></td>
+<td style="text-align: left;">Optimal (zero indirection, stride-1)</td>
+<td style="text-align: left;">Structured FDM grids on CPUs/Vector systems</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>ELLPACK</strong></td>
+<td style="text-align: left;"><span class="math inline">\(2 \cdot n \times Nd\)</span></td>
+<td style="text-align: left;">Optimal (fully coalesced warps)</td>
+<td style="text-align: left;">GPU accelerators, CUDA SIMT architecture</td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-02.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Mathematical Foundations: Linear Algebra & Vector Spaces</span>
+      </a>
+    
+      
+      <a href="chapter-04.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Direct Solvers, Factorization & TDMA</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

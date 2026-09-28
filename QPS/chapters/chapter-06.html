@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Spectral Theory, SVD, Positive Definiteness & Condition Numbers | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-06" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-05.html" class="btn-nav-control" title="Previous: Classical Iterative Solvers & Convergence Theory">← Prev</a>
+      <a href="chapter-07.html" class="btn-nav-control" title="Next: Orthogonalization, Gram-Schmidt & QR Factorization">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 06</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Spectral Theory, SVD, Positive Definiteness & Condition Numbers</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-06" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-06-spectral-theory-svd-positive-definiteness--condition-numbers">Chapter 06: Spectral Theory, SVD, Positive Definiteness &amp; Condition Numbers</h1>
+<hr/>
+<h2 id="1-eigenvalues-and-eigenvectors">1. Eigenvalues and Eigenvectors</h2>
+<h3 id="11-definitions-and-fundamental-concepts">1.1 Definitions and Fundamental Concepts</h3>
+<p>For a square matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span>, a non-zero vector <span class="math inline">\(x \in \mathbb{C}^n\)</span> is an <strong>eigenvector</strong> of <span class="math inline">\(A\)</span> corresponding to scalar <strong>eigenvalue</strong> <span class="math inline">\(\lambda \in \mathbb{C}\)</span> if: <span class="math display">\[A x = \lambda x \iff (A - \lambda I) x = \mathbf{0}\]</span> Since <span class="math inline">\(x \ne \mathbf{0}\)</span>, the operator <span class="math inline">\((A - \lambda I)\)</span> must be singular: <span class="math display">\[\det(A - \lambda I) = 0\]</span> This determinant expands into the <strong>characteristic polynomial</strong> of degree <span class="math inline">\(n\)</span>: <span class="math display">\[P_n(\lambda) = (-1)^n \lambda^n + c_{n-1} \lambda^{n-1} + \dots + c_1 \lambda + \det(A) = 0\]</span></p>
+<ul>
+<li><strong>Algebraic Multiplicity (<span class="math inline">\(m_a\)</span>)</strong>: The number of times <span class="math inline">\(\lambda\)</span> appears as a root of <span class="math inline">\(P_n(\lambda) = 0\)</span>.</li>
+<li><strong>Geometric Multiplicity (<span class="math inline">\(m_g\)</span>)</strong>: The dimension of the eigenspace <span class="math inline">\(N(A - \lambda I)\)</span> (number of linearly independent eigenvectors associated with <span class="math inline">\(\lambda\)</span>).</li>
+<li><strong>Defective Matrix</strong>: A matrix where <span class="math inline">\(m_g &lt; m_a\)</span> for at least one eigenvalue (cannot be diagonalized).</li>
+</ul>
+<hr/>
+<h2 id="2-spectral-properties-of-real-symmetric-matrices">2. Spectral Properties of Real Symmetric Matrices</h2>
+<p>Real symmetric matrices (<span class="math inline">\(A = A^T\)</span>) govern almost all physical equilibrium and energy problems (diffusion, elasticity, structural dynamics). They possess extraordinary mathematical properties that underpin scientific computing.</p>
+<h3 id="21-theorem-1-all-eigenvalues-of-a-real-symmetric-matrix-are-real">2.1 Theorem 1: All Eigenvalues of a Real Symmetric Matrix are Real</h3>
+<blockquote>
+<p><strong>Theorem</strong>: If <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> and <span class="math inline">\(A = A^T\)</span>, then all <span class="math inline">\(n\)</span> eigenvalues <span class="math inline">\(\lambda_1, \dots, \lambda_n\)</span> are <strong>strictly real numbers</strong> (<span class="math inline">\(\lambda_i \in \mathbb{R}\)</span>).</p>
+</blockquote>
+<h4 id="complete-mathematical-proof-from-slides-126131">Complete Mathematical Proof (From Slides 126–131)</h4>
+<p>Let <span class="math inline">\(\lambda \in \mathbb{C}\)</span> be an eigenvalue of <span class="math inline">\(A\)</span> with non-zero eigenvector <span class="math inline">\(x \in \mathbb{C}^n\)</span>: <span class="math display">\[A x = \lambda x \quad \text{--- (1)}\]</span> Take the complex conjugate transpose (Hermitian conjugate, <span class="math inline">\(H\)</span>) of equation (1): <span class="math display">\[(A x)^H = (\lambda x)^H \implies x^H A^H = \bar{\lambda} x^H \quad \text{--- (2)}\]</span> where <span class="math inline">\(\bar{\lambda}\)</span> denotes the complex conjugate of <span class="math inline">\(\lambda\)</span>, and <span class="math inline">\(x^H = (\bar{x})^T\)</span>.</p>
+<p>Because <span class="math inline">\(A\)</span> has real entries (<span class="math inline">\(A = \bar{A}\)</span>) and is symmetric (<span class="math inline">\(A = A^T\)</span>): <span class="math display">\[A^H = (\bar{A})^T = A^T = A\]</span> Substitute <span class="math inline">\(A^H = A\)</span> into equation (2): <span class="math display">\[x^H A = \bar{\lambda} x^H \quad \text{--- (3)}\]</span></p>
+<p>Now multiply equation (1) from the left by <span class="math inline">\(x^H\)</span>: <span class="math display">\[x^H (A x) = x^H (\lambda x) = \lambda (x^H x) \quad \text{--- (4)}\]</span> Multiply equation (3) from the right by <span class="math inline">\(x\)</span>: <span class="math display">\[(x^H A) x = (\bar{\lambda} x^H) x = \bar{\lambda} (x^H x) \quad \text{--- (5)}\]</span></p>
+<p>Subtract equation (5) from equation (4): <span class="math display">\[x^H A x - x^H A x = \lambda (x^H x) - \bar{\lambda} (x^H x)\]</span> <span class="math display">\[0 = (\lambda - \bar{\lambda}) (x^H x)\]</span> Since <span class="math inline">\(x\)</span> is a non-zero eigenvector: <span class="math display">\[x^H x = \sum_{i=1}^n \bar{x}_i x_i = \sum_{i=1}^n |x_i|^2 = \|x\|_2^2 &gt; 0\]</span> Dividing by <span class="math inline">\(\|x\|_2^2\)</span>: <span class="math display">\[\lambda - \bar{\lambda} = 0 \implies \mathbf{\lambda = \bar{\lambda}}\]</span> A complex number that equals its conjugate must have zero imaginary part (<span class="math inline">\(\text{Im}(\lambda) = 0\)</span>). Therefore, <strong><span class="math inline">\(\lambda \in \mathbb{R}\)</span></strong>. <span class="math inline">\(\blacksquare\)</span></p>
+<h3 id="22-theorem-2-orthogonality-of-eigenvectors">2.2 Theorem 2: Orthogonality of Eigenvectors</h3>
+<blockquote>
+<p><strong>Theorem</strong>: For a real symmetric matrix <span class="math inline">\(A = A^T\)</span>, eigenvectors corresponding to <strong>distinct eigenvalues</strong> are <strong>mutually orthogonal</strong>.</p>
+</blockquote>
+<h4 id="ch06-complete-mathematical-proof">Complete Mathematical Proof</h4>
+<p>Let <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> be eigenvectors corresponding to distinct eigenvalues <span class="math inline">\(\lambda_1 \ne \lambda_2\)</span>: <span class="math display">\[A x_1 = \lambda_1 x_1 \quad \text{--- (A)}\]</span> <span class="math display">\[A x_2 = \lambda_2 x_2 \quad \text{--- (B)}\]</span> Multiply Eq. (A) on the left by <span class="math inline">\(x_2^T\)</span>: <span class="math display">\[x_2^T A x_1 = x_2^T (\lambda_1 x_1) = \lambda_1 (x_2^T x_1) \quad \text{--- (C)}\]</span> Multiply Eq. (B) on the left by <span class="math inline">\(x_1^T\)</span>: <span class="math display">\[x_1^T A x_2 = x_1^T (\lambda_2 x_2) = \lambda_2 (x_1^T x_2) \quad \text{--- (D)}\]</span> Take the transpose of both sides of Eq. (C): <span class="math display">\[(x_2^T A x_1)^T = x_1^T A^T (x_2^T)^T = x_1^T A x_2\]</span> Substitute this into Eq. (D): <span class="math display">\[x_2^T A x_1 = \lambda_2 (x_1^T x_2) = \lambda_2 (x_2^T x_1) \quad \text{--- (E)}\]</span> Subtract Eq. (E) from Eq. (C): <span class="math display">\[\lambda_1 (x_2^T x_1) - \lambda_2 (x_2^T x_1) = 0 \implies (\lambda_1 - \lambda_2) (x_2^T x_1) = 0\]</span> Since the eigenvalues are distinct, <span class="math inline">\(\lambda_1 - \lambda_2 \ne 0\)</span>. Dividing gives: <span class="math display">\[\mathbf{x_2^T x_1 = x_1 \cdot x_2 = 0} \quad \blacksquare\]</span></p>
+<h3 id="23-the-spectral-theorem-orthogonal-diagonalization">2.3 The Spectral Theorem (Orthogonal Diagonalization)</h3>
+<blockquote>
+<p><strong>Spectral Theorem</strong>: Every real symmetric matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> has <span class="math inline">\(n\)</span> real eigenvalues and can be orthogonally diagonalized: <span class="math display">\[\mathbf{A = Q \Lambda Q^T}\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(Q = [q_1, q_2, \dots, q_n]\)</span> is an <strong>orthogonal matrix</strong> (<span class="math inline">\(Q^T Q = Q Q^T = I_n\)</span>) whose columns are normalized eigenvectors (<span class="math inline">\(q_i^T q_j = \delta_{ij}\)</span>).</li>
+<li><span class="math inline">\(\Lambda = \text{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)\)</span> is the diagonal matrix of real eigenvalues.</li>
+</ul>
+</blockquote>
+<p>Spectral decomposition allows expressing <span class="math inline">\(A\)</span> as a sum of rank-1 projections: <span class="math display">\[A = \sum_{i=1}^n \lambda_i q_i q_i^T\]</span></p>
+<h3 id="24-rayleigh-quotient--min-max-theorem">2.4 Rayleigh Quotient &amp; Min-Max Theorem</h3>
+<p>For any non-zero vector <span class="math inline">\(x \in \mathbb{R}^n\)</span>, the <strong>Rayleigh Quotient</strong> <span class="math inline">\(R(x)\)</span> is defined as: <span class="math display">\[R(x) = \frac{x^T A x}{x^T x}\]</span></p>
+<ul>
+<li><strong>Rayleigh-Ritz Theorem</strong>: <span class="math display">\[\mathbf{\lambda_{\min} \le \frac{x^T A x}{x^T x} \le \lambda_{\max}}\]</span> <span class="math display">\[\lambda_{\min} = \min_{x \ne \mathbf{0}} R(x), \quad \lambda_{\max} = \max_{x \ne \mathbf{0}} R(x)\]</span></li>
+</ul>
+<hr/>
+<h2 id="3-positive-definite-matrices--quadratic-forms">3. Positive Definite Matrices &amp; Quadratic Forms</h2>
+<h3 id="31-calculus-motivation-minima-of-a-function-slide-387">3.1 Calculus Motivation: Minima of a Function (Slide 387)</h3>
+<p>Consider a general quadratic surface in two variables: <span class="math display">\[f(x, y) = ax^2 + bxy + cy^2\]</span> Positive definiteness physically means that <span class="math inline">\(f(x, y) &gt; 0\)</span> for all <span class="math inline">\((x, y) \ne (0, 0)\)</span>, meaning the origin <span class="math inline">\((0, 0)\)</span> is a <strong>strict global minimum</strong> (a bowl-shaped paraboloid opening upwards).</p>
+<p>At the critical point <span class="math inline">\((x = 0, y = 0)\)</span>, the gradients vanish: <span class="math display">\[\frac{\partial f}{\partial x} = 2ax + by = 0, \quad \frac{\partial f}{\partial y} = bx + 2cy = 0\]</span> From multivariable calculus, for the critical point to be a strict local minimum:</p>
+<ol type="1">
+<li><span class="math inline">\(\frac{\partial^2 f}{\partial x^2} = 2a &gt; 0 \implies a &gt; 0\)</span></li>
+<li><span class="math inline">\(\frac{\partial^2 f}{\partial y^2} = 2c &gt; 0 \implies c &gt; 0\)</span></li>
+<li>The determinant of the Hessian matrix must be strictly positive: <span class="math display">\[\left[ \frac{\partial^2 f}{\partial x^2} \right] \left[ \frac{\partial^2 f}{\partial y^2} \right] &gt; \left[ \frac{\partial^2 f}{\partial x \partial y} \right]^2 \implies (2a)(2c) &gt; b^2 \implies \mathbf{4ac &gt; b^2}\]</span></li>
+</ol>
+<p>In matrix form (Slides 388): <span class="math display">\[f(x, y) = \begin{bmatrix} x &amp; y \end{bmatrix} \begin{bmatrix} a &amp; b/2 \\ b/2 &amp; c \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} &gt; 0\]</span> In higher dimensions <span class="math inline">\(\mathbb{R}^n\)</span>: <span class="math display">\[X^T A X = \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j &gt; 0 \quad \text{for all non-zero } X \in \mathbb{R}^n\]</span></p>
+<h3 id="32-classification-of-real-symmetric-matrices">3.2 Classification of Real Symmetric Matrices</h3>
+<ol type="1">
+<li><strong>Positive Definite (SPD)</strong>: <span class="math display">\[x^T A x &gt; 0 \quad \text{for all } x \ne \mathbf{0}\]</span></li>
+<li><strong>Positive Semi-Definite (SPSD)</strong>: <span class="math display">\[x^T A x \ge 0 \quad \text{for all } x\]</span></li>
+<li><strong>Negative Definite</strong>: <span class="math display">\[x^T A x &lt; 0 \quad \text{for all } x \ne \mathbf{0}\]</span></li>
+<li><strong>Indefinite</strong>: <span class="math inline">\(x^T A x &gt; 0\)</span> for some vectors, and <span class="math inline">\(x^T A x &lt; 0\)</span> for others (saddle-point behavior).</li>
+</ol>
+<h3 id="33-five-equivalent-characterizations-of-an-spd-matrix-slide-389">3.3 Five Equivalent Characterizations of an SPD Matrix (Slide 389)</h3>
+<p>In an exam, you can prove a real symmetric matrix <span class="math inline">\(A = A^T\)</span> is Positive Definite using any of the following necessary and sufficient tests:</p>
+<ol type="1">
+<li><strong>Quadratic Form Test</strong>: <span class="math inline">\(X^T A X &gt; 0\)</span> for all non-zero real vectors <span class="math inline">\(X\)</span>.</li>
+<li><strong>Eigenvalue Test</strong>: All eigenvalues are strictly positive: <span class="math inline">\(\lambda_i &gt; 0\)</span> for all <span class="math inline">\(i = 1, \dots, n\)</span>.</li>
+<li><strong>Sylvester’s Criterion (Leading Principal Minors)</strong>: All upper-left sub-matrices <span class="math inline">\(A_k\)</span> have positive determinants: <span class="math display">\[\det(A_1) = a_{11} &gt; 0, \quad \det(A_2) = \det \begin{bmatrix} a_{11} &amp; a_{12} \\ a_{21} &amp; a_{22} \end{bmatrix} &gt; 0, \quad \dots, \quad \det(A_n) = \det(A) &gt; 0\]</span></li>
+<li><strong>Pivots in Gaussian Elimination</strong>: All <span class="math inline">\(n\)</span> pivots (without row exchanges) satisfy <span class="math inline">\(d_k &gt; 0\)</span>.</li>
+<li><strong>Factorization Characterization</strong>: A real symmetric matrix <span class="math inline">\(A\)</span> is positive definite if and only if there exists a matrix <span class="math inline">\(R\)</span> with <strong>linearly independent columns</strong> such that: <span class="math display">\[\mathbf{A = R^T R}\]</span> (When <span class="math inline">\(R\)</span> is chosen upper triangular, this corresponds to the Cholesky factorization <span class="math inline">\(A = R^T R = L L^T\)</span>).</li>
+<li><strong>Energy Norm</strong>: <span class="math inline">\(A\)</span> defines a valid inner product <span class="math inline">\(\langle u, v \rangle_A = u^T A v\)</span> and norm <span class="math inline">\(\|x\|_A = \sqrt{x^T A x}\)</span>.</li>
+</ol>
+<h3 id="34-conditions-for-positive-semi-definite-matrices-slide-390">3.4 Conditions for Positive Semi-Definite Matrices (Slide 390)</h3>
+<p>A real symmetric matrix is <strong>Positive Semi-Definite (SPSD)</strong> if:</p>
+<ol type="1">
+<li><span class="math inline">\(X^T A X \ge 0\)</span> for all real vectors <span class="math inline">\(X\)</span>.</li>
+<li>All eigenvalues satisfy <span class="math inline">\(\lambda_i \ge 0\)</span>.</li>
+<li>No principal sub-matrices have negative determinants (all principal minors <span class="math inline">\(\ge 0\)</span>).</li>
+<li>No pivots are negative (<span class="math inline">\(d_k \ge 0\)</span>).</li>
+<li>There exists a matrix <span class="math inline">\(R\)</span> (possibly with dependent columns) such that <span class="math inline">\(A = R^T R\)</span>.</li>
+</ol>
+<hr/>
+<h2 id="4-singular-value-decomposition-svd">4. Singular Value Decomposition (SVD)</h2>
+<p>While eigenvalue decomposition is strictly defined for square matrices, SVD applies to <strong>any arbitrary rectangular matrix</strong>.</p>
+<h3 id="41-theorem-of-svd">4.1 Theorem of SVD</h3>
+<blockquote>
+<p><strong>Theorem</strong>: Let <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> be an arbitrary real matrix with rank <span class="math inline">\(r\)</span>. Then <span class="math inline">\(A\)</span> can be uniquely factored as: <span class="math display">\[\mathbf{A = U \Sigma V^T}\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(U \in \mathbb{R}^{m \times m}\)</span> is an orthogonal matrix (<span class="math inline">\(U^T U = I_m\)</span>); its columns <span class="math inline">\(u_i\)</span> are the <strong>left singular vectors</strong>.</li>
+<li><span class="math inline">\(V \in \mathbb{R}^{n \times n}\)</span> is an orthogonal matrix (<span class="math inline">\(V^T V = I_n\)</span>); its columns <span class="math inline">\(v_i\)</span> are the <strong>right singular vectors</strong>.</li>
+<li><span class="math inline">\(\Sigma \in \mathbb{R}^{m \times n}\)</span> is a rectangular diagonal matrix containing the <strong>singular values</strong> <span class="math inline">\(\sigma_i\)</span> ordered non-increasingly: <span class="math display">\[\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r &gt; \sigma_{r+1} = \dots = \sigma_{\min(m, n)} = 0\]</span></li>
+</ul>
+</blockquote>
+<pre><code>              A             =          U           ×       Σ       ×       V^T
+        ┌───────────┐           ┌─────────────┐        ┌───────┐       ┌───────────┐
+      m │           │         m │             │      m │σ₁     │     n │           │
+        │           │           │             │        │  σ₂   │       └───────────┘
+        └───────────┘           └─────────────┘        │    0  │             n
+              n                        m               └───────┘
+                                                           n</code></pre>
+<h3 id="42-relationship-between-svd-and-symmetric-eigensystems">4.2 Relationship Between SVD and Symmetric Eigensystems</h3>
+<p>Multiplying <span class="math inline">\(A\)</span> by its transpose reveals the origin of singular values and vectors:</p>
+<ol type="1">
+<li><p><strong>Computing <span class="math inline">\(A^T A\)</span> (an <span class="math inline">\(n \times n\)</span> symmetric matrix)</strong>: <span class="math display">\[A^T A = (U \Sigma V^T)^T (U \Sigma V^T) = V \Sigma^T U^T U \Sigma V^T = V (\Sigma^T \Sigma) V^T\]</span></p>
+<ul>
+<li>Columns of <span class="math inline">\(V\)</span> (<span class="math inline">\(v_i\)</span>) are the <strong>eigenvectors of <span class="math inline">\(A^T A\)</span></strong>.</li>
+<li>The non-zero eigenvalues of <span class="math inline">\(A^T A\)</span> are the <strong>squares of the singular values</strong>: <span class="math display">\[\lambda_i(A^T A) = \sigma_i^2 \implies \mathbf{\sigma_i = \sqrt{\lambda_i(A^T A)}}\]</span></li>
+</ul></li>
+<li><p><strong>Computing <span class="math inline">\(A A^T\)</span> (an <span class="math inline">\(m \times m\)</span> symmetric matrix)</strong>: <span class="math display">\[A A^T = (U \Sigma V^T) (U \Sigma V^T)^T = U \Sigma V^T V \Sigma^T U^T = U (\Sigma \Sigma^T) U^T\]</span></p>
+<ul>
+<li>Columns of <span class="math inline">\(U\)</span> (<span class="math inline">\(u_i\)</span>) are the <strong>eigenvectors of <span class="math inline">\(A A^T\)</span></strong>.</li>
+</ul></li>
+<li><p><strong>Connection for Symmetric Positive Definite Matrices</strong>: If <span class="math inline">\(A = A^T\)</span> and <span class="math inline">\(A\)</span> is positive definite, then <span class="math inline">\(U = V = Q\)</span>, and the singular values are <strong>identical to the eigenvalues</strong>: <span class="math display">\[\sigma_i = \lambda_i\]</span></p></li>
+</ol>
+<h3 id="43-geometric-meaning-of-svd">4.3 Geometric Meaning of SVD</h3>
+<p>Matrix multiplication <span class="math inline">\(y = A x\)</span> can be decomposed into three geometric steps:</p>
+<ol type="1">
+<li><strong><span class="math inline">\(V^T x\)</span></strong>: An orthogonal coordinate rotation / reflection in <span class="math inline">\(\mathbb{R}^n\)</span>.</li>
+<li><strong><span class="math inline">\(\Sigma (V^T x)\)</span></strong>: Axis-aligned stretching/compression along coordinate directions by scale factors <span class="math inline">\(\sigma_i\)</span>.</li>
+<li><strong><span class="math inline">\(U (\Sigma V^T x)\)</span></strong>: An orthogonal coordinate rotation / reflection in <span class="math inline">\(\mathbb{R}^m\)</span>. <strong>Geometric Summary</strong>: SVD transforms the unit sphere <span class="math inline">\(\|x\|_2 = 1\)</span> in <span class="math inline">\(\mathbb{R}^n\)</span> into a <strong>hyper-ellipsoid</strong> in <span class="math inline">\(\mathbb{R}^m\)</span>, where the semi-axes have lengths equal to <span class="math inline">\(\sigma_i\)</span> pointing along directions <span class="math inline">\(u_i\)</span>.</li>
+</ol>
+<h3 id="44-fundamental-remarks-on-svd-slide-392">4.4 Fundamental Remarks on SVD (Slide 392)</h3>
+<ol type="1">
+<li><strong>Identity for Symmetric Positive Definite Matrices</strong>: For any real SPD matrix <span class="math inline">\(A\)</span>: <span class="math display">\[\mathbf{A = U \Sigma V^T \quad \text{is strictly identical to} \quad A = Q \Lambda Q^T}\]</span> where <span class="math inline">\(U = V = Q\)</span> and <span class="math inline">\(\sigma_i = \lambda_i &gt; 0\)</span>.</li>
+<li><strong>Orthonormal Bases for the Four Fundamental Subspaces</strong>: The singular vectors <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> furnish explicit orthonormal bases for all four fundamental subspaces of <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> with rank <span class="math inline">\(r\)</span>:
+<ul>
+<li><strong>First <span class="math inline">\(r\)</span> columns of <span class="math inline">\(U\)</span></strong> (<span class="math inline">\(u_1, \dots, u_r\)</span>): Orthonormal basis for the <strong>Column Space <span class="math inline">\(C(A)\)</span></strong>.</li>
+<li><strong>Last <span class="math inline">\(m - r\)</span> columns of <span class="math inline">\(U\)</span></strong> (<span class="math inline">\(u_{r+1}, \dots, u_m\)</span>): Orthonormal basis for the <strong>Left Nullspace <span class="math inline">\(N(A^T)\)</span></strong>.</li>
+<li><strong>First <span class="math inline">\(r\)</span> columns of <span class="math inline">\(V\)</span></strong> (<span class="math inline">\(v_1, \dots, v_r\)</span>): Orthonormal basis for the <strong>Row Space <span class="math inline">\(C(A^T)\)</span></strong>.</li>
+<li><strong>Last <span class="math inline">\(n - r\)</span> columns of <span class="math inline">\(V\)</span></strong> (<span class="math inline">\(v_{r+1}, \dots, v_n\)</span>): Orthonormal basis for the <strong>Nullspace <span class="math inline">\(N(A)\)</span></strong>.</li>
+</ul></li>
+<li><strong>Action on Basis Vectors</strong>: Matrix <span class="math inline">\(A\)</span> maps the <span class="math inline">\(j\)</span>-th orthonormal right singular vector <span class="math inline">\(v_j\)</span> directly to <span class="math inline">\(\sigma_j\)</span> times the <span class="math inline">\(j\)</span>-th orthonormal left singular vector <span class="math inline">\(u_j\)</span>: <span class="math display">\[A V = U \Sigma \implies \mathbf{A v_j = \sigma_j u_j \quad (1 \le j \le r)}\]</span> For any vector in the nullspace (<span class="math inline">\(j &gt; r\)</span>), <span class="math inline">\(A v_j = \mathbf{0}\)</span>.</li>
+</ol>
+<hr/>
+<h2 id="5-vector-and-matrix-norms">5. Vector and Matrix Norms</h2>
+<h3 id="51-vector-p-norms">5.1 Vector <span class="math inline">\(p\)</span>-Norms</h3>
+<p>For <span class="math inline">\(x \in \mathbb{R}^n\)</span>: <span class="math display">\[\|x\|_p = \left( \sum_{i=1}^n |x_i|^p \right)^{1/p}\]</span></p>
+<ul>
+<li><strong><span class="math inline">\(L_1\)</span> Norm (Manhattan / Taxicab)</strong>: <span class="math inline">\(\|x\|_1 = \sum_{i=1}^n |x_i|\)</span>.</li>
+<li><strong><span class="math inline">\(L_2\)</span> Norm (Euclidean Norm)</strong>: <span class="math inline">\(\|x\|_2 = \sqrt{\sum_{i=1}^n x_i^2} = \sqrt{x^T x}\)</span>.</li>
+<li><strong><span class="math inline">\(L_\infty\)</span> Norm (Chebyshev / Maximum Norm)</strong>: <span class="math inline">\(\|x\|_\infty = \max_{1 \le i \le n} |x_i|\)</span>.</li>
+</ul>
+<h3 id="52-induced-subordinate-matrix-norms">5.2 Induced (Subordinate) Matrix Norms</h3>
+<p>The induced matrix norm measures the maximum amplification factor that <span class="math inline">\(A\)</span> imparts to any vector <span class="math inline">\(x\)</span>: <span class="math display">\[\|A\|_p = \sup_{x \ne \mathbf{0}} \frac{\|Ax\|_p}{\|x\|_p} = \max_{\|x\|_p = 1} \|Ax\|_p\]</span></p>
+<ul>
+<li><strong>1-Norm (Maximum Column-Sum Norm)</strong>: <span class="math display">\[\mathbf{\|A\|_1 = \max_{1 \le j \le n} \sum_{i=1}^m |a_{ij}|}\]</span></li>
+<li><strong><span class="math inline">\(\infty\)</span>-Norm (Maximum Row-Sum Norm)</strong>: <span class="math display">\[\mathbf{\|A\|_\infty = \max_{1 \le i \le m} \sum_{j=1}^n |a_{ij}|}\]</span></li>
+<li><strong>2-Norm (Spectral Norm)</strong>: <span class="math display">\[\mathbf{\|A\|_2 = \sigma_{\max}(A) = \sqrt{\lambda_{\max}(A^T A)}}\]</span> <em>(For real symmetric matrices, <span class="math inline">\(\|A\|_2 = \max_i |\lambda_i| = \rho(A)\)</span>).</em></li>
+<li><strong>Submultiplicative Property</strong>: For any compatible matrices and vectors: <span class="math display">\[\|A x\| \le \|A\| \|x\|, \quad \|A B\| \le \|A\| \|B\|\]</span></li>
+</ul>
+<hr/>
+<h2 id="6-matrix-condition-number--error-bounds">6. Matrix Condition Number &amp; Error Bounds</h2>
+<h3 id="61-definition-of-condition-number">6.1 Definition of Condition Number</h3>
+<p>The <strong>condition number</strong> <span class="math inline">\(\kappa(A)\)</span> measures the sensitivity of the solution <span class="math inline">\(x\)</span> of <span class="math inline">\(Ax = b\)</span> to perturbations in the input data (<span class="math inline">\(b\)</span> or <span class="math inline">\(A\)</span>). <span class="math display">\[\mathbf{\kappa(A) = \|A\| \|A^{-1}\|}\]</span> Under the matrix 2-norm: <span class="math display">\[\|A\|_2 = \sigma_{\max}, \quad \|A^{-1}\|_2 = \frac{1}{\sigma_{\min}}\]</span> <span class="math display">\[\mathbf{\kappa_2(A) = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)}}\]</span></p>
+<p>For Symmetric Positive Definite matrices: <span class="math display">\[\mathbf{\kappa_2(A) = \frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}}\]</span></p>
+<ul>
+<li><strong>Range</strong>: <span class="math inline">\(\kappa(A) \ge 1\)</span> always.</li>
+<li><strong>Well-conditioned</strong>: <span class="math inline">\(\kappa(A) \approx 1\)</span> (orthogonal matrices have <span class="math inline">\(\kappa_2(Q) = 1\)</span>, the theoretical minimum).</li>
+<li><strong>Ill-conditioned</strong>: <span class="math inline">\(\kappa(A) \gg 1\)</span> (<span class="math inline">\(\kappa \sim 10^4\)</span> to <span class="math inline">\(10^{12}\)</span>).</li>
+<li><strong>Singular Matrix</strong>: <span class="math inline">\(\sigma_{\min} = 0 \implies \kappa(A) = \infty\)</span>.</li>
+</ul>
+<h3 id="62-rigorous-derivation-of-the-error-propagation-inequality">6.2 Rigorous Derivation of the Error Propagation Inequality</h3>
+<p>Consider the unperturbed system: <span class="math display">\[A x = b \quad \text{--- (1)}\]</span> Suppose the right-hand side vector <span class="math inline">\(b\)</span> is perturbed by a small error <span class="math inline">\(\delta b\)</span> (measurement error, round-off). The resulting solution becomes <span class="math inline">\(x + \delta x\)</span>: <span class="math display">\[A (x + \delta x) = b + \delta b\]</span> By linearity: <span class="math display">\[A x + A \delta x = b + \delta b \implies A \delta x = \delta b\]</span> Since <span class="math inline">\(A\)</span> is non-singular: <span class="math display">\[\delta x = A^{-1} \delta b \quad \text{--- (2)}\]</span></p>
+<p>Take norms on both sides of Eq. (2) and apply the submultiplicative property: <span class="math display">\[\|\delta x\| = \|A^{-1} \delta b\| \le \|A^{-1}\| \|\delta b\| \quad \text{--- (3)}\]</span> Now, from Eq. (1), take norms: <span class="math display">\[\|b\| = \|A x\| \le \|A\| \|x\| \implies \frac{1}{\|x\|} \le \frac{\|A\|}{\|b\|} \quad \text{--- (4)}\]</span> Multiply inequality (3) by inequality (4): <span class="math display">\[\frac{\|\delta x\|}{\|x\|} \le \|A^{-1}\| \|\delta b\| \cdot \frac{\|A\|}{\|b\|} = \left( \|A\| \|A^{-1}\| \right) \frac{\|\delta b\|}{\|b\|}\]</span> <span class="math display">\[\mathbf{\frac{\|\delta x\|}{\|x\|} \le \kappa(A) \frac{\|\delta b\|}{\|b\|}}\]</span></p>
+<h3 id="63-general-perturbation-bound-both-a-and-b-perturbed">6.3 General Perturbation Bound (Both <span class="math inline">\(A\)</span> and <span class="math inline">\(b\)</span> Perturbed)</h3>
+<p>If both the operator <span class="math inline">\(A\)</span> and the RHS <span class="math inline">\(b\)</span> suffer perturbations <span class="math inline">\((A + \delta A)(x + \delta x) = b + \delta b\)</span>, with <span class="math inline">\(\|\delta A\| &lt; 1/\|A^{-1}\|\)</span>: <span class="math display">\[\mathbf{\frac{\|\delta x\|}{\|x\|} \le \frac{\kappa(A)}{1 - \kappa(A) \frac{\|\delta A\|}{\|A\|}} \left( \frac{\|\delta b\|}{\|b\|} + \frac{\|\delta A\|}{\|A\|} \right)}\]</span></p>
+<h3 id="64-practical-significance-in-numerical-computation">6.4 Practical Significance in Numerical Computation</h3>
+<ul>
+<li><strong>Rule of Thumb (Loss of Significance)</strong>: If a problem has condition number <span class="math inline">\(\kappa(A) \approx 10^k\)</span>, solving the system in IEEE 754 double precision (<span class="math inline">\(16\text{ decimal digits}\)</span>) can lose up to <span class="math inline">\(k\)</span> significant digits: <span class="math display">\[\text{Digits of precision remaining} \approx 16 - \log_{10}(\kappa(A))\]</span></li>
+<li><strong>Ill-Conditioning in Discretized PDEs</strong>: For the central difference Laplacian on a grid with spacing <span class="math inline">\(h\)</span>: <span class="math display">\[\lambda_{\min} \sim \pi^2, \quad \lambda_{\max} \sim \frac{4}{h^2} \implies \mathbf{\kappa_2(A) \sim O\left(\frac{1}{h^2}\right) = O(N)}\]</span> As the mesh is refined to improve accuracy (<span class="math inline">\(h \to 0\)</span>), the condition number blows up quadratically! This makes iterative solvers stall, directly necessitating <strong>preconditioning</strong>.</li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-05.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Classical Iterative Solvers & Convergence Theory</span>
+      </a>
+    
+      
+      <a href="chapter-07.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Orthogonalization, Gram-Schmidt & QR Factorization</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

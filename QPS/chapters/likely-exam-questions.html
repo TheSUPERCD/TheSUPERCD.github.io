@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>HPSC Examination Question Bank & Model Solutions Repository | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#likely-exam-questions" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-19.html" class="btn-nav-control" title="Previous: The Ultimate Last-Night Cramming Guide & Complete Notation Decryptor">← Prev</a>
+      <a href="previous-years-question-papers.html" class="btn-nav-control" title="Next: Previous Years Examination Question Papers: Detailed Solutions & Analysis">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Question Bank</span><span class="hub-badge badge-primary">Part III</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">HPSC Examination Question Bank & Model Solutions Repository</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#likely-exam-questions" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="hpsc-examination-question-bank--model-solutions-repository">HPSC Examination Question Bank &amp; Model Solutions Repository</h1>
+<h2 id="high-performance-scientific-computing-cd61002--iit-kharagpur">High Performance Scientific Computing (CD61002) — IIT Kharagpur</h2>
+<blockquote>
+<p><strong>Course</strong>: CD61002 — High Performance Scientific Computing<br/>
+<strong>Target Audience</strong>: Students preparing for Mid-Semester, End-Semester, and Class Tests<br/>
+<strong>Pedagogical Alignment</strong>: Prof. Somnath Roy (IIT Kharagpur), Gilbert Strang, Yousef Saad, Grama et al.<br/>
+<strong>Document Purpose</strong>: A curated repository of high-probability examination questions covering all 18 lecture modules, complete with step-by-step analytical solutions, algebraic proofs, matrix calculations, and architectural trade-off evaluations.</p>
+</blockquote>
+<hr/>
+<h2 id="bookmark_tabs-question-bank-index-by-module">📑 Question Bank Index by Module</h2>
+<ul>
+<li><a href="#module-1-pde-discretization-stencils--sparse-storage-schemes">Module 1: PDE Discretization, Stencils &amp; Sparse Storage Schemes</a>
+<ul>
+<li><a href="#q11-2d-poisson-stencil-with-mixed-boundary-conditions--matrix-assembly-5-marks">Q1.1: 2D Poisson Stencil with Mixed Boundary Conditions &amp; Matrix Assembly</a></li>
+<li><a href="#q12-unpacking-compressed-sparse-row-csr-and-modified-sparse-row-msr-arrays-6-marks">Q1.2: Unpacking Compressed Sparse Row (CSR) and Modified Sparse Row (MSR) Arrays</a></li>
+<li><a href="#q13-ellpack-vs-dia-memory-footprint-and-gpu-warp-coalescing-5-marks">Q1.3: ELLPACK vs. DIA Memory Footprint and GPU Warp Coalescing</a></li>
+</ul></li>
+<li><a href="#module-2-classical-iterative-solvers--convergence-theory">Module 2: Classical Iterative Solvers &amp; Convergence Theory</a>
+<ul>
+<li><a href="#q21-spectral-radius-derivation-and-unconditional-divergence-of-iteration-matrix-6-marks">Q2.1: Spectral Radius Derivation and Unconditional Divergence of Iteration Matrix</a></li>
+<li><a href="#q22-gershgorin-circle-theorem--proof-of-jacobi-convergence-for-sdd-matrices-5-marks">Q2.2: Gershgorin Circle Theorem &amp; Proof of Jacobi Convergence for SDD Matrices</a></li>
+<li><a href="#q23-youngs-theorem-sor-optimal-relaxation-factor-omega_opt-and-iteration-contraction-6-marks">Q2.3: Young's Theorem, SOR Optimal Relaxation Factor <span class="math inline">\(\omega_{opt}\)</span>, and Iteration Contraction</a></li>
+<li><a href="#q24-counterexample-non-singular-system-failing-jacobi-but-solvable-by-gauss-seidel-4-marks">Q2.4: Counterexample: Non-Singular System Failing Jacobi But Solvable by Gauss-Seidel</a></li>
+</ul></li>
+<li><a href="#module-3-direct-solvers-tdma--sherman-morrison-formula">Module 3: Direct Solvers, TDMA &amp; Sherman-Morrison Formula</a>
+<ul>
+<li><a href="#q31-thomas-algorithm-tdma-recurrence-derivation-and-stability-bound-6-marks">Q3.1: Thomas Algorithm (TDMA) Recurrence Derivation and Stability Bound</a></li>
+<li><a href="#q32-cyclic-tridiagonal-solver-via-sherman-morrison-rank-1-perturbation-6-marks">Q3.2: Cyclic Tridiagonal Solver via Sherman-Morrison Rank-1 Perturbation</a></li>
+</ul></li>
+<li><a href="#module-4-projection-methods--steepest-descent">Module 4: Projection Methods &amp; Steepest Descent</a>
+<ul>
+<li><a href="#q41-derivation-of-optimal-step-size-alpha_k-and-residual-orthogonality-proof-6-marks">Q4.1: Derivation of Optimal Step Size <span class="math inline">\(\alpha_k\)</span> and Residual Orthogonality Proof</a></li>
+<li><a href="#q42-kantorovich-inequality-and-geometric-analysis-of-zigzagging-5-marks">Q4.2: Kantorovich Inequality and Geometric Analysis of Zigzagging</a></li>
+</ul></li>
+<li><a href="#module-5-krylov-subspace-methods-cg-arnoldi-gmres-bicgstab">Module 5: Krylov Subspace Methods (CG, Arnoldi, GMRES, BiCGSTAB)</a>
+<ul>
+<li><a href="#q51-conjugate-gradient-step-length-alpha_k-and-search-direction-beta_k-derivation-7-marks">Q5.1: Conjugate Gradient Step Length <span class="math inline">\(\alpha_k\)</span> and Search Direction <span class="math inline">\(\beta_k\)</span> Derivation</a></li>
+<li><a href="#q52-finite-element-mesh-refinement-scaling-on-cg-iterations--computational-cost-6-marks">Q5.2: Finite-Element Mesh Refinement Scaling on CG Iterations &amp; Computational Cost</a></li>
+<li><a href="#q53-arnoldi-hessenberg-reduction-vs-symmetric-lanczos-3-term-recurrence-5-marks">Q5.3: Arnoldi Hessenberg Reduction vs. Symmetric Lanczos 3-Term Recurrence</a></li>
+<li><a href="#q54-gmres-minimization-via-givens-rotations--residual-norm-monitoring-6-marks">Q5.4: GMRES Minimization via Givens Rotations &amp; Residual Norm Monitoring</a></li>
+<li><a href="#q55-bicg-breakdown-modes-and-bicgstab-polynomial-stabilization-mechanism-5-marks">Q5.5: BiCG Breakdown Modes and BiCGSTAB Polynomial Stabilization Mechanism</a></li>
+</ul></li>
+<li><a href="#module-6-preconditioning-techniques">Module 6: Preconditioning Techniques</a>
+<ul>
+<li><a href="#q61-preconditioned-conjugate-gradient-pcg-algebraic-derivation-6-marks">Q6.1: Preconditioned Conjugate Gradient (PCG) Algebraic Derivation</a></li>
+<li><a href="#q62-incomplete-cholesky-ic0-vs-ssor-preconditioner-construction-5-marks">Q6.2: Incomplete Cholesky IC(0) vs. SSOR Preconditioner Construction</a></li>
+</ul></li>
+<li><a href="#module-7-computer-architecture-caching--memory-wall">Module 7: Computer Architecture, Caching &amp; Memory Wall</a>
+<ul>
+<li><a href="#q71-the-memory-wall-dram-latency-penalty-and-effective-access-time-eat-5-marks">Q7.1: The Memory Wall: DRAM Latency Penalty and Effective Access Time (EAT)</a></li>
+<li><a href="#q72-row-major-vs-column-major-striding-and-cache-tiling-analysis-6-marks">Q7.2: Row-Major vs. Column-Major Striding and Cache Tiling Analysis</a></li>
+</ul></li>
+<li><a href="#module-8-parallel-architectures-interconnects--topologies">Module 8: Parallel Architectures, Interconnects &amp; Topologies</a>
+<ul>
+<li><a href="#q81-network-topology-metrics-degree-diameter-and-bisection-width-derivation-6-marks">Q8.1: Network Topology Metrics: Degree, Diameter, and Bisection Width Derivation</a></li>
+<li><a href="#q82-cache-coherency-mesi-protocol-and-false-sharing-pathology-with-code-fix-5-marks">Q8.2: Cache Coherency (MESI Protocol) and False Sharing Pathology with Code Fix</a></li>
+</ul></li>
+<li><a href="#module-9-parallel-performance-scalability--amdahls-law">Module 9: Parallel Performance, Scalability &amp; Amdahl's Law</a>
+<ul>
+<li><a href="#q91-amdahls-law-with-parallel-communication-overhead-and-maximum-efficiency-6-marks">Q9.1: Amdahl's Law with Parallel Communication Overhead and Maximum Efficiency</a></li>
+<li><a href="#q92-isoefficiency-function-derivation-and-scalability-evaluation-6-marks">Q9.2: Isoefficiency Function Derivation and Scalability Evaluation</a></li>
+</ul></li>
+<li><a href="#module-10-parallel-numerical-linear-algebra">Module 10: Parallel Numerical Linear Algebra</a>
+<ul>
+<li><a href="#q101-parallel-spmv-1d-row-striping-vs-2d-checkerboard-mesh-decomposition-6-marks">Q10.1: Parallel SpMV: 1D Row Striping vs. 2D Checkerboard Mesh Decomposition</a></li>
+<li><a href="#q102-cannons-algorithm-on-2d-torus-communication-complexity--shift-steps-7-marks">Q10.2: Cannon's Algorithm on 2D Torus: Communication Complexity &amp; Shift Steps</a></li>
+</ul></li>
+<li><a href="#full-model-examination-paper-25-marks-2-hours">Full Model Examination Paper (25 Marks, 2 Hours)</a></li>
+</ul>
+<hr/>
+<h2 id="module-1-pde-discretization-stencils--sparse-storage-schemes">Module 1: PDE Discretization, Stencils &amp; Sparse Storage Schemes</h2>
+<h3 id="q11-2d-poisson-stencil-with-mixed-boundary-conditions--matrix-assembly-5-marks">Q1.1: 2D Poisson Stencil with Mixed Boundary Conditions &amp; Matrix Assembly [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Consider the 2D Poisson equation on the unit square <span class="math inline">\(\Omega = [0, 1] \times [0, 1]\)</span>: <span class="math display">\[\frac{\partial^2 T}{\partial x^2} + \frac{\partial^2 T}{\partial y^2} = -2 \pi^2 \sin(\pi x) \sin(\pi y)\]</span> The domain is discretized using a uniform grid with spacing <span class="math inline">\(h = \Delta x = \Delta y = \frac{1}{3}\)</span>, yielding interior nodes at <span class="math inline">\((x_i, y_j) = (ih, jh)\)</span> for <span class="math inline">\(i, j \in \{1, 2\}\)</span>.<br/>
+The boundary conditions are:</p>
+<ul>
+<li>Bottom (<span class="math inline">\(y = 0\)</span>): <span class="math inline">\(T(x, 0) = 0\)</span> (Dirichlet)</li>
+<li>Top (<span class="math inline">\(y = 1\)</span>): <span class="math inline">\(T(x, 1) = 0\)</span> (Dirichlet)</li>
+<li>Left (<span class="math inline">\(x = 0\)</span>): <span class="math inline">\(T(0, y) = 0\)</span> (Dirichlet)</li>
+<li>Right (<span class="math inline">\(x = 1\)</span>): <span class="math inline">\(\left.\frac{\partial T}{\partial x}\right|_{x=1} = 0\)</span> (Homogeneous Neumann)</li>
+</ul>
+<p>Using standard second-order central difference approximations and a fictitious ghost node for the Neumann boundary, assemble the linear system <span class="math inline">\(A x = b\)</span> for the 4 interior nodes numbered lexicographically <span class="math inline">\(\text{ipt}(i, j) = i + (j-1)N_x\)</span> where <span class="math inline">\(N_x = 2\)</span>.</p>
+<h4 id="full-step-by-step-solution">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Grid Setup and Node Indexing</strong>:</p>
+<ul>
+<li>Spacing: <span class="math inline">\(h = 1/3\)</span>.</li>
+<li>Interior grid coordinates:
+<ul>
+<li>Node 1: <span class="math inline">\((x_1, y_1) = (1/3, 1/3)\)</span></li>
+<li>Node 2: <span class="math inline">\((x_2, y_1) = (2/3, 1/3)\)</span></li>
+<li>Node 3: <span class="math inline">\((x_1, y_2) = (1/3, 2/3)\)</span></li>
+<li>Node 4: <span class="math inline">\((x_2, y_2) = (2/3, 2/3)\)</span></li>
+</ul></li>
+<li><span class="math inline">\(N_x = 2\)</span> nodes in the <span class="math inline">\(x\)</span>-direction, <span class="math inline">\(N_y = 2\)</span> nodes in the <span class="math inline">\(y\)</span>-direction. Total unknowns <span class="math inline">\(N = 4\)</span>.</li>
+</ul></li>
+<li><p><strong>Standard 5-Point Interior Stencil</strong>: The standard 2nd-order central difference operator for <span class="math inline">\(\nabla^2 T = f\)</span> gives: <span class="math display">\[\frac{T_{i+1, j} - 2T_{i, j} + T_{i-1, j}}{h^2} + \frac{T_{i, j+1} - 2T_{i, j} + T_{i, j-1}}{h^2} = f_{i, j}\]</span> Multiplying by <span class="math inline">\(-h^2\)</span>: <span class="math display">\[4T_{i, j} - T_{i+1, j} - T_{i-1, j} - T_{i, j+1} - T_{i, j-1} = -h^2 f_{i, j}\]</span> Here <span class="math inline">\(-h^2 = -(1/3)^2 = -1/9\)</span>. Thus the right-hand side source term is: <span class="math display">\[b_{i, j} = \frac{2\pi^2}{9} \sin(\pi x_i) \sin(\pi y_j)\]</span></p></li>
+<li><p><strong>Neumann Boundary Condition &amp; Ghost Node Formulation</strong>: On the right boundary (<span class="math inline">\(x = 1\)</span>, i.e., <span class="math inline">\(i = 3\)</span>), we enforce <span class="math inline">\(\left.\frac{\partial T}{\partial x}\right|_{3, j} = 0\)</span>: Using a central difference at <span class="math inline">\(i = 2\)</span>: <span class="math display">\[\left.\frac{\partial T}{\partial x}\right|_{2, j} \approx \frac{T_{3, j} - T_{1, j}}{2h}\]</span> However, node <span class="math inline">\((2, j)\)</span> has neighbor <span class="math inline">\(T_{3, j}\)</span> on the boundary. If we treat node 2 as an interior node adjacent to boundary <span class="math inline">\(i = 3\)</span>, we apply the boundary condition directly at <span class="math inline">\(x = 1\)</span>.<br/>
+Using a 2nd-order backwards/ghost formulation at <span class="math inline">\(i = 2\)</span>: <span class="math display">\[\left.\frac{\partial T}{\partial x}\right|_{2, j} = 0 \implies T_{3, j} = T_{1, j}\]</span> Substituting <span class="math inline">\(T_{3, j} = T_{1, j}\)</span> into the 5-point stencil for <span class="math inline">\(i = 2\)</span>: <span class="math display">\[4T_{2, j} - T_{1, j} - T_{1, j} - T_{2, j+1} - T_{2, j-1} = b_{2, j} \implies 4T_{2, j} - 2T_{1, j} - T_{2, j+1} - T_{2, j-1} = b_{2, j}\]</span></p></li>
+<li><p><strong>Equations for Each Unknown</strong>:</p>
+<ul>
+<li><p><strong>Node 1 <span class="math inline">\((1, 1)\)</span></strong>:</p>
+<ul>
+<li>Neighbors: <span class="math inline">\(T_{0, 1} = 0\)</span> (left), <span class="math inline">\(T_{1, 0} = 0\)</span> (bottom), <span class="math inline">\(T_{2, 1} = T_2\)</span> (right), <span class="math inline">\(T_{1, 2} = T_3\)</span> (top).</li>
+<li>Equation: <span class="math display">\[4T_1 - T_2 - T_3 = b_1\]</span> where <span class="math inline">\(b_1 = \frac{2\pi^2}{9} \sin(\pi/3) \sin(\pi/3) = \frac{2\pi^2}{9} \left(\frac{\sqrt{3}}{2}\right)^2 = \frac{2\pi^2}{9} \cdot \frac{3}{4} = \frac{\pi^2}{6} \approx 1.6449\)</span>.</li>
+</ul></li>
+<li><p><strong>Node 2 <span class="math inline">\((2, 1)\)</span></strong>:</p>
+<ul>
+<li>Neighbors: <span class="math inline">\(T_{1, 1} = T_1\)</span> (left), <span class="math inline">\(T_{2, 0} = 0\)</span> (bottom), <span class="math inline">\(T_{3, 1} = T_1\)</span> (right, Neumann ghost), <span class="math inline">\(T_{2, 2} = T_4\)</span> (top).</li>
+<li>Equation: <span class="math display">\[4T_2 - 2T_1 - T_4 = b_2\]</span> where <span class="math inline">\(b_2 = \frac{2\pi^2}{9} \sin(2\pi/3) \sin(\pi/3) = \frac{\pi^2}{6} \approx 1.6449\)</span>.</li>
+</ul></li>
+<li><p><strong>Node 3 <span class="math inline">\((1, 2)\)</span></strong>:</p>
+<ul>
+<li>Neighbors: <span class="math inline">\(T_{0, 2} = 0\)</span> (left), <span class="math inline">\(T_{1, 1} = T_1\)</span> (bottom), <span class="math inline">\(T_{2, 2} = T_4\)</span> (right), <span class="math inline">\(T_{1, 3} = 0\)</span> (top).</li>
+<li>Equation: <span class="math display">\[-T_1 + 4T_3 - T_4 = b_3\]</span> where <span class="math inline">\(b_3 = \frac{2\pi^2}{9} \sin(\pi/3) \sin(2\pi/3) = \frac{\pi^2}{6} \approx 1.6449\)</span>.</li>
+</ul></li>
+<li><p><strong>Node 4 <span class="math inline">\((2, 2)\)</span></strong>:</p>
+<ul>
+<li>Neighbors: <span class="math inline">\(T_{1, 2} = T_3\)</span> (left), <span class="math inline">\(T_{2, 1} = T_2\)</span> (bottom), <span class="math inline">\(T_{3, 2} = T_3\)</span> (right, Neumann ghost), <span class="math inline">\(T_{2, 3} = 0\)</span> (top).</li>
+<li>Equation: <span class="math display">\[-T_2 - 2T_3 + 4T_4 = b_4\]</span> where <span class="math inline">\(b_4 = \frac{\pi^2}{6} \approx 1.6449\)</span>.</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Assembled Matrix System</strong>: <span class="math display">\[\begin{bmatrix}
+4 &amp; -1 &amp; -1 &amp; 0 \\
+-2 &amp; 4 &amp; 0 &amp; -1 \\
+-1 &amp; 0 &amp; 4 &amp; -1 \\
+0 &amp; -1 &amp; -2 &amp; 4
+\end{bmatrix}
+\begin{bmatrix} T_1 \\ T_2 \\ T_3 \\ T_4 \end{bmatrix}
+= \frac{\pi^2}{6}
+\begin{bmatrix} 1 \\ 1 \\ 1 \\ 1 \end{bmatrix}\]</span></p>
+<blockquote>
+<p><strong>Exam Insight</strong>: Notice that the Neumann boundary condition introduces an asymmetry in the coefficient matrix (<span class="math inline">\(a_{21} = -2 \ne a_{12} = -1\)</span>). Consequently, <span class="math inline">\(A \ne A^T\)</span>! Conjugate Gradient <em>cannot</em> be used directly without symmetrization or normal equations; GMRES or BiCGSTAB must be employed.</p>
+</blockquote></li>
+</ol>
+<hr/>
+<h3 id="q12-unpacking-compressed-sparse-row-csr-and-modified-sparse-row-msr-arrays-6-marks">Q1.2: Unpacking Compressed Sparse Row (CSR) and Modified Sparse Row (MSR) Arrays [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+A sparse coefficient matrix <span class="math inline">\(A \in \mathbb{R}^{5 \times 5}\)</span> is represented in the Modified Sparse Row (MSR) format using two 1D arrays:</p>
+<pre><code>AA = [ 10.0,  20.0,  30.0,  40.0,  50.0,   *,   -1.0,   2.0,  -3.0,   4.0,  -5.0 ]
+JA = [    7,     8,    10,    11,    12,  12,      2,     1,     4,     2,     3 ]</code></pre>
+<ol type="1">
+<li>Explain the significance of entry <code>JA(6) = 12</code> and the asterisk <code>*</code> at <code>AA(6)</code>.</li>
+<li>Fully reconstruct the <span class="math inline">\(5 \times 5\)</span> matrix <span class="math inline">\(A\)</span>.</li>
+<li>Convert this matrix into standard 0-indexed Compressed Sparse Row (CSR) format with arrays <code>val</code>, <code>col_ind</code>, and <code>row_ptr</code>.</li>
+</ol>
+<h4 id="full-step-by-step-solution-1">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Anatomy of MSR Format</strong>:</p>
+<ul>
+<li>In MSR format for an <span class="math inline">\(n \times n\)</span> matrix with <span class="math inline">\(N_{nz}\)</span> non-zero elements:
+<ul>
+<li>Array length: <span class="math inline">\(N_{nz} + 1\)</span>. Here length is 11, so <span class="math inline">\(N_{nz} = 10\)</span>.</li>
+<li><code>AA(1:n)</code> stores the <span class="math inline">\(n\)</span> main diagonal entries: <span class="math inline">\(a_{11}=10, a_{22}=20, a_{33}=30, a_{44}=40, a_{55}=50\)</span>.</li>
+<li><code>AA(n+1)</code> (position 6) is an unused placeholder/pointer delimiter, conventionally marked with <code>*</code>.</li>
+<li><code>AA(n+2 : end)</code> stores the strictly off-diagonal non-zero entries.</li>
+<li><code>JA(1:n)</code> points to the starting index in <code>AA</code> of off-diagonal elements for each row.</li>
+<li><code>JA(n+1)</code> points to the first unoccupied position after all off-diagonals (i.e., <code>length + 1</code> = 12).</li>
+<li>Because <code>JA(5) = 12</code> and <code>JA(6) = 12</code>, the difference <span class="math inline">\(\text{JA}(6) - \text{JA}(5) = 0\)</span>. This proves that <strong>Row 5 contains ZERO off-diagonal elements</strong> (it has only a diagonal entry <span class="math inline">\(a_{55} = 50\)</span>).</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Reconstruction of Matrix <span class="math inline">\(A\)</span></strong>:</p>
+<ul>
+<li><strong>Row 1</strong>:
+<ul>
+<li>Diagonal: <span class="math inline">\(a_{11} = 10.0\)</span>.</li>
+<li>Off-diagonals: index range from <code>JA(1)=7</code> to <code>JA(2)-1 = 7</code> (1 element).</li>
+<li>At index 7: value <code>AA(7) = -1.0</code>, column <code>JA(7) = 2</code> <span class="math inline">\(\implies a_{12} = -1.0\)</span>.</li>
+</ul></li>
+<li><strong>Row 2</strong>:
+<ul>
+<li>Diagonal: <span class="math inline">\(a_{22} = 20.0\)</span>.</li>
+<li>Off-diagonals: index range from <code>JA(2)=8</code> to <code>JA(3)-1 = 9</code> (2 elements).</li>
+<li>Index 8: value <code>AA(8) = 2.0</code>, column <code>JA(8) = 1</code> <span class="math inline">\(\implies a_{21} = 2.0\)</span>.</li>
+<li>Index 9: value <code>AA(9) = -3.0</code>, column <code>JA(9) = 4</code> <span class="math inline">\(\implies a_{24} = -3.0\)</span>.</li>
+</ul></li>
+<li><strong>Row 3</strong>:
+<ul>
+<li>Diagonal: <span class="math inline">\(a_{33} = 30.0\)</span>.</li>
+<li>Off-diagonals: index range from <code>JA(3)=10</code> to <code>JA(4)-1 = 10</code> (1 element).</li>
+<li>Index 10: value <code>AA(10) = 4.0</code>, column <code>JA(10) = 2</code> <span class="math inline">\(\implies a_{32} = 4.0\)</span>.</li>
+</ul></li>
+<li><strong>Row 4</strong>:
+<ul>
+<li>Diagonal: <span class="math inline">\(a_{44} = 40.0\)</span>.</li>
+<li>Off-diagonals: index range from <code>JA(4)=11</code> to <code>JA(5)-1 = 11</code> (1 element).</li>
+<li>Index 11: value <code>AA(11) = -5.0</code>, column <code>JA(11) = 3</code> <span class="math inline">\(\implies a_{43} = -5.0\)</span>.</li>
+</ul></li>
+<li><strong>Row 5</strong>:
+<ul>
+<li>Diagonal: <span class="math inline">\(a_{55} = 50.0\)</span>.</li>
+<li>Off-diagonals: none (<code>JA(5) = JA(6) = 12</code>).</li>
+</ul></li>
+</ul>
+<p><span class="math display">\[A = \begin{bmatrix}
+10.0 &amp; -1.0 &amp;  0.0 &amp;  0.0 &amp;  0.0 \\
+2.0 &amp; 20.0 &amp;  0.0 &amp; -3.0 &amp;  0.0 \\
+0.0 &amp;  4.0 &amp; 30.0 &amp;  0.0 &amp;  0.0 \\
+0.0 &amp;  0.0 &amp; -5.0 &amp; 40.0 &amp;  0.0 \\
+0.0 &amp;  0.0 &amp;  0.0 &amp;  0.0 &amp; 50.0
+\end{bmatrix}\]</span></p></li>
+<li><p><strong>Conversion to 0-Indexed CSR Format</strong>:</p>
+<ul>
+<li>Total non-zeros: <span class="math inline">\(N_{nz} = 1 + 3 + 2 + 2 + 1 = 9\)</span> (excluding explicit zeros).</li>
+<li>In 0-indexing:
+<ul>
+<li><code>val</code>: All non-zero entries row by row:
+<pre><code>val = [ 10.0, -1.0, 2.0, 20.0, -3.0, 4.0, 30.0, -5.0, 40.0, 50.0 ]</code></pre></li>
+<li><code>col_ind</code> (0-indexed column coordinates):
+<pre><code>col_ind = [ 0, 1, 0, 1, 3, 1, 2, 2, 3, 4 ]</code></pre></li>
+<li><code>row_ptr</code> (cumulative non-zero counts per row):
+<ul>
+<li>Row 0 starts at index 0. Has 2 non-zeros.</li>
+<li>Row 1 starts at index 2. Has 3 non-zeros.</li>
+<li>Row 2 starts at index 5. Has 2 non-zeros.</li>
+<li>Row 3 starts at index 7. Has 2 non-zeros.</li>
+<li>Row 4 starts at index 9. Has 1 non-zero.</li>
+<li>End pointer is 10.</li>
+</ul>
+<pre><code>row_ptr = [ 0, 2, 5, 7, 9, 10 ]</code></pre></li>
+</ul></li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q13-ellpack-vs-dia-memory-footprint-and-gpu-warp-coalescing-5-marks">Q1.3: ELLPACK vs. DIA Memory Footprint and GPU Warp Coalescing [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+A 3D structured CFD grid of size <span class="math inline">\(100 \times 100 \times 100\)</span> (<span class="math inline">\(N = 10^6\)</span> nodes) is discretized using a 7-point Laplacian stencil.</p>
+<ol type="1">
+<li>Compute the exact storage requirement in Megabytes (MB) for double-precision floating point values (8 bytes) and 32-bit integer indices (4 bytes) under:
+<ul>
+<li>(a) Compressed Sparse Row (CSR) format.</li>
+<li>(b) Diagonal Storage (DIA) format.</li>
+<li>(c) ELLPACK format.</li>
+</ul></li>
+<li>Explain why the ELLPACK format delivers substantially higher memory throughput than CSR when executing Sparse Matrix-Vector multiplication (SpMV) on modern NVIDIA GPU architectures.</li>
+</ol>
+<h4 id="full-step-by-step-solution-2">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Storage Calculations</strong>:</p>
+<ul>
+<li><p>Total unknowns: <span class="math inline">\(N = 10^6\)</span>.</p></li>
+<li><p>Interior stencil has 7 points. Non-zeros: <span class="math inline">\(N_{nz} \approx 7N - 2(N_x N_y + N_y N_z + N_x N_z) \approx 7 \times 10^6\)</span> entries.</p></li>
+<li><p><strong>(a) CSR Format</strong>:</p>
+<ul>
+<li><code>val</code>: <span class="math inline">\(N_{nz}\)</span> doubles <span class="math inline">\(\implies 7 \times 10^6 \times 8\text{ B} = 56\text{ MB}\)</span>.</li>
+<li><code>col_ind</code>: <span class="math inline">\(N_{nz}\)</span> integers <span class="math inline">\(\implies 7 \times 10^6 \times 4\text{ B} = 28\text{ MB}\)</span>.</li>
+<li><code>row_ptr</code>: <span class="math inline">\(N + 1\)</span> integers <span class="math inline">\(\implies (10^6 + 1) \times 4\text{ B} \approx 4\text{ MB}\)</span>.</li>
+<li><strong>Total CSR Storage</strong> = <span class="math inline">\(56 + 28 + 4 = \mathbf{88\text{ MB}}\)</span>.</li>
+</ul></li>
+<li><p><strong>(b) DIA Format</strong>:</p>
+<ul>
+<li>Active diagonals for 7-point 3D stencil: Offsets: <span class="math inline">\([-N_x N_y, \; -N_x, \; -1, \; 0, \; 1, \; N_x, \; N_x N_y] \implies 7\text{ active diagonals}\)</span>.</li>
+<li>Dense array <code>DIAG(N, 7)</code> of doubles: <span class="math inline">\(10^6 \times 7 \times 8\text{ B} = 56\text{ MB}\)</span>.</li>
+<li>Offset vector <code>IOFF(7)</code> of integers: <span class="math inline">\(7 \times 4\text{ B} = 28\text{ bytes} \approx 0\text{ MB}\)</span>.</li>
+<li>Zero padding overhead on boundaries: minimal (<span class="math inline">\(2 \times 10^4\)</span> zeros).</li>
+<li><strong>Total DIA Storage</strong> <span class="math inline">\(\approx \mathbf{56\text{ MB}}\)</span> (No column index array needed!).</li>
+</ul></li>
+<li><p><strong>(c) ELLPACK Format</strong>:</p>
+<ul>
+<li>Maximum non-zeros per row: <span class="math inline">\(K = 7\)</span>.</li>
+<li><code>COEF(N, 7)</code> array of doubles: <span class="math inline">\(10^6 \times 7 \times 8\text{ B} = 56\text{ MB}\)</span>.</li>
+<li><code>JCOEF(N, 7)</code> array of integers: <span class="math inline">\(10^6 \times 7 \times 4\text{ B} = 28\text{ MB}\)</span>.</li>
+<li><strong>Total ELLPACK Storage</strong> = <span class="math inline">\(56 + 28 = \mathbf{84\text{ MB}}\)</span>.</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Why ELLPACK Outperforms CSR on GPUs</strong>:</p>
+<ul>
+<li><strong>GPU Architecture Principle</strong>: NVIDIA GPUs execute threads in SIMT (Single Instruction, Multiple Threads) groups called <strong>Warps</strong> (32 threads).</li>
+<li>In <strong>CSR SpMV</strong>, thread <span class="math inline">\(i\)</span> computes row <span class="math inline">\(i\)</span>. If rows have different numbers of non-zeros, threads within the warp diverge (warp divergence), idling while waiting for the longest row. Furthermore, row indices require irregular memory indirect accesses (<span class="math inline">\(x[col\_ind[j]]\)</span>).</li>
+<li>In <strong>ELLPACK SpMV</strong>, data is stored in <strong>Column-Major order</strong>: <span class="math display">\[\text{COEF}[k \cdot N + i], \quad \text{JCOEF}[k \cdot N + i]\]</span> When 32 threads in a warp access the <span class="math inline">\(k\)</span>-th non-zero of their respective rows <span class="math inline">\(i, i+1, \dots, i+31\)</span>, they access <strong>32 consecutive memory addresses</strong> in DRAM.</li>
+<li>This triggers <strong>Memory Coalescing</strong>: the GPU memory controller fulfills the request in a single 128-byte cache line transaction, maximizing memory bandwidth saturation (<span class="math inline">\(&gt; 90\%\)</span> of peak).</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="module-2-classical-iterative-solvers--convergence-theory">Module 2: Classical Iterative Solvers &amp; Convergence Theory</h2>
+<h3 id="q21-spectral-radius-derivation-and-unconditional-divergence-of-iteration-matrix-6-marks">Q2.1: Spectral Radius Derivation and Unconditional Divergence of Iteration Matrix [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+To solve <span class="math inline">\(A x = b\)</span>, an engineer proposes the stationary iterative scheme <span class="math inline">\(x^{(k+1)} = G x^{(k)} + f\)</span>, where the iteration matrix <span class="math inline">\(G\)</span> is given by: <span class="math display">\[G = \begin{bmatrix}
+0.4 &amp; 0.0 &amp; 0.0 &amp; 0.0 \\
+1.5 &amp; 0.2 &amp; 0.0 &amp; 0.0 \\
+2.0 &amp; 1.0 &amp; 0.5 &amp; 3.0 \\
+0.5 &amp; -1.0 &amp; 1.0 &amp; 1.5
+\end{bmatrix}\]</span></p>
+<ol type="1">
+<li>Compute all eigenvalues of <span class="math inline">\(G\)</span> algebraically.</li>
+<li>Determine the spectral radius <span class="math inline">\(\rho(G)\)</span>.</li>
+<li>State whether the method converges for an arbitrary initial guess <span class="math inline">\(x^{(0)}\)</span>.</li>
+<li>If <span class="math inline">\(x^{(0)} - x^* = [0, 0, 1, 1]^T\)</span>, derive the analytical expression for the error norm <span class="math inline">\(\|e^{(k)}\|_2\)</span> as <span class="math inline">\(k \to \infty\)</span>.</li>
+</ol>
+<h4 id="full-step-by-step-solution-3">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Block Lower-Triangular Partitioning</strong>: Partition <span class="math inline">\(G\)</span> into <span class="math inline">\(2 \times 2\)</span> blocks: <span class="math display">\[G = \begin{bmatrix} G_{11} &amp; \mathbf{0} \\ G_{21} &amp; G_{22} \end{bmatrix}\]</span> where: <span class="math display">\[G_{11} = \begin{bmatrix} 0.4 &amp; 0.0 \\ 1.5 &amp; 0.2 \end{bmatrix}, \quad G_{22} = \begin{bmatrix} 0.5 &amp; 3.0 \\ 1.0 &amp; 1.5 \end{bmatrix}\]</span> Because <span class="math inline">\(G\)</span> is block lower-triangular, <span class="math inline">\(\det(G - \lambda I) = \det(G_{11} - \lambda I) \cdot \det(G_{22} - \lambda I) = 0\)</span>.</p></li>
+<li><p><strong>Eigenvalues of <span class="math inline">\(G_{11}\)</span></strong>: Since <span class="math inline">\(G_{11}\)</span> is triangular: <span class="math display">\[\lambda_1 = 0.4, \quad \lambda_2 = 0.2\]</span></p></li>
+<li><p><strong>Eigenvalues of <span class="math inline">\(G_{22}\)</span></strong>: <span class="math display">\[\det(G_{22} - \lambda I) = \det \begin{bmatrix} 0.5 - \lambda &amp; 3.0 \\ 1.0 &amp; 1.5 - \lambda \end{bmatrix} = (0.5 - \lambda)(1.5 - \lambda) - (3.0)(1.0) = 0\]</span> Expanding: <span class="math display">\[0.75 - 0.5\lambda - 1.5\lambda + \lambda^2 - 3.0 = 0 \implies \lambda^2 - 2.0\lambda - 2.25 = 0\]</span> Applying the quadratic formula: <span class="math display">\[\lambda = \frac{2.0 \pm \sqrt{(-2.0)^2 - 4(1)(-2.25)}}{2} = \frac{2.0 \pm \sqrt{4.0 + 9.0}}{2} = \frac{2.0 \pm \sqrt{13.0}}{2}\]</span> Since <span class="math inline">\(\sqrt{13} \approx 3.60555\)</span>: <span class="math display">\[\lambda_3 = \frac{2.0 + 3.60555}{2} = \mathbf{2.8028}\]</span> <span class="math display">\[\lambda_4 = \frac{2.0 - 3.60555}{2} = \mathbf{-0.8028}\]</span></p></li>
+<li><p><strong>Spectral Radius</strong>: <span class="math display">\[\rho(G) = \max_i |\lambda_i| = \max(|0.4|, |0.2|, |2.8028|, |-0.8028|) = \mathbf{2.8028}\]</span></p></li>
+<li><p><strong>Convergence Assessment</strong>: By the Master Convergence Theorem, a linear stationary iteration converges for all <span class="math inline">\(x^{(0)}\)</span> if and only if <span class="math inline">\(\rho(G) &lt; 1\)</span>.<br/>
+Since <span class="math inline">\(\mathbf{\rho(G) = 2.8028 &gt; 1}\)</span>, the scheme <strong>diverges unconditionally</strong>.</p></li>
+<li><p><strong>Error Growth for Given Initial Error</strong>: The initial error <span class="math inline">\(e^{(0)} = [0, 0, 1, 1]^T\)</span> has zero components in the first two entries, isolating the sub-system <span class="math inline">\(G_{22}\)</span>: <span class="math display">\[e_{3:4}^{(k)} = (G_{22})^k \begin{bmatrix} 1 \\ 1 \end{bmatrix}\]</span> Projecting <span class="math inline">\([1, 1]^T\)</span> onto the eigenvectors of <span class="math inline">\(G_{22}\)</span>, the component along the dominant eigenvector <span class="math inline">\(v_3\)</span> (corresponding to <span class="math inline">\(\lambda_3 = 2.8028\)</span>) is non-zero.<br/>
+Therefore, asymptotically: <span class="math display">\[\|e^{(k)}\|_2 \approx C \cdot (\lambda_3)^k = C \cdot (2.8028)^k\]</span> The error grows exponentially by a factor of <span class="math inline">\(\approx 2.803\)</span> on <strong>every single iteration</strong>.</p></li>
+</ol>
+<hr/>
+<h3 id="q22-gershgorin-circle-theorem--proof-of-jacobi-convergence-for-sdd-matrices-5-marks">Q2.2: Gershgorin Circle Theorem &amp; Proof of Jacobi Convergence for SDD Matrices [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>State the Gershgorin Circle Theorem for an arbitrary matrix <span class="math inline">\(A \in \mathbb{C}^{n \times n}\)</span>.</li>
+<li>Define a <strong>Strictly Diagonally Dominant (SDD)</strong> matrix.</li>
+<li>Using the Gershgorin Circle Theorem, rigorously prove that the Jacobi iterative method converges for any initial guess if matrix <span class="math inline">\(A\)</span> is Strictly Diagonally Dominant.</li>
+</ol>
+<h4 id="full-step-by-step-solution-4">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Gershgorin Circle Theorem</strong>: Let <span class="math inline">\(A \in \mathbb{C}^{n \times n}\)</span>. For each row <span class="math inline">\(i \in \{1, \dots, n\}\)</span>, define the row off-diagonal sum: <span class="math display">\[R_i = \sum_{j \ne i} |a_{ij}|\]</span> The <span class="math inline">\(i\)</span>-th Gershgorin disk is defined as: <span class="math display">\[D_i = \{z \in \mathbb{C} \mid |z - a_{ii}| \le R_i\}\]</span> <strong>Theorem</strong>: Every eigenvalue <span class="math inline">\(\lambda\)</span> of <span class="math inline">\(A\)</span> lies within the union of all Gershgorin disks: <span class="math display">\[\sigma(A) \subset \bigcup_{i=1}^n D_i\]</span></p></li>
+<li><p><strong>Strict Diagonal Dominance</strong>: Matrix <span class="math inline">\(A\)</span> is Strictly Diagonally Dominant (SDD) if for all <span class="math inline">\(i \in \{1, \dots, n\}\)</span>: <span class="math display">\[|a_{ii}| &gt; \sum_{j \ne i} |a_{ij}| = R_i\]</span></p></li>
+<li><p><strong>Convergence Proof of Jacobi Iteration</strong>:</p>
+<ul>
+<li>The Jacobi iteration matrix is: <span class="math display">\[G_J = -D^{-1}(L + U) = I - D^{-1} A\]</span></li>
+<li>The entries of <span class="math inline">\(G_J = [g_{ij}]\)</span> are: <span class="math display">\[g_{ii} = 0 \quad (\text{all diagonal entries are identically zero})\]</span> <span class="math display">\[g_{ij} = -\frac{a_{ij}}{a_{ii}} \quad \text{for } j \ne i\]</span></li>
+<li>Apply the Gershgorin Circle Theorem to matrix <span class="math inline">\(G_J\)</span>:
+<ul>
+<li>Center of disk <span class="math inline">\(i\)</span>: <span class="math inline">\(c_i = g_{ii} = 0\)</span>.</li>
+<li>Radius of disk <span class="math inline">\(i\)</span>: <span class="math display">\[R_i(G_J) = \sum_{j \ne i} |g_{ij}| = \sum_{j \ne i} \left| -\frac{a_{ij}}{a_{ii}} \right| = \frac{1}{|a_{ii}|} \sum_{j \ne i} |a_{ij}|\]</span></li>
+</ul></li>
+<li>Since <span class="math inline">\(A\)</span> is SDD, <span class="math inline">\(|a_{ii}| &gt; \sum_{j \ne i} |a_{ij}|\)</span>, which directly implies: <span class="math display">\[R_i(G_J) = \frac{\sum_{j \ne i} |a_{ij}|}{|a_{ii}|} &lt; 1 \quad \text{for all } i = 1, \dots, n\]</span></li>
+<li>Let <span class="math inline">\(\mu\)</span> be any eigenvalue of <span class="math inline">\(G_J\)</span>. By Gershgorin's theorem: <span class="math display">\[\mu \in D_k \implies |\mu - 0| \le R_k(G_J) &lt; 1\]</span></li>
+<li>Therefore, for every eigenvalue <span class="math inline">\(\mu \in \sigma(G_J)\)</span>: <span class="math display">\[|\mu| &lt; 1 \implies \mathbf{\rho(G_J) = \max_i |\mu_i| &lt; 1}\]</span></li>
+<li>By the Master Convergence Theorem, <span class="math inline">\(\rho(G_J) &lt; 1\)</span> is necessary and sufficient for convergence. Hence, Jacobi iteration <strong>always converges</strong> for SDD matrices. <span class="math inline">\(\blacksquare\)</span></li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q23-youngs-theorem-sor-optimal-relaxation-factor-omega_opt-and-iteration-contraction-6-marks">Q2.3: Young's Theorem, SOR Optimal Relaxation Factor <span class="math inline">\(\omega_{opt}\)</span>, and Iteration Contraction [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+A 2D Laplace problem is discretized on an <span class="math inline">\(N \times N\)</span> grid, producing a consistently ordered 2-cyclic matrix <span class="math inline">\(A\)</span>. The spectral radius of the Jacobi iteration matrix is found to be <span class="math inline">\(\rho(G_J) = 0.96\)</span>.</p>
+<ol type="1">
+<li>Compute the spectral radius of the Gauss-Seidel iteration matrix <span class="math inline">\(\rho(G_{GS})\)</span> using Young's relation.</li>
+<li>Calculate the optimal SOR relaxation parameter <span class="math inline">\(\omega_{opt}\)</span> and the corresponding spectral radius <span class="math inline">\(\rho(G_{SOR}(\omega_{opt}))\)</span>.</li>
+<li>If an engineer mistakenly selects <span class="math inline">\(\omega = 1.6\)</span>, compute <span class="math inline">\(\rho(G_{SOR}(1.6))\)</span> and explain how the difference norm <span class="math inline">\(\|x^{(k+1)} - x^{(k)}\|\)</span> behaves asymptotically.</li>
+<li>How many times faster does optimal SOR converge compared to Gauss-Seidel?</li>
+</ol>
+<h4 id="full-step-by-step-solution-5">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Young's Theorem for Gauss-Seidel</strong>: For consistently ordered, 2-cyclic matrices: <span class="math display">\[\rho(G_{GS}) = [\rho(G_J)]^2\]</span> Substituting <span class="math inline">\(\rho(G_J) = 0.96\)</span>: <span class="math display">\[\mathbf{\rho(G_{GS}) = (0.96)^2 = 0.9216}\]</span></p></li>
+<li><p><strong>Optimal SOR Parameter and Spectral Radius</strong>: Young’s analytical formula for optimal relaxation is: <span class="math display">\[\omega_{opt} = \frac{2}{1 + \sqrt{1 - \rho(G_J)^2}}\]</span> Compute the radical: <span class="math display">\[\sqrt{1 - (0.96)^2} = \sqrt{1 - 0.9216} = \sqrt{0.0784} = 0.28\]</span> Therefore: <span class="math display">\[\mathbf{\omega_{opt} = \frac{2}{1 + 0.28} = \frac{2}{1.28} = 1.5625}\]</span> For <span class="math inline">\(\omega = \omega_{opt}\)</span>, the spectral radius is: <span class="math display">\[\mathbf{\rho(G_{SOR}(\omega_{opt})) = \omega_{opt} - 1 = 1.5625 - 1 = 0.5625}\]</span></p></li>
+<li><p><strong>Analysis for <span class="math inline">\(\omega = 1.6\)</span></strong>: Notice that <span class="math inline">\(\omega = 1.6 &gt; \omega_{opt} = 1.5625\)</span>.<br/>
+For any <span class="math inline">\(\omega\)</span> in the over-relaxed regime (<span class="math inline">\(\omega_{opt} \le \omega &lt; 2\)</span>): <span class="math display">\[\mathbf{\rho(G_{SOR}(\omega)) = \omega - 1}\]</span> Thus for <span class="math inline">\(\omega = 1.6\)</span>: <span class="math display">\[\mathbf{\rho(G_{SOR}(1.6)) = 1.6 - 1 = 0.6000}\]</span> <strong>Asymptotic Difference Contraction</strong>: As <span class="math inline">\(k \to \infty\)</span>, the successive iteration difference norm contracts according to the dominant eigenvalue: <span class="math display">\[\lim_{k \to \infty} \frac{\|x^{(k+1)} - x^{(k)}\|}{\|x^{(k)} - x^{(k-1)}\|} = \rho(G_{SOR}) = \mathbf{0.6000}\]</span> The difference between successive iterates drops by exactly <span class="math inline">\(40\%\)</span> per iteration.</p></li>
+<li><p><strong>Convergence Acceleration Factor</strong>: The asymptotic rates of convergence are: <span class="math display">\[R_\infty(GS) = -\ln(\rho(G_{GS})) = -\ln(0.9216) \approx 0.08164\]</span> <span class="math display">\[R_\infty(SOR_{opt}) = -\ln(\rho(G_{SOR})) = -\ln(0.5625) \approx 0.57536\]</span> Speedup factor in iteration count: <span class="math display">\[\text{Speedup} = \frac{R_\infty(SOR_{opt})}{R_\infty(GS)} = \frac{0.57536}{0.08164} \approx \mathbf{7.05\times}\]</span> Optimal SOR converges more than <strong>7 times faster</strong> than Gauss-Seidel!</p></li>
+</ol>
+<hr/>
+<h3 id="q24-counterexample-non-singular-system-failing-jacobi-but-solvable-by-gauss-seidel-4-marks">Q2.4: Counterexample: Non-Singular System Failing Jacobi But Solvable by Gauss-Seidel [4 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Prove that non-singularity of <span class="math inline">\(A\)</span> (<span class="math inline">\(\det(A) \ne 0\)</span>) does <strong>not</strong> guarantee convergence of the Jacobi method. Construct a concrete <span class="math inline">\(3 \times 3\)</span> matrix <span class="math inline">\(A\)</span> with non-zero diagonal entries such that:</p>
+<ol type="1">
+<li><span class="math inline">\(\det(A) \ne 0\)</span>.</li>
+<li>The Jacobi method diverges (<span class="math inline">\(\rho(G_J) &gt; 1\)</span>).</li>
+<li>The Gauss-Seidel method converges (<span class="math inline">\(\rho(G_{GS}) &lt; 1\)</span>).</li>
+</ol>
+<h4 id="full-step-by-step-solution-6">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Matrix Construction</strong>: Consider the real symmetric matrix: <span class="math display">\[A = \begin{bmatrix}
+1 &amp; 0.8 &amp; 0.8 \\
+0.8 &amp; 1 &amp; 0.8 \\
+0.8 &amp; 0.8 &amp; 1
+\end{bmatrix}\]</span></p></li>
+<li><p><strong>Verification of Non-Singularity</strong>: Subtract row 1 from rows 2 and 3: <span class="math display">\[\det(A) = \det \begin{bmatrix}
+1 &amp; 0.8 &amp; 0.8 \\
+0 &amp; 0.2 &amp; 0 \\
+0 &amp; 0 &amp; 0.2
+\end{bmatrix} + \dots\]</span> Eigenvalues of an all-ones perturbed matrix <span class="math inline">\(A = (1 - 0.8)I + 0.8 \mathbf{1}\mathbf{1}^T = 0.2 I + 0.8 J\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\lambda_1 = 0.2 + 3(0.8) = 2.6\)</span></li>
+<li><span class="math inline">\(\lambda_2 = \lambda_3 = 0.2\)</span> <span class="math display">\[\det(A) = (2.6)(0.2)(0.2) = \mathbf{0.104 \ne 0}\]</span> Hence, <span class="math inline">\(A\)</span> is strictly non-singular (and positive definite!).</li>
+</ul></li>
+<li><p><strong>Divergence of Jacobi Method</strong>: <span class="math inline">\(D = I \implies G_J = I - A\)</span>: <span class="math display">\[G_J = \begin{bmatrix}
+0 &amp; -0.8 &amp; -0.8 \\
+-0.8 &amp; 0 &amp; -0.8 \\
+-0.8 &amp; -0.8 &amp; 0
+\end{bmatrix}\]</span> The eigenvalues of <span class="math inline">\(G_J\)</span> are <span class="math inline">\(\mu_i = 1 - \lambda_i(A)\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\mu_1 = 1 - 2.6 = \mathbf{-1.6}\)</span></li>
+<li><span class="math inline">\(\mu_2 = \mu_3 = 1 - 0.2 = \mathbf{0.8}\)</span> Spectral radius: <span class="math display">\[\mathbf{\rho(G_J) = \max(|-1.6|, |0.8|) = 1.6 &gt; 1}\]</span> <strong>The Jacobi method diverges unconditionally!</strong></li>
+</ul></li>
+<li><p><strong>Convergence of Gauss-Seidel Method</strong>: Because <span class="math inline">\(A\)</span> is symmetric and all its eigenvalues are strictly positive (<span class="math inline">\(\lambda_i &gt; 0 \implies A\)</span> is Symmetric Positive Definite), we apply the <strong>Ostrowski-Reich Theorem</strong>:</p>
+<blockquote>
+<p><em>Theorem</em>: If <span class="math inline">\(A\)</span> is symmetric with positive diagonal entries, the Gauss-Seidel method converges (<span class="math inline">\(\rho(G_{GS}) &lt; 1\)</span>) if and only if <span class="math inline">\(A\)</span> is positive definite.</p>
+</blockquote>
+<p>Since <span class="math inline">\(A\)</span> is SPD, the Gauss-Seidel method is <strong>guaranteed to converge</strong> (<span class="math inline">\(\rho(G_{GS}) &lt; 1\)</span>), despite the total divergence of Jacobi.</p></li>
+</ol>
+<hr/>
+<h2 id="module-3-direct-solvers-tdma--sherman-morrison-formula">Module 3: Direct Solvers, TDMA &amp; Sherman-Morrison Formula</h2>
+<h3 id="q31-thomas-algorithm-tdma-recurrence-derivation-and-stability-bound-6-marks">Q3.1: Thomas Algorithm (TDMA) Recurrence Derivation and Stability Bound [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Consider a tridiagonal system <span class="math inline">\(A T = d\)</span> of dimension <span class="math inline">\(N\)</span>: <span class="math display">\[-a_i T_{i-1} + b_i T_i - c_i T_{i+1} = d_i, \quad i = 1, \dots, N \quad (T_0 = T_{N+1} = 0)\]</span></p>
+<ol type="1">
+<li>Derive the forward elimination recurrences for coefficients <span class="math inline">\(\beta_i\)</span> and <span class="math inline">\(\gamma_i\)</span> such that <span class="math inline">\(T_i = \gamma_i + \alpha_i T_{i+1}\)</span>.</li>
+<li>State the backward substitution formula.</li>
+<li>Prove that the condition of diagonal dominance (<span class="math inline">\(|b_i| \ge |a_i| + |c_i|\)</span> with strict inequality for at least one <span class="math inline">\(i\)</span>) guarantees that <span class="math inline">\(\beta_i \ne 0\)</span> for all <span class="math inline">\(i\)</span>, ensuring numerical stability without pivoting.</li>
+</ol>
+<h4 id="full-step-by-step-solution-7">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Forward Recurrence Derivation</strong>: Assume the solution at step <span class="math inline">\(i\)</span> can be expressed in terms of <span class="math inline">\(T_{i+1}\)</span> as: <span class="math display">\[T_{i-1} = \alpha_{i-1} T_i + \gamma_{i-1} \quad \text{(induction hypothesis)}\]</span> Substitute this into the <span class="math inline">\(i\)</span>-th equation: <span class="math display">\[-a_i (\alpha_{i-1} T_i + \gamma_{i-1}) + b_i T_i - c_i T_{i+1} = d_i\]</span> Group terms by <span class="math inline">\(T_i\)</span>: <span class="math display">\[(b_i - a_i \alpha_{i-1}) T_i = c_i T_{i+1} + (d_i + a_i \gamma_{i-1})\]</span> Divide by <span class="math inline">\((b_i - a_i \alpha_{i-1})\)</span>: <span class="math display">\[T_i = \left( \frac{c_i}{b_i - a_i \alpha_{i-1}} \right) T_{i+1} + \left( \frac{d_i + a_i \gamma_{i-1}}{b_i - a_i \alpha_{i-1}} \right)\]</span> Matching with the recurrence <span class="math inline">\(T_i = \alpha_i T_{i+1} + \gamma_i\)</span>, we identify: <span class="math display">\[\mathbf{\alpha_i = \frac{c_i}{b_i - a_i \alpha_{i-1}}}, \qquad \mathbf{\gamma_i = \frac{d_i + a_i \gamma_{i-1}}{b_i - a_i \alpha_{i-1}}}\]</span> Defining the denominator <span class="math inline">\(\beta_i \equiv b_i - a_i \alpha_{i-1}\)</span>, we get: <span class="math display">\[\mathbf{\beta_i = b_i - \frac{a_i c_{i-1}}{\beta_{i-1}}}, \qquad \mathbf{\gamma_i = \frac{d_i + a_i \gamma_{i-1}}{\beta_i}}\]</span> <strong>Base Case (<span class="math inline">\(i = 1\)</span>)</strong>: Since <span class="math inline">\(T_0 = 0\)</span>, <span class="math inline">\(a_1 = 0\)</span>: <span class="math display">\[\beta_1 = b_1, \qquad \gamma_1 = \frac{d_1}{b_1}, \qquad \alpha_1 = \frac{c_1}{b_1}\]</span></p></li>
+<li><p><strong>Backward Substitution</strong>: At the boundary <span class="math inline">\(i = N\)</span>, since <span class="math inline">\(T_{N+1} = 0\)</span>: <span class="math display">\[\mathbf{T_N = \gamma_N}\]</span> Then sweep backwards for <span class="math inline">\(i = N-1, N-2, \dots, 1\)</span>: <span class="math display">\[\mathbf{T_i = \alpha_i T_{i+1} + \gamma_i = \frac{c_i}{\beta_i} T_{i+1} + \gamma_i}\]</span></p></li>
+<li><p><strong>Stability Proof via Diagonal Dominance</strong>: We prove by induction that <span class="math inline">\(|\alpha_i| &lt; 1\)</span> and <span class="math inline">\(|\beta_i| &gt; |c_i| \ge 0\)</span> for all <span class="math inline">\(i\)</span>:</p>
+<ul>
+<li><strong>Base Step (<span class="math inline">\(i = 1\)</span>)</strong>: By diagonal dominance, <span class="math inline">\(|b_1| \ge |c_1|\)</span>. If strict inequality holds, <span class="math inline">\(|\beta_1| = |b_1| &gt; |c_1|\)</span>. Then <span class="math inline">\(|\alpha_1| = |c_1 / b_1| &lt; 1\)</span>.</li>
+<li><strong>Inductive Step</strong>: Assume <span class="math inline">\(|\alpha_{i-1}| &lt; 1\)</span>. Consider <span class="math inline">\(\beta_i = b_i - a_i \alpha_{i-1}\)</span>: <span class="math display">\[|\beta_i| = |b_i - a_i \alpha_{i-1}| \ge |b_i| - |a_i| |\alpha_{i-1}| &gt; |b_i| - |a_i|\]</span> Using diagonal dominance <span class="math inline">\(|b_i| \ge |a_i| + |c_i|\)</span>: <span class="math display">\[|\beta_i| &gt; (|a_i| + |c_i|) - |a_i| = |c_i|\]</span> Therefore: <span class="math display">\[|\beta_i| &gt; |c_i| \ge 0 \implies \mathbf{\beta_i \ne 0}\]</span> and: <span class="math display">\[|\alpha_i| = \left| \frac{c_i}{\beta_i} \right| &lt; 1\]</span></li>
+<li>Since <span class="math inline">\(\beta_i\)</span> is bounded strictly away from zero at every step, <strong>division by zero is impossible</strong> and error amplification is bounded (<span class="math inline">\(|\alpha_i| &lt; 1\)</span>). Thus TDMA is unconditionally stable without pivoting. <span class="math inline">\(\blacksquare\)</span></li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q32-cyclic-tridiagonal-solver-via-sherman-morrison-rank-1-perturbation-6-marks">Q3.2: Cyclic Tridiagonal Solver via Sherman-Morrison Rank-1 Perturbation [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Periodic boundary conditions transform a tridiagonal system into a cyclic tridiagonal system <span class="math inline">\(\tilde{A} x = d\)</span>, where non-zero corner elements <span class="math inline">\(a_{1, N} = \alpha\)</span> and <span class="math inline">\(a_{N, 1} = \beta\)</span> destroy the band structure.</p>
+<ol type="1">
+<li>State the <strong>Sherman-Morrison Formula</strong> for the inverse of a rank-1 perturbed matrix <span class="math inline">\((A + u v^T)\)</span>.</li>
+<li>Show how <span class="math inline">\(\tilde{A}\)</span> can be decomposed as <span class="math inline">\(\tilde{A} = A + u v^T\)</span>, where <span class="math inline">\(A\)</span> is strictly tridiagonal.</li>
+<li>Outline the complete <span class="math inline">\(O(N)\)</span> algorithm using TDMA to solve the cyclic system.</li>
+</ol>
+<h4 id="full-step-by-step-solution-8">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>The Sherman-Morrison Formula</strong>: If <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> is invertible and <span class="math inline">\(u, v \in \mathbb{R}^n\)</span> are vectors such that <span class="math inline">\(1 + v^T A^{-1} u \ne 0\)</span>: <span class="math display">\[\mathbf{(A + u v^T)^{-1} = A^{-1} - \frac{A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u}}\]</span></p></li>
+<li><p><strong>Rank-1 Decomposition of Cyclic Tridiagonal Matrix</strong>: Let the cyclic matrix be: <span class="math display">\[\tilde{A} = \begin{bmatrix}
+b_1 &amp; c_1 &amp; 0 &amp; \dots &amp; \alpha \\
+a_2 &amp; b_2 &amp; c_2 &amp; \dots &amp; 0 \\
+\vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \vdots \\
+0 &amp; \dots &amp; a_{N-1} &amp; b_{N-1} &amp; c_{N-1} \\
+\beta &amp; \dots &amp; 0 &amp; a_N &amp; b_N
+\end{bmatrix}\]</span> Choose scalar parameter <span class="math inline">\(\gamma\)</span> (e.g., <span class="math inline">\(\gamma = -b_1\)</span>). Construct vectors <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span>: <span class="math display">\[u = \begin{bmatrix} \gamma \\ 0 \\ \vdots \\ 0 \\ \beta \end{bmatrix}, \qquad v = \begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \\ \alpha / \gamma \end{bmatrix}\]</span> Compute the outer product <span class="math inline">\(u v^T\)</span>: <span class="math display">\[u v^T = \begin{bmatrix}
+\gamma \cdot 1 &amp; 0 &amp; \dots &amp; \gamma(\alpha / \gamma) \\
+0 &amp; 0 &amp; \dots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\beta \cdot 1 &amp; 0 &amp; \dots &amp; \beta(\alpha / \gamma)
+\end{bmatrix} = \begin{bmatrix}
+\gamma &amp; 0 &amp; \dots &amp; \alpha \\
+0 &amp; 0 &amp; \dots &amp; 0 \\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+\beta &amp; 0 &amp; \dots &amp; \frac{\alpha \beta}{\gamma}
+\end{bmatrix}\]</span> Subtracting <span class="math inline">\(u v^T\)</span> from <span class="math inline">\(\tilde{A}\)</span> gives a strictly tridiagonal matrix <span class="math inline">\(A = \tilde{A} - u v^T\)</span>: <span class="math display">\[A = \begin{bmatrix}
+b_1 - \gamma &amp; c_1 &amp; 0 &amp; \dots &amp; 0 \\
+a_2 &amp; b_2 &amp; c_2 &amp; \dots &amp; 0 \\
+\vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \vdots \\
+0 &amp; \dots &amp; a_{N-1} &amp; b_{N-1} &amp; c_{N-1} \\
+0 &amp; \dots &amp; 0 &amp; a_N &amp; b_N - \frac{\alpha \beta}{\gamma}
+\end{bmatrix}\]</span></p></li>
+<li><p><strong><span class="math inline">\(O(N)\)</span> Solution Algorithm</strong>: To solve <span class="math inline">\(\tilde{A} x = d \iff (A + u v^T) x = d\)</span>:</p>
+<ul>
+<li>Multiply by <span class="math inline">\((A + u v^T)^{-1}\)</span>: <span class="math display">\[x = A^{-1} d - \frac{A^{-1} u (v^T A^{-1} d)}{1 + v^T A^{-1} u}\]</span></li>
+<li><strong>Step 1</strong>: Solve tridiagonal system <span class="math inline">\(A y = d\)</span> for <span class="math inline">\(y\)</span> using TDMA (<span class="math inline">\(O(N)\)</span> operations).</li>
+<li><strong>Step 2</strong>: Solve tridiagonal system <span class="math inline">\(A z = u\)</span> for <span class="math inline">\(z\)</span> using TDMA (<span class="math inline">\(O(N)\)</span> operations).</li>
+<li><strong>Step 3</strong>: Compute scalar dot products: <span class="math display">\[v^T y = y_1 + \frac{\alpha}{\gamma} y_N, \qquad v^T z = z_1 + \frac{\alpha}{\gamma} z_N\]</span></li>
+<li><strong>Step 4</strong>: Compute final solution via vector update (AXPY): <span class="math display">\[\mathbf{x = y - \left( \frac{v^T y}{1 + v^T z} \right) z}\]</span></li>
+<li><strong>Complexity</strong>: Requires exactly <strong>2 tridiagonal solves</strong> <span class="math inline">\(\implies 2 \times O(N) = \mathbf{O(N)}\)</span> total operations!</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="module-4-projection-methods--steepest-descent">Module 4: Projection Methods &amp; Steepest Descent</h2>
+<h3 id="q41-derivation-of-optimal-step-size-alpha_k-and-residual-orthogonality-proof-6-marks">Q4.1: Derivation of Optimal Step Size <span class="math inline">\(\alpha_k\)</span> and Residual Orthogonality Proof [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> be a Symmetric Positive Definite (SPD) matrix. The problem <span class="math inline">\(A x = b\)</span> is equivalent to minimizing the quadratic functional: <span class="math display">\[J(x) = \frac{1}{2} x^T A x - b^T x\]</span> At iteration <span class="math inline">\(k\)</span> with search direction <span class="math inline">\(p_k = r_k = b - A x_k\)</span>:</p>
+<ol type="1">
+<li>Prove that <span class="math inline">\(\nabla J(x) = A x - b = -r(x)\)</span>.</li>
+<li>Derive the analytical expression for the step size <span class="math inline">\(\alpha_k\)</span> that minimizes <span class="math inline">\(J(x_k + \alpha p_k)\)</span> along the search ray.</li>
+<li>Prove that consecutive residuals are strictly orthogonal: <span class="math inline">\(r_{k+1} \perp r_k\)</span> (i.e., <span class="math inline">\(r_{k+1}^T r_k = 0\)</span>).</li>
+</ol>
+<h4 id="full-step-by-step-solution-9">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Gradient of Quadratic Functional</strong>: <span class="math display">\[J(x) = \frac{1}{2} \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j - \sum_{i=1}^n b_i x_i\]</span> Differentiating with respect to <span class="math inline">\(x_m\)</span>: <span class="math display">\[\frac{\partial J}{\partial x_m} = \frac{1}{2} \sum_{j=1}^n a_{mj} x_j + \frac{1}{2} \sum_{i=1}^n a_{im} x_i - b_m\]</span> Since <span class="math inline">\(A\)</span> is symmetric (<span class="math inline">\(a_{im} = a_{mi}\)</span>): <span class="math display">\[\frac{\partial J}{\partial x_m} = \sum_{j=1}^n a_{mj} x_j - b_m = (Ax)_m - b_m\]</span> In vector form: <span class="math display">\[\mathbf{\nabla J(x) = A x - b = -r(x)}\]</span></p></li>
+<li><p><strong>Derivation of Step Size <span class="math inline">\(\alpha_k\)</span></strong>: Define the 1D line function <span class="math inline">\(\phi(\alpha) \equiv J(x_k + \alpha p_k)\)</span>: <span class="math display">\[\phi(\alpha) = \frac{1}{2} (x_k + \alpha p_k)^T A (x_k + \alpha p_k) - b^T (x_k + \alpha p_k)\]</span> Expanding: <span class="math display">\[\phi(\alpha) = \frac{1}{2} x_k^T A x_k + \alpha p_k^T A x_k + \frac{1}{2} \alpha^2 p_k^T A p_k - b^T x_k - \alpha b^T p_k\]</span> Differentiate with respect to <span class="math inline">\(\alpha\)</span> and set to zero: <span class="math display">\[\frac{d\phi}{d\alpha} = p_k^T A x_k + \alpha p_k^T A p_k - b^T p_k = 0\]</span> Rearranging terms: <span class="math display">\[\alpha p_k^T A p_k = p_k^T (b - A x_k) = p_k^T r_k\]</span> Since <span class="math inline">\(p_k = r_k\)</span> in Steepest Descent: <span class="math display">\[\mathbf{\alpha_k = \frac{r_k^T r_k}{r_k^T A r_k}}\]</span> Since <span class="math inline">\(A\)</span> is SPD, the denominator <span class="math inline">\(r_k^T A r_k &gt; 0\)</span> for all <span class="math inline">\(r_k \ne 0\)</span>, so <span class="math inline">\(\alpha_k\)</span> is always uniquely defined and positive.</p></li>
+<li><p><strong>Proof of Consecutive Residual Orthogonality</strong>: The update formula is <span class="math inline">\(x_{k+1} = x_k + \alpha_k r_k\)</span>.<br/>
+Multiply by <span class="math inline">\(-A\)</span> and add <span class="math inline">\(b\)</span>: <span class="math display">\[b - A x_{k+1} = b - A x_k - \alpha_k A r_k \implies \mathbf{r_{k+1} = r_k - \alpha_k A r_k}\]</span> Take the inner product with <span class="math inline">\(r_k\)</span>: <span class="math display">\[r_{k+1}^T r_k = (r_k - \alpha_k A r_k)^T r_k = r_k^T r_k - \alpha_k (r_k^T A r_k)\]</span> Substitute the derived expression <span class="math inline">\(\alpha_k = \frac{r_k^T r_k}{r_k^T A r_k}\)</span>: <span class="math display">\[r_{k+1}^T r_k = r_k^T r_k - \left( \frac{r_k^T r_k}{r_k^T A r_k} \right) (r_k^T A r_k) = r_k^T r_k - r_k^T r_k = \mathbf{0}\]</span> Thus <span class="math inline">\(\mathbf{r_{k+1} \perp r_k}\)</span>. <span class="math inline">\(\blacksquare\)</span></p></li>
+</ol>
+<hr/>
+<h3 id="q42-kantorovich-inequality-and-geometric-analysis-of-zigzagging-5-marks">Q4.2: Kantorovich Inequality and Geometric Analysis of Zigzagging [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>State the <strong>Kantorovich Inequality</strong> for a symmetric positive definite matrix <span class="math inline">\(A\)</span>.</li>
+<li>State the error convergence bound of the Method of Steepest Descent in the <span class="math inline">\(A\)</span>-norm: <span class="math display">\[\|e_{k+1}\|_A \le \left( \frac{\kappa_2(A) - 1}{\kappa_2(A) + 1} \right) \|e_k\|_A\]</span></li>
+<li>For a 2D anisotropic diffusion problem with condition number <span class="math inline">\(\kappa_2(A) = 1000\)</span>, calculate the number of iterations required to reduce the initial error by <span class="math inline">\(10^{-4}\)</span>.</li>
+<li>Explain geometrically why Steepest Descent exhibits severe "zigzagging" in ill-conditioned problems.</li>
+</ol>
+<h4 id="full-step-by-step-solution-10">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>The Kantorovich Inequality</strong>: Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> be SPD with extreme eigenvalues <span class="math inline">\(\lambda_{\max} \ge \dots \ge \lambda_{\min} &gt; 0\)</span>. For any non-zero vector <span class="math inline">\(x \in \mathbb{R}^n\)</span>: <span class="math display">\[\mathbf{\frac{(x^T x)^2}{(x^T A x)(x^T A^{-1} x)} \ge \frac{4 \lambda_{\min} \lambda_{\max}}{(\lambda_{\min} + \lambda_{\max})^2} = \frac{4 \kappa}{(\kappa + 1)^2}}\]</span> where <span class="math inline">\(\kappa = \lambda_{\max} / \lambda_{\min}\)</span>.</p></li>
+<li><p><strong>Steepest Descent Error Bound</strong>: Using the Kantorovich inequality, the error reduction per step in the energy norm <span class="math inline">\(\|e\|_A = \sqrt{e^T A e}\)</span> satisfies: <span class="math display">\[\mathbf{\|e_{k+1}\|_A \le \left( \frac{\kappa - 1}{\kappa + 1} \right) \|e_k\|_A}\]</span></p></li>
+<li><p><strong>Numerical Iteration Calculation</strong>: Given <span class="math inline">\(\kappa = 1000\)</span>: <span class="math display">\[\rho = \frac{1000 - 1}{1000 + 1} = \frac{999}{1001} \approx 0.998002\]</span> To achieve <span class="math inline">\(\|e_k\|_A / \|e_0\|_A \le 10^{-4}\)</span>: <span class="math display">\[\rho^k \le 10^{-4} \implies k \ln(\rho) \le \ln(10^{-4})\]</span> <span class="math display">\[k \ge \frac{-4 \ln(10)}{\ln(0.998002)} = \frac{-9.21034}{-0.00200} \approx \mathbf{4,606\text{ iterations}}\]</span></p></li>
+<li><p><strong>Geometric Cause of Zigzagging</strong>:</p>
+<ul>
+<li>The level curves of the quadratic functional <span class="math inline">\(J(x)\)</span> are multidimensional ellipsoids. The ratio of the major axis to the minor axis is <span class="math inline">\(\sqrt{\kappa(A)} = \sqrt{1000} \approx 31.6\)</span>.</li>
+<li>The gradient <span class="math inline">\(\nabla J(x_k) = -r_k\)</span> is orthogonal to the elliptical contour tangent at <span class="math inline">\(x_k\)</span>.</li>
+<li>Because <span class="math inline">\(r_{k+1} \perp r_k\)</span>, consecutive search steps are strictly at <strong><span class="math inline">\(90^\circ\)</span> right angles</strong> to one another.</li>
+<li>In a steep, elongated valley (<span class="math inline">\(\kappa \gg 1\)</span>), the gradient points almost transversely across the valley rather than down along the bottom toward the minimum <span class="math inline">\(x^*\)</span>.</li>
+<li>The iterates bounce back and forth between the steep walls of the canyon in tiny, perpendicular zig-zag steps, resulting in asymptotic stagnation.</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="module-5-krylov-subspace-methods-cg-arnoldi-gmres-bicgstab">Module 5: Krylov Subspace Methods (CG, Arnoldi, GMRES, BiCGSTAB)</h2>
+<h3 id="q51-conjugate-gradient-step-length-alpha_k-and-search-direction-beta_k-derivation-7-marks">Q5.1: Conjugate Gradient Step Length <span class="math inline">\(\alpha_k\)</span> and Search Direction <span class="math inline">\(\beta_k\)</span> Derivation [7 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+In the Conjugate Gradient (CG) method for an SPD system <span class="math inline">\(A x = b\)</span>, the search directions <span class="math inline">\(p_k\)</span> are constructed to be <span class="math inline">\(A\)</span>-conjugate (<span class="math inline">\(p_i^T A p_j = 0\)</span> for <span class="math inline">\(i \ne j\)</span>).</p>
+<ol type="1">
+<li>Starting from the iterate update <span class="math inline">\(x_{k+1} = x_k + \alpha_k p_k\)</span>, derive <span class="math inline">\(\alpha_k\)</span> enforcing that <span class="math inline">\(r_{k+1}\)</span> is orthogonal to <span class="math inline">\(p_k\)</span>.</li>
+<li>In the direction update <span class="math inline">\(p_k = r_k + \beta_{k-1} p_{k-1}\)</span>, derive the Fletcher-Reeves formula for <span class="math inline">\(\beta_{k-1}\)</span> enforcing that <span class="math inline">\(p_k^T A p_{k-1} = 0\)</span>.</li>
+<li>Show that this reduces to: <span class="math display">\[\beta_{k-1} = \frac{r_k^T r_k}{r_{k-1}^T r_{k-1}}\]</span></li>
+</ol>
+<h4 id="full-step-by-step-solution-11">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Derivation of Step Size <span class="math inline">\(\alpha_k\)</span></strong>: The residual update is: <span class="math display">\[r_{k+1} = b - A x_{k+1} = b - A(x_k + \alpha_k p_k) = r_k - \alpha_k A p_k\]</span> We require that <span class="math inline">\(r_{k+1} \perp p_k\)</span> (projection condition): <span class="math display">\[p_k^T r_{k+1} = 0 \implies p_k^T (r_k - \alpha_k A p_k) = 0\]</span> <span class="math display">\[p_k^T r_k - \alpha_k p_k^T A p_k = 0 \implies \mathbf{\alpha_k = \frac{p_k^T r_k}{p_k^T A p_k}}\]</span> Since <span class="math inline">\(p_k = r_k + \beta_{k-1} p_{k-1}\)</span> and <span class="math inline">\(r_k \perp p_{k-1}\)</span>, <span class="math inline">\(p_k^T r_k = (r_k + \beta_{k-1} p_{k-1})^T r_k = r_k^T r_k\)</span>.<br/>
+Therefore: <span class="math display">\[\mathbf{\alpha_k = \frac{r_k^T r_k}{p_k^T A p_k}}\]</span></p></li>
+<li><p><strong>Derivation of Conjugacy Parameter <span class="math inline">\(\beta_{k-1}\)</span></strong>: The search direction update is: <span class="math display">\[p_k = r_k + \beta_{k-1} p_{k-1}\]</span> We require <span class="math inline">\(A\)</span>-conjugacy between consecutive search directions: <span class="math display">\[p_{k-1}^T A p_k = 0\]</span> Substitute <span class="math inline">\(p_k\)</span>: <span class="math display">\[p_{k-1}^T A (r_k + \beta_{k-1} p_{k-1}) = 0\]</span> <span class="math display">\[p_{k-1}^T A r_k + \beta_{k-1} p_{k-1}^T A p_{k-1} = 0\]</span> Solving for <span class="math inline">\(\beta_{k-1}\)</span>: <span class="math display">\[\mathbf{\beta_{k-1} = -\frac{p_{k-1}^T A r_k}{p_{k-1}^T A p_{k-1}} = -\frac{r_k^T A p_{k-1}}{p_{k-1}^T A p_{k-1}}}\]</span></p></li>
+<li><p><strong>Simplification to Fletcher-Reeves Formula</strong>: From the residual recurrence at step <span class="math inline">\(k-1\)</span>: <span class="math display">\[r_k = r_{k-1} - \alpha_{k-1} A p_{k-1} \implies A p_{k-1} = \frac{1}{\alpha_{k-1}} (r_{k-1} - r_k)\]</span> Substitute <span class="math inline">\(A p_{k-1}\)</span> into the numerator of <span class="math inline">\(\beta_{k-1}\)</span>: <span class="math display">\[r_k^T A p_{k-1} = r_k^T \left[ \frac{1}{\alpha_{k-1}} (r_{k-1} - r_k) \right] = \frac{1}{\alpha_{k-1}} (r_k^T r_{k-1} - r_k^T r_k)\]</span> By the orthogonality of the Krylov subspace residuals, <span class="math inline">\(r_k^T r_{k-1} = 0\)</span>. Thus: <span class="math display">\[r_k^T A p_{k-1} = -\frac{1}{\alpha_{k-1}} r_k^T r_k\]</span> From step 1, <span class="math inline">\(\alpha_{k-1} = \frac{r_{k-1}^T r_{k-1}}{p_{k-1}^T A p_{k-1}} \implies p_{k-1}^T A p_{k-1} = \frac{r_{k-1}^T r_{k-1}}{\alpha_{k-1}}\)</span>.<br/>
+Substitute both into the expression for <span class="math inline">\(\beta_{k-1}\)</span>: <span class="math display">\[\beta_{k-1} = -\frac{-\frac{1}{\alpha_{k-1}} r_k^T r_k}{\frac{1}{\alpha_{k-1}} r_{k-1}^T r_{k-1}} = \mathbf{\frac{r_k^T r_k}{r_{k-1}^T r_{k-1}}}\]</span> This completes the proof. <span class="math inline">\(\blacksquare\)</span></p></li>
+</ol>
+<hr/>
+<h3 id="q52-finite-element-mesh-refinement-scaling-on-cg-iterations--computational-cost-6-marks">Q5.2: Finite-Element Mesh Refinement Scaling on CG Iterations &amp; Computational Cost [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+A 2D structural mechanics problem is solved using linear triangular finite elements on an initial mesh of size <span class="math inline">\(h_1 = 0.02\)</span> (<span class="math inline">\(N_1 = 2,500\)</span> nodes), requiring <span class="math inline">\(T_1 = 0.8\text{ seconds}\)</span> to converge with the Conjugate Gradient method.</p>
+<ol type="1">
+<li>The mesh is refined uniformly by a factor of 4 (<span class="math inline">\(h_2 = h_1 / 4 = 0.005\)</span>). Determine the new number of degrees of freedom <span class="math inline">\(N_2\)</span>.</li>
+<li>Knowing that the global stiffness matrix condition number scales as <span class="math inline">\(\kappa([K]) = O(h^{-2})\)</span>, by what theoretical factor do the CG iterations increase?</li>
+<li>In a benchmark on a dual-channel workstation, the solver runtime on mesh 2 is observed to be <span class="math inline">\(T_2 = 28.5\text{ seconds}\)</span> (a <span class="math inline">\(35.6\times\)</span> increase), far exceeding the theoretical iteration scaling. Explain the two architectural hardware factors responsible for this discrepancy.</li>
+</ol>
+<h4 id="full-step-by-step-solution-12">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Node Count Scaling</strong>: In 2D, the number of nodes scales inversely with the square of the grid spacing <span class="math inline">\(h\)</span>: <span class="math display">\[N \propto \frac{1}{h^2} \implies N_2 = N_1 \times \left(\frac{h_1}{h_2}\right)^2 = 2,500 \times (4)^2 = 2,500 \times 16 = \mathbf{40,000\text{ nodes}}\]</span></p></li>
+<li><p><strong>Iteration Scaling via Chebyshev Bound</strong>: The number of iterations <span class="math inline">\(k\)</span> for Conjugate Gradient is bounded by: <span class="math display">\[k \propto \sqrt{\kappa([K])}\]</span> Since <span class="math inline">\(\kappa([K]) = C \cdot h^{-2}\)</span>: <span class="math display">\[\sqrt{\kappa([K])} \propto \sqrt{h^{-2}} = h^{-1} = \frac{1}{h}\]</span> Refining the mesh by a factor of 4 (<span class="math inline">\(h_2 = h_1 / 4\)</span>) implies: <span class="math display">\[\frac{k_2}{k_1} \approx \frac{h_1}{h_2} = \mathbf{4\times}\]</span> The number of CG iterations scales by a factor of <strong>4</strong>.</p></li>
+<li><p><strong>Theoretical Work Scaling vs. Architectural Reality</strong>:</p>
+<ul>
+<li><strong>Theoretical FLOP Scaling</strong>: Work per iteration is dominated by SpMV, which is <span class="math inline">\(O(N)\)</span> for sparse matrices. <span class="math display">\[\text{Total Work} W \propto k \times N \propto h^{-1} \times h^{-2} = O(h^{-3}) = O(N^{1.5})\]</span> Predicted runtime increase: <span class="math display">\[\frac{T_2}{T_1} \approx 4 \times 16 = \mathbf{64\times \text{ for FLOPs}} \dots \text{ wait!}\]</span> Let's check: <span class="math inline">\(k\)</span> scales by 4, <span class="math inline">\(N\)</span> scales by 16. Total operations scale by <span class="math inline">\(4 \times 16 = 64\times\)</span>.<br/>
+Why did <span class="math inline">\(T_2\)</span> increase by <span class="math inline">\(35.6\times\)</span>?</li>
+<li><strong>Hardware Architectural Factors</strong>:
+<ol type="1">
+<li><strong>Cache Capacity Boundary Crossing</strong>: For <span class="math inline">\(N_1 = 2,500\)</span>, the sparse matrix and vectors occupy: <span class="math display">\[2,500 \times 7 \times 12\text{ bytes} \approx 210\text{ KB}\]</span> This fits entirely inside the ultra-fast L2 cache (<span class="math inline">\(512\text{ KB}\)</span>), achieving near-peak compute throughput.<br/>
+For <span class="math inline">\(N_2 = 40,000\)</span>, working memory exceeds <span class="math inline">\(3.36\text{ MB}\)</span>, overflowing the L2 cache and spilling into the slower L3 cache and DRAM, dropping memory bandwidth from <span class="math inline">\(200\text{ GB/s}\)</span> to <span class="math inline">\(40\text{ GB/s}\)</span>.</li>
+<li><strong>Memory Bandwidth Saturation (The Memory Wall)</strong>: SpMV has an extremely low arithmetic intensity (<span class="math inline">\(\approx 0.25\text{ FLOP/byte}\)</span>). As the problem size expands beyond cache limits, the CPU cores stall waiting for DRAM word requests, shifting the execution from compute-bound to memory-bandwidth-bound.</li>
+</ol></li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q53-arnoldi-hessenberg-reduction-vs-symmetric-lanczos-3-term-recurrence-5-marks">Q5.3: Arnoldi Hessenberg Reduction vs. Symmetric Lanczos 3-Term Recurrence [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>State the <span class="math inline">\(m\)</span>-step Arnoldi procedure using Modified Gram-Schmidt and write the fundamental matrix relation: <span class="math display">\[A V_m = V_{m+1} \bar{H}_m\]</span></li>
+<li>Prove that if <span class="math inline">\(A\)</span> is real symmetric (<span class="math inline">\(A = A^T\)</span>), the upper Hessenberg matrix <span class="math inline">\(H_m = V_m^T A V_m\)</span> is <strong>tridiagonal</strong>.</li>
+<li>State the resulting 3-term Lanczos recurrence relation and explain why this dramatically reduces memory requirements compared to Arnoldi.</li>
+</ol>
+<h4 id="full-step-by-step-solution-13">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>The Arnoldi Process and Fundamental Relation</strong>: Given matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> and initial unit vector <span class="math inline">\(v_1 = r_0 / \|r_0\|_2\)</span>: For <span class="math inline">\(j = 1, \dots, m\)</span>:</p>
+<ul>
+<li><span class="math inline">\(w = A v_j\)</span></li>
+<li>For <span class="math inline">\(i = 1, \dots, j\)</span>:
+<ul>
+<li><span class="math inline">\(h_{ij} = v_i^T w\)</span></li>
+<li><span class="math inline">\(w = w - h_{ij} v_i\)</span></li>
+</ul></li>
+<li><span class="math inline">\(h_{j+1, j} = \|w\|_2\)</span></li>
+<li>If <span class="math inline">\(h_{j+1, j} = 0\)</span>, stop; otherwise <span class="math inline">\(v_{j+1} = w / h_{j+1, j}\)</span>. In matrix form, defining <span class="math inline">\(V_m = [v_1, \dots, v_m] \in \mathbb{R}^{n \times m}\)</span> and the <span class="math inline">\((m+1) \times m\)</span> upper Hessenberg matrix <span class="math inline">\(\bar{H}_m\)</span>: <span class="math display">\[\mathbf{A V_m = V_{m+1} \bar{H}_m = V_m H_m + h_{m+1, m} v_{m+1} e_m^T}\]</span></li>
+</ul></li>
+<li><p><strong>Proof that <span class="math inline">\(H_m\)</span> is Tridiagonal for Symmetric <span class="math inline">\(A\)</span></strong>: Since the columns of <span class="math inline">\(V_{m+1}\)</span> are orthonormal (<span class="math inline">\(V_m^T V_m = I_m\)</span>): Multiply <span class="math inline">\(A V_m = V_{m+1} \bar{H}_m\)</span> from the left by <span class="math inline">\(V_m^T\)</span>: <span class="math display">\[V_m^T A V_m = V_m^T (V_m H_m + h_{m+1, m} v_{m+1} e_m^T) = I_m H_m + \mathbf{0} = H_m\]</span> Now take the matrix transpose of <span class="math inline">\(H_m\)</span>: <span class="math display">\[H_m^T = (V_m^T A V_m)^T = V_m^T A^T (V_m^T)^T = V_m^T A^T V_m\]</span> Since <span class="math inline">\(A = A^T\)</span>: <span class="math display">\[H_m^T = V_m^T A V_m = H_m\]</span> Thus, <span class="math inline">\(H_m\)</span> is <strong>symmetric</strong>!<br/>
+By definition of the Arnoldi process, <span class="math inline">\(H_m\)</span> is an <strong>upper Hessenberg matrix</strong> (<span class="math inline">\(h_{ij} = 0\)</span> for <span class="math inline">\(i &gt; j + 1\)</span>).<br/>
+A matrix that is both symmetric (<span class="math inline">\(h_{ij} = h_{ji}\)</span>) and upper Hessenberg must have: <span class="math display">\[h_{ij} = 0 \quad \text{for all } |i - j| &gt; 1\]</span> Therefore, <span class="math inline">\(H_m\)</span> is strictly <strong>tridiagonal</strong>: <span class="math display">\[H_m = T_m = \begin{bmatrix}
+\alpha_1 &amp; \beta_1 &amp; 0 &amp; \dots &amp; 0 \\
+\beta_1 &amp; \alpha_2 &amp; \beta_2 &amp; \dots &amp; 0 \\
+0 &amp; \beta_2 &amp; \alpha_3 &amp; \dots &amp; 0 \\
+\vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \vdots \\
+0 &amp; \dots &amp; 0 &amp; \beta_{m-1} &amp; \alpha_m
+\end{bmatrix} \quad \blacksquare\]</span></p></li>
+<li><p><strong>The 3-Term Lanczos Recurrence and Memory Savings</strong>: Because <span class="math inline">\(h_{ij} = 0\)</span> for <span class="math inline">\(i &lt; j - 1\)</span>, the vector <span class="math inline">\(A v_j\)</span> only needs to be orthogonalized against the <strong>immediately preceding two vectors</strong> <span class="math inline">\(v_j\)</span> and <span class="math inline">\(v_{j-1}\)</span>: <span class="math display">\[\mathbf{\beta_j v_{j+1} = A v_j - \alpha_j v_j - \beta_{j-1} v_{j-1}}\]</span></p>
+<ul>
+<li><strong>Arnoldi Storage</strong>: Must store all <span class="math inline">\(m\)</span> orthonormal vectors <span class="math inline">\(\{v_1, \dots, v_m\}\)</span> in RAM to orthogonalize <span class="math inline">\(v_{j+1}\)</span> (<span class="math inline">\(m \times n\)</span> floats <span class="math inline">\(\implies\)</span> memory explodes as <span class="math inline">\(m\)</span> grows).</li>
+<li><strong>Lanczos Storage</strong>: Only requires storing <strong>3 vectors</strong> (<span class="math inline">\(v_{j+1}, v_j, v_{j-1}\)</span>), reducing memory footprint from <span class="math inline">\(O(m n)\)</span> to <span class="math inline">\(O(n)\)</span>!</li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q54-gmres-minimization-via-givens-rotations--residual-norm-monitoring-6-marks">Q5.4: GMRES Minimization via Givens Rotations &amp; Residual Norm Monitoring [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+The Generalized Minimal Residual (GMRES) method finds <span class="math inline">\(x_m \in x_0 + \mathcal{K}_m(A, r_0)\)</span> that minimizes the residual norm <span class="math inline">\(\|b - A x_m\|_2\)</span>.</p>
+<ol type="1">
+<li>Show that this least-squares problem reduces to: <span class="math display">\[\min_{y \in \mathbb{R}^m} \|\beta e_1 - \bar{H}_m y\|_2\]</span> where <span class="math inline">\(\beta = \|r_0\|_2\)</span> and <span class="math inline">\(\bar{H}_m \in \mathbb{R}^{(m+1) \times m}\)</span>.</li>
+<li>Describe how a sequence of <span class="math inline">\(m\)</span> Givens plane rotations <span class="math inline">\(\Omega_1, \Omega_2, \dots, \Omega_m\)</span> transforms <span class="math inline">\(\bar{H}_m\)</span> into an upper triangular matrix <span class="math inline">\(R_m\)</span>.</li>
+<li>Explain how the residual norm <span class="math inline">\(\|r_m\|_2\)</span> can be monitored at every step <strong>without</strong> computing the solution vector <span class="math inline">\(x_m\)</span> or performing matrix-vector multiplication.</li>
+</ol>
+<h4 id="full-step-by-step-solution-14">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Reduction of GMRES Least-Squares Problem</strong>: Any iterate <span class="math inline">\(x_m \in x_0 + \mathcal{K}_m\)</span> can be written as <span class="math inline">\(x_m = x_0 + V_m y\)</span> for some <span class="math inline">\(y \in \mathbb{R}^m\)</span>. The residual is: <span class="math display">\[r_m = b - A x_m = b - A(x_0 + V_m y) = r_0 - A V_m y\]</span> Using the Arnoldi relation <span class="math inline">\(A V_m = V_{m+1} \bar{H}_m\)</span> and setting <span class="math inline">\(r_0 = \beta v_1 = V_{m+1} (\beta e_1)\)</span>: <span class="math display">\[r_m = V_{m+1} (\beta e_1) - V_{m+1} \bar{H}_m y = V_{m+1} (\beta e_1 - \bar{H}_m y)\]</span> Since the columns of <span class="math inline">\(V_{m+1}\)</span> are orthonormal, the Euclidean norm is preserved: <span class="math display">\[\|r_m\|_2 = \|V_{m+1} (\beta e_1 - \bar{H}_m y)\|_2 = \|\beta e_1 - \bar{H}_m y\|_2\]</span> Thus, minimizing <span class="math inline">\(\|r_m\|_2\)</span> over <span class="math inline">\(\mathbb{R}^n\)</span> reduces to: <span class="math display">\[\mathbf{\min_{y \in \mathbb{R}^m} \|\beta e_1 - \bar{H}_m y\|_2}\]</span></p></li>
+<li><p><strong>Givens Rotations QR Transformation</strong>: At step <span class="math inline">\(j\)</span>, the Hessenberg matrix has non-zeros on the sub-diagonal entry <span class="math inline">\(h_{j+1, j}\)</span>.<br/>
+A <span class="math inline">\(2 \times 2\)</span> Givens rotation matrix acting on rows <span class="math inline">\(j\)</span> and <span class="math inline">\(j+1\)</span> is constructed: <span class="math display">\[\Omega_j = \begin{bmatrix}
+c_j &amp; s_j \\
+-s_j &amp; c_j
+\end{bmatrix}, \quad \text{where } c_j = \frac{h_{jj}}{\sqrt{h_{jj}^2 + h_{j+1, j}^2}}, \; s_j = \frac{h_{j+1, j}}{\sqrt{h_{jj}^2 + h_{j+1, j}^2}}\]</span> Multiplying <span class="math inline">\(\bar{H}_m\)</span> by <span class="math inline">\(Q_m = \Omega_m \dots \Omega_2 \Omega_1\)</span> eliminates all sub-diagonal elements: <span class="math display">\[Q_m \bar{H}_m = \begin{bmatrix} R_m \\ \mathbf{0}^T \end{bmatrix}\]</span> where <span class="math inline">\(R_m \in \mathbb{R}^{m \times m}\)</span> is upper triangular.</p></li>
+<li><p><strong>In-Progress Residual Norm Monitoring</strong>: Applying the same orthogonal rotations to the right-hand side vector <span class="math inline">\(\beta e_1\)</span>: <span class="math display">\[Q_m (\beta e_1) = \begin{bmatrix} g_m \\ \gamma_{m+1} \end{bmatrix}, \quad g_m \in \mathbb{R}^m, \; \gamma_{m+1} \in \mathbb{R}\]</span> The transformed least-squares problem is: <span class="math display">\[\|\beta e_1 - \bar{H}_m y\|_2 = \left\| \begin{bmatrix} g_m \\ \gamma_{m+1} \end{bmatrix} - \begin{bmatrix} R_m \\ \mathbf{0}^T \end{bmatrix} y \right\|_2 = \|g_m - R_m y\|_2^2 + |\gamma_{m+1}|^2\]</span> The minimum is achieved when <span class="math inline">\(R_m y = g_m\)</span>, which drives the first term to zero.<br/>
+The remaining residual norm is <strong>identically equal to the scalar entry <span class="math inline">\(|\gamma_{m+1}|\)</span></strong>: <span class="math display">\[\mathbf{\|r_m\|_2 = |\gamma_{m+1}|}\]</span></p>
+<ul>
+<li><strong>Significance</strong>: The solver checks whether <span class="math inline">\(|\gamma_{m+1}| &lt; \epsilon\)</span> at negligible cost (<span class="math inline">\(O(1)\)</span> scalar operation). The expensive backward substitution <span class="math inline">\(R_m y = g_m\)</span> and vector reconstruction <span class="math inline">\(x_m = x_0 + V_m y\)</span> (<span class="math inline">\(O(m n)\)</span> operations) are performed <strong>only once</strong> when convergence is achieved!</li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q55-bicg-breakdown-modes-and-bicgstab-polynomial-stabilization-mechanism-5-marks">Q5.5: BiCG Breakdown Modes and BiCGSTAB Polynomial Stabilization Mechanism [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>Explain the difference between <strong>Lanczos Biorthogonalization</strong> (BiCG) and standard Arnoldi/Lanczos methods.</li>
+<li>Define the two distinct breakdown modes that cause BiCG to fail:
+<ul>
+<li>(a) Division by zero in vector normalization (Pivot Breakdown).</li>
+<li>(b) Lanczos breakdown (Serious Breakdown).</li>
+</ul></li>
+<li>How does the <strong>BiCGSTAB</strong> (Biconjugate Gradient Stabilized) algorithm eliminate the erratic residual oscillations of BiCG and avoid using <span class="math inline">\(A^T\)</span>?</li>
+</ol>
+<h4 id="full-step-by-step-solution-15">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Lanczos Biorthogonalization Principle</strong>: For non-symmetric matrices (<span class="math inline">\(A \ne A^T\)</span>), standard Lanczos fails because <span class="math inline">\(H_m\)</span> is not tridiagonal.<br/>
+BiCG resolves this by maintaining <strong>two dual Krylov subspaces</strong>: <span class="math display">\[\mathcal{K}_m(A, v_1) = \text{span}\{v_1, A v_1, \dots, A^{m-1} v_1\}\]</span> <span class="math display">\[\mathcal{K}_m(A^T, w_1) = \text{span}\{w_1, A^T w_1, \dots, (A^T)^{m-1} w_1\}\]</span> The basis vectors satisfy the <strong>biorthogonality condition</strong>: <span class="math display">\[w_i^T v_j = \delta_{ij}\]</span> This restores short 3-term recurrences, but projections are oblique rather than orthogonal.</p></li>
+<li><p><strong>The Two Breakdown Modes of BiCG</strong>:</p>
+<ul>
+<li><strong>(a) Division by Zero (Pivot breakdown)</strong>: In the scalar update <span class="math inline">\(\alpha_j = \frac{\langle r_j, \tilde{r}_j \rangle}{\langle A p_j, \tilde{p}_j \rangle}\)</span>, the denominator <span class="math inline">\(\langle A p_j, \tilde{p}_j \rangle = 0\)</span> while <span class="math inline">\(r_j \ne 0\)</span>. The step size becomes infinite.</li>
+<li><strong>(b) Serious Lanczos Breakdown</strong>: The dual inner product vanishes: <span class="math display">\[\langle r_j, \tilde{r}_j \rangle = 0 \quad \text{while } r_j \ne 0 \text{ and } \tilde{r}_j \ne 0\]</span> Because the search space and shadow space become mutually orthogonal, biorthogonal vectors <span class="math inline">\(v_{j+1}\)</span> and <span class="math inline">\(w_{j+1}\)</span> cannot be normalized, and the algorithm halts completely.</li>
+</ul></li>
+<li><p><strong>BiCGSTAB Stabilization Mechanism</strong>:</p>
+<ul>
+<li><strong>Elimination of <span class="math inline">\(A^T\)</span></strong>: Conjugate Gradient Squared (CGS) squared the BiCG residual polynomial <span class="math inline">\(r_j^{\text{CGS}} = [\phi_j(A)]^2 r_0\)</span>, which removed <span class="math inline">\(A^T\)</span> but amplified round-off errors and caused violent residual spikes.</li>
+<li><strong>BiCGSTAB Smoothing</strong>: BiCGSTAB decomposes the residual polynomial into the product of the BiCG polynomial <span class="math inline">\(\phi_j(t)\)</span> and a <strong>stabilizing linear factor</strong>: <span class="math display">\[r_j = \psi_j(A) \phi_j(A) r_0, \quad \text{where } \psi_j(t) = (1 - \omega_1 t)(1 - \omega_2 t) \dots (1 - \omega_j t)\]</span></li>
+<li>At each half-step, BiCGSTAB performs a <strong>1D Steepest Descent / Minimal Residual step</strong> to choose <span class="math inline">\(\omega_j\)</span>: <span class="math display">\[\omega_j = \frac{\langle A s_j, s_j \rangle}{\langle A s_j, A s_j \rangle}\]</span> This local minimization exponentially dampens oscillations, prevents wild residual spikes, and guarantees smooth, monotonic-like convergence without ever forming <span class="math inline">\(A^T\)</span>.</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="module-6-preconditioning-techniques">Module 6: Preconditioning Techniques</h2>
+<h3 id="q61-preconditioned-conjugate-gradient-pcg-algebraic-derivation-6-marks">Q6.1: Preconditioned Conjugate Gradient (PCG) Algebraic Derivation [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> be SPD and <span class="math inline">\(M \in \mathbb{R}^{n \times n}\)</span> be an SPD preconditioner factored as <span class="math inline">\(M = L L^T\)</span>.</p>
+<ol type="1">
+<li>Transform <span class="math inline">\(A x = b\)</span> into the split preconditioned symmetric system: <span class="math display">\[\tilde{A} \tilde{x} = \tilde{b}, \quad \text{where } \tilde{A} = L^{-1} A L^{-T}\]</span></li>
+<li>Apply standard Conjugate Gradient to <span class="math inline">\(\tilde{A} \tilde{x} = \tilde{b}\)</span>.</li>
+<li>Show that by substituting variables <span class="math inline">\(x = L^{-T} \tilde{x}\)</span>, <span class="math inline">\(p = L^{-T} \tilde{p}\)</span>, and defining the preconditioned residual solve: <span class="math display">\[M z_k = r_k\]</span> the explicit Cholesky factors <span class="math inline">\(L\)</span> and <span class="math inline">\(L^T\)</span> completely disappear from the algorithm!</li>
+</ol>
+<h4 id="full-step-by-step-solution-16">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Split Symmetrization</strong>: Given <span class="math inline">\(A x = b\)</span> and <span class="math inline">\(M = L L^T\)</span>: <span class="math display">\[L^{-1} A (L^{-T} L^T) x = L^{-1} b \implies (L^{-1} A L^{-T}) (L^T x) = L^{-1} b\]</span> Define: <span class="math display">\[\tilde{A} = L^{-1} A L^{-T}, \quad \tilde{x} = L^T x, \quad \tilde{b} = L^{-1} b\]</span> Since <span class="math inline">\(A\)</span> is SPD, <span class="math inline">\(\tilde{A}^T = (L^{-1} A L^{-T})^T = L^{-1} A^T L^{-T} = \tilde{A}\)</span>, and <span class="math inline">\(y^T \tilde{A} y = (L^{-T} y)^T A (L^{-T} y) &gt; 0\)</span>. Thus <span class="math inline">\(\tilde{A}\)</span> is SPD.</p></li>
+<li><p><strong>Standard CG on Split System</strong>: <span class="math display">\[\tilde{\alpha}_k = \frac{\tilde{r}_k^T \tilde{r}_k}{\tilde{p}_k^T \tilde{A} \tilde{p}_k}\]</span> <span class="math display">\[\tilde{x}_{k+1} = \tilde{x}_k + \tilde{\alpha}_k \tilde{p}_k\]</span> <span class="math display">\[\tilde{r}_{k+1} = \tilde{r}_k - \tilde{\alpha}_k \tilde{A} \tilde{p}_k\]</span> <span class="math display">\[\tilde{\beta}_k = \frac{\tilde{r}_{k+1}^T \tilde{r}_{k+1}}{\tilde{r}_k^T \tilde{r}_k}\]</span> <span class="math display">\[\tilde{p}_{k+1} = \tilde{r}_{k+1} + \tilde{\beta}_k \tilde{p}_k\]</span></p></li>
+<li><p><strong>Elimination of Cholesky Factors</strong>:</p>
+<ul>
+<li>Relationship between residuals: <span class="math display">\[\tilde{r}_k = \tilde{b} - \tilde{A} \tilde{x}_k = L^{-1} b - L^{-1} A L^{-T} (L^T x_k) = L^{-1} (b - A x_k) = L^{-1} r_k\]</span></li>
+<li>Numerator of <span class="math inline">\(\tilde{\alpha}_k\)</span>: <span class="math display">\[\tilde{r}_k^T \tilde{r}_k = (L^{-1} r_k)^T (L^{-1} r_k) = r_k^T (L L^T)^{-1} r_k = r_k^T M^{-1} r_k\]</span> Define <span class="math inline">\(\mathbf{z_k \equiv M^{-1} r_k} \iff \mathbf{M z_k = r_k}\)</span>. Then: <span class="math display">\[\tilde{r}_k^T \tilde{r}_k = \mathbf{r_k^T z_k}\]</span></li>
+<li>Denominator of <span class="math inline">\(\tilde{\alpha}_k\)</span>: Let <span class="math inline">\(p_k \equiv L^{-T} \tilde{p}_k\)</span>. Then: <span class="math display">\[\tilde{p}_k^T \tilde{A} \tilde{p}_k = (L^T p_k)^T (L^{-1} A L^{-T}) (L^T p_k) = p_k^T A p_k\]</span> Therefore: <span class="math display">\[\mathbf{\alpha_k = \frac{r_k^T z_k}{p_k^T A p_k}}\]</span></li>
+<li>Update of <span class="math inline">\(x_{k+1}\)</span>: <span class="math display">\[L^T x_{k+1} = L^T x_k + \alpha_k (L^T p_k) \implies \mathbf{x_{k+1} = x_k + \alpha_k p_k}\]</span></li>
+<li>Update of <span class="math inline">\(r_{k+1}\)</span>: <span class="math display">\[L^{-1} r_{k+1} = L^{-1} r_k - \alpha_k L^{-1} A p_k \implies \mathbf{r_{k+1} = r_k - \alpha_k A p_k}\]</span></li>
+<li>Update of <span class="math inline">\(\beta_k\)</span>: <span class="math display">\[\mathbf{\beta_k = \frac{r_{k+1}^T z_{k+1}}{r_k^T z_k}}\]</span></li>
+<li>Direction update: <span class="math display">\[L^T p_{k+1} = L^{-1} r_{k+1} + \beta_k L^T p_k \implies p_{k+1} = (L L^T)^{-1} r_{k+1} + \beta_k p_k \implies \mathbf{p_{k+1} = z_{k+1} + \beta_k p_k}\]</span></li>
+<li><strong>Conclusion</strong>: The algorithm requires only the solution of the linear system <span class="math inline">\(M z = r\)</span>. The explicit matrix factor <span class="math inline">\(L\)</span> is never needed! <span class="math inline">\(\blacksquare\)</span></li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q62-incomplete-cholesky-ic0-vs-ssor-preconditioner-construction-5-marks">Q6.2: Incomplete Cholesky IC(0) vs. SSOR Preconditioner Construction [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>Define the <strong>Incomplete Cholesky factorization with zero fill-in (IC(0))</strong> for an SPD sparse matrix <span class="math inline">\(A\)</span>.</li>
+<li>Write the matrix formulation of the <strong>Symmetric Successive Over-Relaxation (SSOR)</strong> preconditioner <span class="math inline">\(M_{\text{SSOR}}\)</span>.</li>
+<li>Compare IC(0) and SSOR in terms of:
+<ul>
+<li>(a) Setup phase CPU cost.</li>
+<li>(b) Storage overhead beyond matrix <span class="math inline">\(A\)</span>.</li>
+<li>(c) Parallelizability of the forward/backward solve <span class="math inline">\(M z = r\)</span>.</li>
+</ul></li>
+</ol>
+<h4 id="full-step-by-step-solution-17">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Incomplete Cholesky IC(0)</strong>:</p>
+<ul>
+<li>Standard Cholesky computes <span class="math inline">\(A = L L^T\)</span>, where <span class="math inline">\(L\)</span> suffers from severe fill-in (<span class="math inline">\(l_{ij} \ne 0\)</span> where <span class="math inline">\(a_{ij} = 0\)</span>).</li>
+<li>IC(0) computes an approximate factor <span class="math inline">\(\tilde{L}\)</span> such that: <span class="math display">\[A = \tilde{L} \tilde{L}^T - R\]</span> enforcing the zero-fill condition: <span class="math display">\[\tilde{l}_{ij} = 0 \quad \text{whenever } a_{ij} = 0\]</span></li>
+<li>The non-zero pattern of <span class="math inline">\(\tilde{L}\)</span> is <strong>identical</strong> to the lower triangular pattern of <span class="math inline">\(A\)</span>.</li>
+</ul></li>
+<li><p><strong>SSOR Preconditioner Formulation</strong>: Splitting <span class="math inline">\(A = D - E - E^T\)</span> (where <span class="math inline">\(D\)</span> is diagonal, <span class="math inline">\(-E\)</span> is strictly lower triangular): A forward Gauss-Seidel step followed by an adjoint backward Gauss-Seidel step yields: <span class="math display">\[\mathbf{M_{\text{SSOR}} = \frac{1}{\omega(2 - \omega)} (D - \omega E) D^{-1} (D - \omega E^T)}\]</span> For <span class="math inline">\(\omega = 1\)</span> (Symmetric Gauss-Seidel / SGS): <span class="math display">\[\mathbf{M_{\text{SGS}} = (D - E) D^{-1} (D - E^T)}\]</span></p></li>
+<li><p><strong>Comparative Evaluation</strong>:</p></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Evaluation Metric</th>
+<th style="text-align: left;">Incomplete Cholesky (IC(0))</th>
+<th style="text-align: left;">SSOR Preconditioner (<span class="math inline">\(\omega = 1\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Setup Cost</strong></td>
+<td style="text-align: left;">Requires explicit incomplete factorization loop (<span class="math inline">\(O(N_{nz})\)</span> FLOPs) with square roots. Risk of breakdown if pivot becomes non-positive.</td>
+<td style="text-align: left;"><strong>Zero setup cost</strong>. Factors <span class="math inline">\((D - E)\)</span> and <span class="math inline">\(D^{-1}\)</span> are read directly from existing arrays of <span class="math inline">\(A\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Memory Overhead</strong></td>
+<td style="text-align: left;">Requires storing <span class="math inline">\(\tilde{L}\)</span> (<span class="math inline">\(N_{nz}/2\)</span> extra floats if not done in-place).</td>
+<td style="text-align: left;"><strong>Zero memory overhead</strong>. Operates directly on the elements of <span class="math inline">\(A\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Solve Complexity</strong></td>
+<td style="text-align: left;">Triangular solve <span class="math inline">\(\tilde{L} y = r\)</span>, <span class="math inline">\(\tilde{L}^T z = y\)</span>. Sequential dependency along elimination tree.</td>
+<td style="text-align: left;">Triangular solve <span class="math inline">\((D-E)y = r\)</span>, <span class="math inline">\((D-E^T)z = Dy\)</span>. Sequential across rows.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Parallelizability</strong></td>
+<td style="text-align: left;">Low (requires multicoloring or level scheduling).</td>
+<td style="text-align: left;">Low (requires Red-Black or hyperplane reordering).</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="module-7-computer-architecture-caching--memory-wall">Module 7: Computer Architecture, Caching &amp; Memory Wall</h2>
+<h3 id="q71-the-memory-wall-dram-latency-penalty-and-effective-access-time-eat-5-marks">Q7.1: The Memory Wall: DRAM Latency Penalty and Effective Access Time (EAT) [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+A high-performance compute core runs at clock frequency <span class="math inline">\(f = 2.5\text{ GHz}\)</span> and has a peak execution rate of 4 floating-point operations per cycle (<span class="math inline">\(10\text{ GFLOPS}\)</span>).<br/>
+The processor has a two-level cache hierarchy with the following parameters:</p>
+<ul>
+<li>L1 Cache: Hit rate <span class="math inline">\(H_1 = 0.95\)</span>, latency <span class="math inline">\(t_1 = 1\text{ cycle}\)</span> (<span class="math inline">\(0.4\text{ ns}\)</span>).</li>
+<li>L2 Cache: Hit rate <span class="math inline">\(H_2 = 0.80\)</span> (of L1 misses), latency <span class="math inline">\(t_2 = 10\text{ cycles}\)</span> (<span class="math inline">\(4.0\text{ ns}\)</span>).</li>
+<li>Main Memory (DRAM): Latency <span class="math inline">\(t_{\text{mem}} = 100\text{ ns}\)</span> (<span class="math inline">\(250\text{ cycles}\)</span>).</li>
+</ul>
+<ol type="1">
+<li>Calculate the Effective Access Time (EAT) in nanoseconds and processor clock cycles.</li>
+<li>If an uncached sparse solver accesses DRAM on every memory reference, calculate its effective processing speed. By what factor is the CPU throttled by DRAM latency?</li>
+</ol>
+<h4 id="full-step-by-step-solution-18">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Calculation of Effective Access Time (EAT)</strong>: The formula for multi-level hierarchical EAT is: <span class="math display">\[\text{EAT} = t_1 + (1 - H_1) \cdot \left[ t_2 + (1 - H_2) \cdot t_{\text{mem}} \right]\]</span></p>
+<ul>
+<li><span class="math inline">\(t_1 = 0.4\text{ ns}\)</span></li>
+<li>Miss rate L1: <span class="math inline">\(1 - H_1 = 1 - 0.95 = 0.05\)</span></li>
+<li>Miss rate L2: <span class="math inline">\(1 - H_2 = 1 - 0.80 = 0.20\)</span></li>
+<li>L2 miss penalty: <span class="math inline">\((1 - H_2) \cdot t_{\text{mem}} = 0.20 \times 100\text{ ns} = 20.0\text{ ns}\)</span></li>
+<li>Combined L2 access: <span class="math inline">\(t_2 + 20.0\text{ ns} = 4.0\text{ ns} + 20.0\text{ ns} = 24.0\text{ ns}\)</span></li>
+<li>EAT in nanoseconds: <span class="math display">\[\text{EAT} = 0.4\text{ ns} + 0.05 \times 24.0\text{ ns} = 0.4\text{ ns} + 1.2\text{ ns} = \mathbf{1.6\text{ ns}}\]</span></li>
+<li>EAT in clock cycles (at <span class="math inline">\(0.4\text{ ns/cycle}\)</span>): <span class="math display">\[\text{Cycles} = \frac{1.6\text{ ns}}{0.4\text{ ns/cycle}} = \mathbf{4\text{ clock cycles}}\]</span></li>
+</ul></li>
+<li><p><strong>DRAM Throttling (Uncached Execution)</strong>:</p>
+<ul>
+<li>Cycle time: <span class="math inline">\(\tau = \frac{1}{2.5\text{ GHz}} = 0.4\text{ ns}\)</span>.</li>
+<li>Peak throughput: 4 FLOPs / <span class="math inline">\(0.4\text{ ns} = \mathbf{10\text{ GFLOPS}}\)</span>.</li>
+<li>If every memory load stalls for main DRAM latency (<span class="math inline">\(t_{\text{mem}} = 100\text{ ns}\)</span>): <span class="math display">\[\text{Effective Speed} = \frac{1\text{ operation}}{100\text{ ns}} = \mathbf{10\text{ MFLOPS}} = 0.01\text{ GFLOPS}\]</span></li>
+<li><strong>Throttling Factor</strong>: <span class="math display">\[\text{Slowdown} = \frac{\text{Peak Speed}}{\text{Effective Speed}} = \frac{10\text{ GFLOPS}}{0.01\text{ GFLOPS}} = \mathbf{1000\times}\]</span></li>
+<li><strong>Conclusion</strong>: The processor sits idle, stalled on DRAM wait states, operating at a catastrophic <strong><span class="math inline">\(0.1\%\)</span> of its peak capability</strong>. This is the physical reality of the <strong>Memory Wall</strong>.</li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q72-row-major-vs-column-major-striding-and-cache-tiling-analysis-6-marks">Q7.2: Row-Major vs. Column-Major Striding and Cache Tiling Analysis [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>Contrast Row-Major (C/C++) and Column-Major (Fortran/MATLAB) memory layouts for a 2D array <code>A[N][N]</code>.</li>
+<li>A programmer writes the following nested loop in C on an array of size <span class="math inline">\(N = 10,000\)</span> (double precision, 8 bytes):
+<div class="sourceCode" id="leq-cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="leq-cb5-1"><a aria-hidden="true" href="#leq-cb5-1" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> N<span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="leq-cb5-2"><a aria-hidden="true" href="#leq-cb5-2" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="leq-cb5-3"><a aria-hidden="true" href="#leq-cb5-3" tabindex="-1"></a>        A<span class="op">[</span>i<span class="op">][</span>j<span class="op">]</span> <span class="op">=</span> <span class="fl">2.0</span> <span class="op">*</span> A<span class="op">[</span>i<span class="op">][</span>j<span class="op">];</span></span>
+<span id="leq-cb5-4"><a aria-hidden="true" href="#leq-cb5-4" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="leq-cb5-5"><a aria-hidden="true" href="#leq-cb5-5" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+Assuming a 64-byte cache line size and a cold cache, calculate the total number of cache misses. How many misses would occur if the loops were interchanged?</li>
+<li>Formulate the <strong>Cache Tiling (Loop Blocking)</strong> transformation for dense matrix multiplication <span class="math inline">\(C = A B\)</span> and derive the optimal tile size <span class="math inline">\(B\)</span> for an L1 cache of <span class="math inline">\(32\text{ KB}\)</span>.</li>
+</ol>
+<h4 id="full-step-by-step-solution-19">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Row-Major vs. Column-Major Layout</strong>:</p>
+<ul>
+<li><strong>Row-Major (C/C++)</strong>: Consecutive elements of the same row (<code>A[i][j]</code> and <code>A[i][j+1]</code>) are adjacent in physical memory (stride-1 in index <span class="math inline">\(j\)</span>).</li>
+<li><strong>Column-Major (Fortran)</strong>: Consecutive elements of the same column (<code>A(i, j)</code> and <code>A(i+1, j)</code>) are adjacent in physical memory (stride-1 in index <span class="math inline">\(i\)</span>).</li>
+</ul></li>
+<li><p><strong>Cache Miss Analysis in C</strong>:</p>
+<ul>
+<li>Cache line size: <span class="math inline">\(64\text{ bytes} / 8\text{ bytes/double} = \mathbf{8\text{ doubles per cache line}}\)</span>.</li>
+<li>Total elements: <span class="math inline">\(N^2 = (10^4)^2 = 10^8\)</span> doubles (<span class="math inline">\(800\text{ MB}\)</span>).</li>
+<li><strong>Given Code (Inner loop over <span class="math inline">\(i\)</span>, Column-wise access <code>A[i][j]</code>)</strong>:
+<ul>
+<li>At each step <span class="math inline">\(i \to i+1\)</span>, the address jumps by <span class="math inline">\(N \times 8\text{ bytes} = 80,000\text{ bytes}\)</span>.</li>
+<li>Since <span class="math inline">\(80\text{ KB} &gt; \text{L1 cache size}\)</span>, consecutive iterations access completely different cache lines!</li>
+<li>Spatial locality is <strong>completely destroyed</strong>. Every single memory access causes a <strong>cache miss</strong>: <span class="math display">\[\text{Misses}_{\text{bad}} = N \times N = 10^4 \times 10^4 = \mathbf{10^8\text{ cache misses}}\]</span></li>
+</ul></li>
+<li><strong>Interchanged Code (Inner loop over <span class="math inline">\(j\)</span>, Row-wise access <code>A[i][j]</code>)</strong>:
+<ul>
+<li>At each step <span class="math inline">\(j \to j+1\)</span>, the address increments by 8 bytes (consecutive memory).</li>
+<li>The first access <code>A[i][0]</code> loads a 64-byte line containing 8 doubles (<code>A[i][0] ... A[i][7]</code>).</li>
+<li>Accesses 1 through 7 are guaranteed <strong>cache hits</strong> (spatial locality).</li>
+<li>Cache miss occurs only once every 8 elements: <span class="math display">\[\text{Misses}_{\text{optimal}} = \frac{N \times N}{8} = \frac{10^8}{8} = \mathbf{1.25 \times 10^7\text{ cache misses}}\]</span></li>
+<li><strong>Performance Impact</strong>: Loop interchange achieves an <strong><span class="math inline">\(8\times\)</span> reduction in memory traffic</strong>!</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Cache Tiling (Loop Blocking) for <span class="math inline">\(C = A B\)</span></strong>:</p>
+<ul>
+<li>Partition matrices into <span class="math inline">\(B \times B\)</span> submatrices (tiles):
+<div class="sourceCode" id="leq-cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="leq-cb6-1"><a aria-hidden="true" href="#leq-cb6-1" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>ii <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> ii <span class="op">&lt;</span> N<span class="op">;</span> ii <span class="op">+=</span> B<span class="op">)</span></span>
+<span id="leq-cb6-2"><a aria-hidden="true" href="#leq-cb6-2" tabindex="-1"></a>  <span class="cf">for</span> <span class="op">(</span>jj <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> jj <span class="op">&lt;</span> N<span class="op">;</span> jj <span class="op">+=</span> B<span class="op">)</span></span>
+<span id="leq-cb6-3"><a aria-hidden="true" href="#leq-cb6-3" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span>kk <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> kk <span class="op">&lt;</span> N<span class="op">;</span> kk <span class="op">+=</span> B<span class="op">)</span></span>
+<span id="leq-cb6-4"><a aria-hidden="true" href="#leq-cb6-4" tabindex="-1"></a>      <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> ii<span class="op">;</span> i <span class="op">&lt;</span> ii <span class="op">+</span> B<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="leq-cb6-5"><a aria-hidden="true" href="#leq-cb6-5" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span>j <span class="op">=</span> jj<span class="op">;</span> j <span class="op">&lt;</span> jj <span class="op">+</span> B<span class="op">;</span> j<span class="op">++)</span></span>
+<span id="leq-cb6-6"><a aria-hidden="true" href="#leq-cb6-6" tabindex="-1"></a>          <span class="cf">for</span> <span class="op">(</span>k <span class="op">=</span> kk<span class="op">;</span> k <span class="op">&lt;</span> kk <span class="op">+</span> B<span class="op">;</span> k<span class="op">++)</span></span>
+<span id="leq-cb6-7"><a aria-hidden="true" href="#leq-cb6-7" tabindex="-1"></a>            C<span class="op">[</span>i<span class="op">][</span>j<span class="op">]</span> <span class="op">+=</span> A<span class="op">[</span>i<span class="op">][</span>k<span class="op">]</span> <span class="op">*</span> B<span class="op">[</span>k<span class="op">][</span>j<span class="op">];</span></span></code></pre></div></li>
+<li><strong>Optimal Tile Size Derivation</strong>: To prevent cache thrashing, one tile of <span class="math inline">\(A\)</span>, one tile of <span class="math inline">\(B\)</span>, and one tile of <span class="math inline">\(C\)</span> must simultaneously reside in L1 cache: <span class="math display">\[3 \times B^2 \times 8\text{ bytes} \le \text{Cache Size} = 32\text{ KB} = 32,768\text{ bytes}\]</span> <span class="math display">\[24 B^2 \le 32,768 \implies B^2 \le \frac{32,768}{24} \approx 1365.3 \implies B \le \sqrt{1365.3} \approx 36.9\]</span> Selecting the nearest power of 2: <span class="math display">\[\mathbf{B = 32}\]</span> This reduces memory traffic between cache and DRAM by a factor of <span class="math inline">\(B = 32\times\)</span>!</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="module-8-parallel-architectures-interconnects--topologies">Module 8: Parallel Architectures, Interconnects &amp; Topologies</h2>
+<h3 id="q81-network-topology-metrics-degree-diameter-and-bisection-width-derivation-6-marks">Q8.1: Network Topology Metrics: Degree, Diameter, and Bisection Width Derivation [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Complete the following comparative table for <span class="math inline">\(p\)</span> processors interconnected in various network topologies:</p>
+<ol type="1">
+<li>Linear Array (<span class="math inline">\(p\)</span> nodes).</li>
+<li>2D Mesh (<span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span> nodes, without wraparound).</li>
+<li>2D Torus (<span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span> nodes, with wraparound).</li>
+<li><span class="math inline">\(d\)</span>-dimensional Hypercube (<span class="math inline">\(p = 2^d\)</span> nodes). For each topology, evaluate: <strong>Node Degree</strong>, <strong>Network Diameter</strong>, and <strong>Bisection Width</strong>.</li>
+</ol>
+<h4 id="full-step-by-step-solution-20">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Definitions of Network Metrics</strong>:</p>
+<ul>
+<li><strong>Node Degree (<span class="math inline">\(d_{\text{node}}\)</span>)</strong>: Maximum number of physical communication links connected to any single processor. Determines switch port complexity.</li>
+<li><strong>Network Diameter (<span class="math inline">\(D\)</span>)</strong>: Maximum shortest path distance (number of hops) between any pair of nodes. Determines worst-case communication latency.</li>
+<li><strong>Bisection Width (<span class="math inline">\(B_w\)</span>)</strong>: Minimum number of communication links that must be severed to partition the network into two equal halves of <span class="math inline">\(p/2\)</span> nodes. Determines bandwidth bottleneck for global communication (e.g., all-to-all).</li>
+</ul></li>
+<li><p><strong>Derivations for Each Topology</strong>:</p>
+<ul>
+<li><p><strong>Linear Array (<span class="math inline">\(p\)</span> nodes)</strong>:</p>
+<ul>
+<li>End nodes have 1 link, interior nodes have 2 links <span class="math inline">\(\implies \text{Degree} = \mathbf{2}\)</span>.</li>
+<li>Longest path is from node 1 to node <span class="math inline">\(p \implies \text{Diameter} = \mathbf{p - 1}\)</span>.</li>
+<li>Splitting in the middle cuts exactly 1 link <span class="math inline">\(\implies \text{Bisection Width} = \mathbf{1}\)</span>.</li>
+</ul></li>
+<li><p><strong>2D Mesh (<span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span>, no wraparound)</strong>:</p>
+<ul>
+<li>Interior nodes have 4 links (North, South, East, West) <span class="math inline">\(\implies \text{Degree} = \mathbf{4}\)</span>.</li>
+<li>Longest path is from corner <span class="math inline">\((1, 1)\)</span> to opposite corner <span class="math inline">\((\sqrt{p}, \sqrt{p})\)</span>: <span class="math inline">\(D = (\sqrt{p} - 1) + (\sqrt{p} - 1) = \mathbf{2(\sqrt{p} - 1)}\)</span>.</li>
+<li>Cutting vertically down the center severs 1 link per row across <span class="math inline">\(\sqrt{p}\)</span> rows <span class="math inline">\(\implies B_w = \mathbf{\sqrt{p}}\)</span>.</li>
+</ul></li>
+<li><p><strong>2D Torus (<span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span>, with wraparound)</strong>:</p>
+<ul>
+<li>Every node has exactly 4 links <span class="math inline">\(\implies \text{Degree} = \mathbf{4}\)</span>.</li>
+<li>Wraparound links halve the maximum distance in each dimension: <span class="math inline">\(D = 2 \times \lfloor \sqrt{p} / 2 \rfloor = \mathbf{\sqrt{p}}\)</span> (for even <span class="math inline">\(\sqrt{p}\)</span>).</li>
+<li>Bisecting cuts both the regular links and the wraparound links <span class="math inline">\(\implies B_w = \mathbf{2\sqrt{p}}\)</span>.</li>
+</ul></li>
+<li><p><strong>Hypercube (<span class="math inline">\(p = 2^d\)</span>, <span class="math inline">\(d = \log_2 p\)</span>)</strong>:</p>
+<ul>
+<li>Each node connects to <span class="math inline">\(d\)</span> neighbors whose binary representations differ by exactly 1 bit <span class="math inline">\(\implies \text{Degree} = d = \mathbf{\log_2 p}\)</span>.</li>
+<li>Maximum bit flips between any two binary addresses is <span class="math inline">\(d \implies \text{Diameter} = d = \mathbf{\log_2 p}\)</span>.</li>
+<li>Bisecting corresponds to fixing 1 bit position, cutting all links along that dimension: <span class="math inline">\(B_w = \frac{p}{2} = \mathbf{2^{d-1}}\)</span>.</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Master Comparative Summary Table</strong>:</p></li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Network Topology</th>
+<th style="text-align: center;">Node Degree (<span class="math inline">\(d_{\text{node}}\)</span>)</th>
+<th style="text-align: center;">Network Diameter (<span class="math inline">\(D\)</span>)</th>
+<th style="text-align: center;">Bisection Width (<span class="math inline">\(B_w\)</span>)</th>
+<th style="text-align: center;">Architectural Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Linear Array</strong></td>
+<td style="text-align: center;"><span class="math inline">\(2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p - 1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(1\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(p)\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2D Mesh</strong></td>
+<td style="text-align: center;"><span class="math inline">\(4\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(2(\sqrt{p} - 1)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\sqrt{p}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(p)\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2D Torus</strong></td>
+<td style="text-align: center;"><span class="math inline">\(4\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\sqrt{p}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(2\sqrt{p}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(p)\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Hypercube (<span class="math inline">\(d\)</span>-cube)</strong></td>
+<td style="text-align: center;"><span class="math inline">\(\log_2 p\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\log_2 p\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p/2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(p \log p)\)</span></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="q82-cache-coherency-mesi-protocol-and-false-sharing-pathology-with-code-fix-5-marks">Q8.2: Cache Coherency (MESI Protocol) and False Sharing Pathology with Code Fix [5 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>Explain the <strong>Cache Coherency Problem</strong> in Shared-Memory multiprocessors and define the 4 states of the <strong>MESI Protocol</strong> (Modified, Exclusive, Shared, Invalid).</li>
+<li>The following OpenMP code computes the sum of elements in parallel:
+<div class="sourceCode" id="leq-cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="leq-cb7-1"><a aria-hidden="true" href="#leq-cb7-1" tabindex="-1"></a><span class="dt">int</span> sum<span class="op">[</span>NUM_THREADS<span class="op">];</span></span>
+<span id="leq-cb7-2"><a aria-hidden="true" href="#leq-cb7-2" tabindex="-1"></a><span class="pp">#pragma omp parallel</span></span>
+<span id="leq-cb7-3"><a aria-hidden="true" href="#leq-cb7-3" tabindex="-1"></a><span class="op">{</span></span>
+<span id="leq-cb7-4"><a aria-hidden="true" href="#leq-cb7-4" tabindex="-1"></a>    <span class="dt">int</span> id <span class="op">=</span> omp_get_thread_num<span class="op">();</span></span>
+<span id="leq-cb7-5"><a aria-hidden="true" href="#leq-cb7-5" tabindex="-1"></a>    sum<span class="op">[</span>id<span class="op">]</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="leq-cb7-6"><a aria-hidden="true" href="#leq-cb7-6" tabindex="-1"></a>    <span class="pp">#pragma omp for</span></span>
+<span id="leq-cb7-7"><a aria-hidden="true" href="#leq-cb7-7" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb7-8"><a aria-hidden="true" href="#cb7-8" tabindex="-1"></a>        sum<span class="op">[</span>id<span class="op">]</span> <span class="op">+=</span> a<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb7-9"><a aria-hidden="true" href="#cb7-9" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb7-10"><a aria-hidden="true" href="#cb7-10" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+Explain why this code suffers from <strong>False Sharing</strong> and exhibits terrible parallel performance on multicore CPUs.</li>
+<li>Rewrite the code to completely eliminate false sharing.</li>
+</ol>
+<h4 id="full-step-by-step-solution-21">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Cache Coherency and the MESI Protocol</strong>:</p>
+<ul>
+<li>In Symmetric Multiprocessors (SMP), each CPU core has its own private L1/L2 cache, while sharing central DRAM. If Core 0 modifies variable <span class="math inline">\(X\)</span> in its local cache without informing Core 1, Core 1 will read stale data from its cache or main memory.</li>
+<li><strong>MESI Protocol States</strong>:
+<ul>
+<li><strong>M (Modified)</strong>: Line is present only in current cache and is dirty (modified relative to DRAM).</li>
+<li><strong>E (Exclusive)</strong>: Line is present only in current cache, but is clean (matches DRAM).</li>
+<li><strong>S (Shared)</strong>: Line is present in multiple caches, clean (read-only).</li>
+<li><strong>I (Invalid)</strong>: Line data is stale and invalid. Any read triggers a cache miss.</li>
+</ul></li>
+</ul></li>
+<li><p><strong>The False Sharing Pathology</strong>:</p>
+<ul>
+<li>Cache coherency hardware tracks memory status at the granularity of <strong>Cache Lines</strong> (typically 64 bytes), <em>not individual variables</em>.</li>
+<li>In the code above, <code>sum[NUM_THREADS]</code> is an array of 4-byte integers.</li>
+<li>For <code>NUM_THREADS = 8</code>, all 8 integers occupy <span class="math inline">\(8 \times 4\text{ B} = 32\text{ bytes}\)</span>, which fits <strong>entirely within a single 64-byte cache line</strong>!</li>
+<li>When Thread 0 writes to <code>sum[0]</code>, its core marks the cache line as <strong>Modified (M)</strong> and broadcasts a <strong>Bus Invalidate</strong> signal across the interconnect.</li>
+<li>The private cache lines of Cores 1 through 7 are immediately forced to the <strong>Invalid (I)</strong> state.</li>
+<li>When Thread 1 tries to write to <code>sum[1]</code>, it experiences a cache miss, loads the line from Core 0, marks it Modified, and invalidates Core 0!</li>
+<li>The cores spend virtually 100% of their execution time ping-ponging the cache line across the interconnect (<strong>Cache Thrashing</strong>), degrading performance below serial execution!</li>
+</ul></li>
+<li><p><strong>Corrected Code Implementations</strong>:</p>
+<ul>
+<li><p><strong>Method A: Private Local Accumulator (Best Practice)</strong>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a aria-hidden="true" href="#cb8-1" tabindex="-1"></a><span class="dt">int</span> total_sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="#cb8-2" tabindex="-1"></a><span class="pp">#pragma omp parallel</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="#cb8-3" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="#cb8-4" tabindex="-1"></a>    <span class="dt">int</span> local_sum <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> <span class="co">// Stored in thread-private CPU register</span></span>
+<span id="cb8-5"><a aria-hidden="true" href="#cb8-5" tabindex="-1"></a>    <span class="pp">#pragma omp for</span></span>
+<span id="cb8-6"><a aria-hidden="true" href="#cb8-6" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> N<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb8-7"><a aria-hidden="true" href="#cb8-7" tabindex="-1"></a>        local_sum <span class="op">+=</span> a<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb8-8"><a aria-hidden="true" href="#cb8-8" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-9"><a aria-hidden="true" href="#cb8-9" tabindex="-1"></a>    <span class="pp">#pragma omp atomic</span></span>
+<span id="cb8-10"><a aria-hidden="true" href="#cb8-10" tabindex="-1"></a>    total_sum <span class="op">+=</span> local_sum<span class="op">;</span></span>
+<span id="cb8-11"><a aria-hidden="true" href="#cb8-11" tabindex="-1"></a><span class="op">}</span></span></code></pre></div></li>
+<li><p><strong>Method B: Structure Padding</strong>: If an array must be maintained, pad each element to exceed the 64-byte cache line boundary:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb9-1"><a aria-hidden="true" href="#cb9-1" tabindex="-1"></a><span class="kw">struct</span> ThreadData <span class="op">{</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="#cb9-2" tabindex="-1"></a>    <span class="dt">int</span> sum<span class="op">;</span></span>
+<span id="cb9-3"><a aria-hidden="true" href="#cb9-3" tabindex="-1"></a>    <span class="dt">char</span> pad<span class="op">[</span><span class="dv">60</span><span class="op">];</span> <span class="co">// 4 + 60 = 64 bytes! Guarantees independent cache lines.</span></span>
+<span id="cb9-4"><a aria-hidden="true" href="#cb9-4" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb9-5"><a aria-hidden="true" href="#cb9-5" tabindex="-1"></a><span class="kw">struct</span> ThreadData sum<span class="op">[</span>NUM_THREADS<span class="op">];</span></span></code></pre></div></li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="module-9-parallel-performance-scalability--amdahls-law">Module 9: Parallel Performance, Scalability &amp; Amdahl's Law</h2>
+<h3 id="q91-amdahls-law-with-parallel-communication-overhead-and-maximum-efficiency-6-marks">Q9.1: Amdahl's Law with Parallel Communication Overhead and Maximum Efficiency [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+A scientific simulation code has a sequential fraction <span class="math inline">\(f = 0.05\)</span> (<span class="math inline">\(5\%\)</span> inherently serial).<br/>
+When running the parallelizable portion (<span class="math inline">\(95\%\)</span>) on <span class="math inline">\(p\)</span> processors, communication and synchronization overhead introduces an additional penalty given by: <span class="math display">\[T_{\text{comm}}(p) = 0.001 \times p\text{ seconds}\]</span> Normalized serial runtime is <span class="math inline">\(T_s = 1.0\text{ second}\)</span>.</p>
+<ol type="1">
+<li>Formulate the total parallel runtime <span class="math inline">\(T_p(p)\)</span> as a function of processor count <span class="math inline">\(p\)</span>.</li>
+<li>Derive the analytical expression for the parallel speedup <span class="math inline">\(S(p)\)</span> and parallel efficiency <span class="math inline">\(E(p)\)</span>.</li>
+<li>Determine the optimal number of processors <span class="math inline">\(p^*\)</span> that maximizes parallel speedup.</li>
+<li>Calculate the peak speedup <span class="math inline">\(S(p^*)\)</span> and the efficiency at this optimal point.</li>
+</ol>
+<h4 id="full-step-by-step-solution-22">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Parallel Execution Time Formulation</strong>: <span class="math display">\[T_p(p) = T_{\text{serial}} + T_{\text{parallel}} + T_{\text{comm}}\]</span> Given <span class="math inline">\(T_s = 1.0\text{ s}\)</span>, <span class="math inline">\(f = 0.05\)</span>: <span class="math display">\[T_{\text{serial}} = f \cdot T_s = 0.05\text{ s}\]</span> <span class="math display">\[T_{\text{parallel}} = \frac{(1 - f) T_s}{p} = \frac{0.95}{p}\text{ s}\]</span> <span class="math display">\[T_{\text{comm}} = 0.001 \cdot p\text{ s}\]</span> Therefore: <span class="math display">\[\mathbf{T_p(p) = 0.05 + \frac{0.95}{p} + 0.001 p}\]</span></p></li>
+<li><p><strong>Speedup and Efficiency Expressions</strong>: <span class="math display">\[\mathbf{S(p) = \frac{T_s}{T_p(p)} = \frac{1}{0.05 + \frac{0.95}{p} + 0.001 p}}\]</span> <span class="math display">\[\mathbf{E(p) = \frac{S(p)}{p} = \frac{1}{0.05 p + 0.95 + 0.001 p^2}}\]</span></p></li>
+<li><p><strong>Optimal Processor Count <span class="math inline">\(p^*\)</span></strong>: Maximizing speedup <span class="math inline">\(S(p)\)</span> is mathematically equivalent to minimizing runtime <span class="math inline">\(T_p(p)\)</span>.<br/>
+Differentiate <span class="math inline">\(T_p(p)\)</span> with respect to <span class="math inline">\(p\)</span> and set to zero: <span class="math display">\[\frac{d T_p}{dp} = -\frac{0.95}{p^2} + 0.001 = 0\]</span> <span class="math display">\[\frac{0.95}{p^2} = 0.001 \implies p^2 = \frac{0.95}{0.001} = 950\]</span> <span class="math display">\[p^* = \sqrt{950} \approx \mathbf{30.82 \implies 31\text{ processors}}\]</span> Verify with second derivative: <span class="math inline">\(\frac{d^2 T_p}{dp^2} = \frac{1.9}{p^3} &gt; 0\)</span> (strict minimum).</p></li>
+<li><p><strong>Peak Speedup and Efficiency at <span class="math inline">\(p^* = 31\)</span></strong>: Substitute <span class="math inline">\(p = 31\)</span> into <span class="math inline">\(T_p\)</span>: <span class="math display">\[T_p(31) = 0.05 + \frac{0.95}{31} + 0.001(31) = 0.05 + 0.030645 + 0.031000 = \mathbf{0.111645\text{ s}}\]</span></p>
+<ul>
+<li><strong>Peak Speedup</strong>: <span class="math display">\[\mathbf{S(31) = \frac{1.0}{0.111645} \approx \mathbf{8.957\times}}\]</span></li>
+<li><strong>Parallel Efficiency</strong>: <span class="math display">\[\mathbf{E(31) = \frac{S(31)}{31} = \frac{8.957}{31} \approx \mathbf{28.89\%}}\]</span></li>
+</ul>
+<blockquote>
+<p><strong>Exam Note</strong>: Beyond 31 processors, adding more cores actually <strong>slows down the simulation</strong> (<span class="math inline">\(S(p)\)</span> decreases) because communication overhead grows faster than the computation reduction!</p>
+</blockquote></li>
+</ol>
+<hr/>
+<h3 id="q92-isoefficiency-function-derivation-and-scalability-evaluation-6-marks">Q9.2: Isoefficiency Function Derivation and Scalability Evaluation [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:</p>
+<ol type="1">
+<li>Define <strong>Scalability</strong> of a parallel system and define the <strong>Isoefficiency Metric</strong> developed by Kumar and Grama.</li>
+<li>An algorithm solves a problem of size <span class="math inline">\(W\)</span> on <span class="math inline">\(p\)</span> processors with an overhead function: <span class="math display">\[T_o(W, p) = c_1 p \sqrt{W} + c_2 p^2\]</span> Derive the isoefficiency function <span class="math inline">\(W(p)\)</span> to maintain a constant efficiency <span class="math inline">\(E\)</span>.</li>
+<li>If processor count <span class="math inline">\(p\)</span> is increased by a factor of 4, by what factor must the workload <span class="math inline">\(W\)</span> increase to maintain the same efficiency?</li>
+<li>Is this algorithm considered poorly scalable, moderately scalable, or highly scalable?</li>
+</ol>
+<h4 id="full-step-by-step-solution-23">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Definitions</strong>:</p>
+<ul>
+<li><strong>Scalability</strong>: The capacity of a parallel algorithm-architecture combination to maintain a constant efficiency <span class="math inline">\(E\)</span> as the number of processors <span class="math inline">\(p\)</span> is increased by simultaneously increasing the problem size <span class="math inline">\(W\)</span>.</li>
+<li><strong>Isoefficiency Function <span class="math inline">\(W(p)\)</span></strong>: The required growth rate of problem size <span class="math inline">\(W\)</span> as a function of <span class="math inline">\(p\)</span> to keep efficiency <span class="math inline">\(E\)</span> invariant. The fundamental relation is: <span class="math display">\[W = K \cdot T_o(W, p), \quad \text{where } K = \frac{E}{1 - E}\]</span></li>
+</ul></li>
+<li><p><strong>Derivation of Isoefficiency Function</strong>: Given <span class="math inline">\(T_o(W, p) = c_1 p \sqrt{W} + c_2 p^2\)</span>: <span class="math display">\[W = K (c_1 p \sqrt{W} + c_2 p^2)\]</span> We analyze the workload required to balance each overhead term independently:</p>
+<ul>
+<li><strong>Term 1 Balance (<span class="math inline">\(c_1 p \sqrt{W}\)</span>)</strong>: <span class="math display">\[W = K c_1 p \sqrt{W} \implies \sqrt{W} = K c_1 p \implies \mathbf{W \propto p^2}\]</span></li>
+<li><strong>Term 2 Balance (<span class="math inline">\(c_2 p^2\)</span>)</strong>: <span class="math display">\[W = K c_2 p^2 \implies \mathbf{W \propto p^2}\]</span> Both terms yield the same asymptotic growth rate: <span class="math display">\[\mathbf{W = O(p^2)}\]</span></li>
+</ul></li>
+<li><p><strong>Workload Increase for <span class="math inline">\(4\times\)</span> Processors</strong>: Let <span class="math inline">\(p_{\text{new}} = 4 p\)</span>. Since <span class="math inline">\(W \propto p^2\)</span>: <span class="math display">\[W_{\text{new}} = (4 p)^2 = 16 p^2 = \mathbf{16 W}\]</span> The problem size <span class="math inline">\(W\)</span> must increase by a factor of <strong>16</strong>!</p></li>
+<li><p><strong>Scalability Classification</strong>:</p>
+<ul>
+<li>An algorithm is <strong>optimally scalable</strong> if <span class="math inline">\(W = O(p)\)</span> (linear growth).</li>
+<li>An algorithm is <strong>highly scalable</strong> if <span class="math inline">\(W = O(p \log p)\)</span>.</li>
+<li>An algorithm with <span class="math inline">\(W = O(p^2)\)</span> is classified as <strong>moderately scalable</strong>. (It is substantially more scalable than matrix multiplication on rings (<span class="math inline">\(O(p^3)\)</span>), but requires problem memory per node to grow linearly as <span class="math inline">\(W/p = O(p)\)</span>).</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="module-10-parallel-numerical-linear-algebra">Module 10: Parallel Numerical Linear Algebra</h2>
+<h3 id="q101-parallel-spmv-1d-row-striping-vs-2d-checkerboard-mesh-decomposition-6-marks">Q10.1: Parallel SpMV: 1D Row Striping vs. 2D Checkerboard Mesh Decomposition [6 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Consider parallel sparse matrix-vector multiplication <span class="math inline">\(y = A x\)</span> on a distributed memory cluster of <span class="math inline">\(p\)</span> processors with network latency <span class="math inline">\(t_s\)</span> and per-word transfer time <span class="math inline">\(t_w\)</span>. Matrix <span class="math inline">\(A\)</span> is <span class="math inline">\(n \times n\)</span> with <span class="math inline">\(m\)</span> non-zeros per row.</p>
+<ol type="1">
+<li>In a <strong>1D Row-wise Block Partitioning</strong>, describe the communication phase and write the parallel execution time <span class="math inline">\(T_p^{1D}\)</span>.</li>
+<li>In a <strong>2D Checkerboard Partitioning</strong> on a <span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span> mesh, describe the required communication steps (Column Broadcast &amp; Row Reduction) and formulate <span class="math inline">\(T_p^{2D}\)</span>.</li>
+<li>For very large processor counts (<span class="math inline">\(p \gg 1000\)</span>), explain why 2D decomposition is asymptotically superior.</li>
+</ol>
+<h4 id="full-step-by-step-solution-24">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>1D Row-wise Block Striping</strong>:</p>
+<ul>
+<li>Each of the <span class="math inline">\(p\)</span> processors owns <span class="math inline">\(n/p\)</span> consecutive rows of <span class="math inline">\(A\)</span> and the local vector segment <span class="math inline">\(x_{\text{loc}}\)</span> of length <span class="math inline">\(n/p\)</span>.</li>
+<li><strong>Communication Phase</strong>: To compute <span class="math inline">\(y_{\text{loc}} = A_{\text{loc}} x\)</span>, each processor needs non-local components of <span class="math inline">\(x\)</span>. In general unstructured topologies, this requires an <strong>All-to-All Broadcast (MPI_Allgather)</strong> of the vector <span class="math inline">\(x\)</span> across all <span class="math inline">\(p\)</span> processors: <span class="math display">\[T_{\text{comm}}^{1D} = t_s \log_2 p + t_w \left(\frac{p - 1}{p}\right) n \approx t_s \log_2 p + t_w n\]</span></li>
+<li><strong>Computation Phase</strong>: Each processor computes <span class="math inline">\(n/p\)</span> rows, each with <span class="math inline">\(m\)</span> non-zeros <span class="math inline">\(\implies 2 m (n/p)\)</span> FLOPs: <span class="math display">\[T_{\text{comp}}^{1D} = 2 m \frac{n}{p} t_{\text{flop}}\]</span></li>
+<li><strong>Total 1D Parallel Runtime</strong>: <span class="math display">\[\mathbf{T_p^{1D} = 2 m \frac{n}{p} t_{\text{flop}} + t_s \log_2 p + t_w n}\]</span></li>
+</ul></li>
+<li><p><strong>2D Checkerboard Partitioning on <span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span> Grid</strong>:</p>
+<ul>
+<li>Processors are arranged in a 2D mesh <span class="math inline">\(P_{i, j}\)</span> for <span class="math inline">\(i, j \in \{1, \dots, \sqrt{p}\}\)</span>.</li>
+<li>Each processor holds a submatrix block of size <span class="math inline">\(\frac{n}{\sqrt{p}} \times \frac{n}{\sqrt{p}}\)</span>.</li>
+<li><strong>Step 1 (Column Broadcast)</strong>: Vector segments <span class="math inline">\(x_j\)</span> (size <span class="math inline">\(n/\sqrt{p}\)</span>) are broadcast vertically along processor columns (<span class="math inline">\(\sqrt{p}\)</span> processors per column): <span class="math display">\[T_{\text{comm, 1}} = (t_s + t_w \frac{n}{\sqrt{p}}) \log_2 \sqrt{p} = \frac{1}{2} (t_s \log_2 p + t_w \frac{n}{\sqrt{p}} \log_2 p)\]</span></li>
+<li><strong>Step 2 (Local Block SpMV)</strong>: <span class="math display">\[T_{\text{comp}}^{2D} = 2 m \frac{n}{p} t_{\text{flop}}\]</span></li>
+<li><strong>Step 3 (Row Reduction)</strong>: Partial results are summed horizontally along processor rows via <strong>MPI_Reduce_scatter</strong>: <span class="math display">\[T_{\text{comm, 2}} = \frac{1}{2} (t_s \log_2 p + t_w \frac{n}{\sqrt{p}} \log_2 p)\]</span></li>
+<li><strong>Total 2D Parallel Runtime</strong>: <span class="math display">\[\mathbf{T_p^{2D} = 2 m \frac{n}{p} t_{\text{flop}} + t_s \log_2 p + t_w \frac{n}{\sqrt{p}} \log_2 p}\]</span></li>
+</ul></li>
+<li><p><strong>Asymptotic Superiority of 2D Decomposition</strong>:</p>
+<ul>
+<li>Compare the data transfer volume term (<span class="math inline">\(t_w\)</span>):
+<ul>
+<li>In 1D striping: <span class="math inline">\(t_w \cdot \mathbf{n}\)</span> (Independent of <span class="math inline">\(p\)</span>! Communication volume does <strong>not decrease</strong> as processors are added).</li>
+<li>In 2D striping: <span class="math inline">\(t_w \cdot \mathbf{\frac{n}{\sqrt{p}} \log_2 p}\)</span> (<span class="math inline">\(\to 0\)</span> as <span class="math inline">\(p \to \infty\)</span>).</li>
+</ul></li>
+<li>For massively parallel supercomputers (<span class="math inline">\(p \ge 10,000\)</span>), 1D row striping creates an insurmountable communication wall where all processors saturate the network links with full-length vector broadcasts. 2D decomposition restricts communication to small <span class="math inline">\(\sqrt{p}\)</span> sub-communicators, achieving superior weak and strong scaling.</li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="q102-cannons-algorithm-on-2d-torus-communication-complexity--shift-steps-7-marks">Q10.2: Cannon's Algorithm on 2D Torus: Communication Complexity &amp; Shift Steps [7 Marks]</h3>
+<p><strong>Problem Statement</strong>:<br/>
+Cannon's algorithm multiplies two dense <span class="math inline">\(n \times n\)</span> matrices <span class="math inline">\(C = A B\)</span> on a 2D Torus of <span class="math inline">\(p\)</span> processors arranged as a <span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span> mesh.</p>
+<ol type="1">
+<li>Describe the <strong>Initial Preskewing Phase</strong> for blocks <span class="math inline">\(A_{i, j}\)</span> and <span class="math inline">\(B_{i, j}\)</span>.</li>
+<li>Describe the <strong>Multiply-Shift Loop</strong> and state the exact number of stages.</li>
+<li>Formulate the total parallel runtime <span class="math inline">\(T_p\)</span>, showing computation and communication components.</li>
+<li>Derive the <strong>Isoefficiency Function</strong> of Cannon's algorithm.</li>
+</ol>
+<h4 id="full-step-by-step-solution-25">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Phase 1: Initial Preskewing Alignment</strong>: To ensure that each processor <span class="math inline">\(P_{i, j}\)</span> initially holds matching blocks <span class="math inline">\(A_{i, k}\)</span> and <span class="math inline">\(B_{k, j}\)</span> with identical inner indices <span class="math inline">\(k\)</span>:</p>
+<ul>
+<li>Row <span class="math inline">\(i\)</span> of block matrix <span class="math inline">\(A\)</span> is circularly shifted <strong>left by <span class="math inline">\(i\)</span> positions</strong> (<span class="math inline">\(i \in \{0, \dots, \sqrt{p}-1\}\)</span>). <span class="math display">\[A_{i, j} \leftarrow A_{i, (j + i) \bmod \sqrt{p}}\]</span></li>
+<li>Column <span class="math inline">\(j\)</span> of block matrix <span class="math inline">\(B\)</span> is circularly shifted <strong>up by <span class="math inline">\(j\)</span> positions</strong> (<span class="math inline">\(j \in \{0, \dots, \sqrt{p}-1\}\)</span>). <span class="math display">\[B_{i, j} \leftarrow B_{(i + j) \bmod \sqrt{p}, j}\]</span></li>
+<li><strong>Preskewing Communication Cost</strong>: Block size is <span class="math inline">\(\frac{n}{\sqrt{p}} \times \frac{n}{\sqrt{p}}\)</span>, so message size is <span class="math inline">\(m = \frac{n^2}{p}\)</span> words. Maximum shift distance is <span class="math inline">\(\sqrt{p}-1\)</span>: <span class="math display">\[T_{\text{preskew}} = 2 \left( t_s + t_w \frac{n^2}{p} \right)\]</span></li>
+</ul></li>
+<li><p><strong>Phase 2: Multiply-and-Shift Loop</strong>: The main loop executes for exactly <strong><span class="math inline">\(\sqrt{p}\)</span> stages</strong>:</p>
+<ul>
+<li>For step <span class="math inline">\(k = 1\)</span> to <span class="math inline">\(\sqrt{p}\)</span>:
+<ol type="1">
+<li><strong>Compute</strong>: Local matrix multiply-add on block size <span class="math inline">\(m_b = n / \sqrt{p}\)</span>: <span class="math display">\[C_{i, j} = C_{i, j} + A_{i, j} B_{i, j}\]</span> Requires <span class="math inline">\(2 \left(\frac{n}{\sqrt{p}}\right)^3 = \frac{2 n^3}{p \sqrt{p}}\)</span> FLOPs per stage.</li>
+<li><strong>Communicate (Shift)</strong>:
+<ul>
+<li>Circularly shift <span class="math inline">\(A\)</span> <strong>left by 1 block</strong> along row.</li>
+<li>Circularly shift <span class="math inline">\(B\)</span> <strong>up by 1 block</strong> along column. Each shift involves nearest-neighbor communication of size <span class="math inline">\(n^2 / p\)</span>: <span class="math display">\[T_{\text{shift-step}} = 2 \left( t_s + t_w \frac{n^2}{p} \right)\]</span></li>
+</ul></li>
+</ol></li>
+</ul></li>
+<li><p><strong>Total Parallel Execution Time Formulation</strong>: Summing over all <span class="math inline">\(\sqrt{p}\)</span> stages:</p>
+<ul>
+<li><strong>Total Computation</strong>: <span class="math display">\[T_{\text{comp}} = \sqrt{p} \times \left( \frac{2 n^3}{p \sqrt{p}} \right) t_{\text{flop}} = \mathbf{\frac{2 n^3}{p} t_{\text{flop}}}\]</span></li>
+<li><strong>Total Communication</strong> (Preskewing + <span class="math inline">\(\sqrt{p}\)</span> shifts): <span class="math display">\[T_{\text{comm}} \approx \sqrt{p} \times 2 \left( t_s + t_w \frac{n^2}{p} \right) = \mathbf{2 \sqrt{p} \, t_s + 2 \frac{n^2}{\sqrt{p}} \, t_w}\]</span></li>
+<li><strong>Master Runtime Equation</strong>: <span class="math display">\[\mathbf{T_p = \frac{2 n^3}{p} t_{\text{flop}} + 2 \sqrt{p} \, t_s + 2 \frac{n^2}{\sqrt{p}} \, t_w}\]</span></li>
+</ul></li>
+<li><p><strong>Derivation of Isoefficiency Function</strong>:</p>
+<ul>
+<li>Serial work: <span class="math inline">\(W = 2 n^3 \implies n = (W/2)^{1/3}\)</span>.</li>
+<li>Total overhead: <span class="math display">\[T_o = p T_p - W = 2 p \sqrt{p} \, t_s + 2 n^2 \sqrt{p} \, t_w\]</span></li>
+<li>Balancing <span class="math inline">\(W = K \cdot T_o\)</span>:
+<ul>
+<li>For the latency term (<span class="math inline">\(2 p^{1.5} t_s\)</span>): <span class="math display">\[W \propto p^{1.5}\]</span></li>
+<li>For the bandwidth term (<span class="math inline">\(2 n^2 \sqrt{p} t_w\)</span>): Substitute <span class="math inline">\(n^2 = (W/2)^{2/3}\)</span>: <span class="math display">\[W = K' W^{2/3} \sqrt{p} \implies W^{1/3} \propto \sqrt{p} \implies W \propto (\sqrt{p})^3 = p^{1.5}\]</span></li>
+</ul></li>
+<li>Both terms scale identically! Therefore, the isoefficiency function of Cannon's algorithm is: <span class="math display">\[\mathbf{W = O(p^{1.5}) \quad \left(\text{or } W \propto p^{3/2}\right)}\]</span></li>
+<li><strong>Scalability Significance</strong>: To keep parallel efficiency constant when processors <span class="math inline">\(p\)</span> quadruple (<span class="math inline">\(4\times\)</span>), the workload <span class="math inline">\(W\)</span> only needs to increase by <span class="math inline">\(4^{1.5} = 8\times\)</span>. This makes Cannon's algorithm <strong>exceptionally scalable</strong> for dense linear algebra!</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="full-model-examination-paper-25-marks-2-hours">Full Model Examination Paper (25 Marks, 2 Hours)</h2>
+<blockquote>
+<p><strong>Instructions</strong>: Answer all questions. You may use class lecture notes and reference textbooks. Calculators are permitted. Part A consists of analytical theory and derivations; Part B involves sparse array reconstruction and algorithmic tracing.</p>
+</blockquote>
+<hr/>
+<h3 id="leq-part-a-15-marks">Part A (15 Marks)</h3>
+<h4 id="leq-question-1-3-marks">Question 1 [3 Marks]</h4>
+<p>A linear stationary iterative method <span class="math inline">\(x^{(k+1)} = G x^{(k)} + f\)</span> has the iteration matrix: <span class="math display">\[G = \begin{bmatrix}
+0.5 &amp; 0 &amp; 0 &amp; 0 \\
+-1.2 &amp; -0.4 &amp; 0 &amp; 0 \\
+3.0 &amp; 2.0 &amp; 0.8 &amp; 1.2 \\
+-1.0 &amp; 0 &amp; 0.4 &amp; 0.6
+\end{bmatrix}\]</span></p>
+<ol type="1">
+<li>Find all eigenvalues of <span class="math inline">\(G\)</span> and determine the spectral radius <span class="math inline">\(\rho(G)\)</span>.</li>
+<li>Does the iteration converge? Justify your answer.</li>
+</ol>
+<p><strong>Solution</strong>:</p>
+<ol type="1">
+<li>Partition <span class="math inline">\(G\)</span> into block lower triangular form: <span class="math display">\[G_{11} = \begin{bmatrix} 0.5 &amp; 0 \\ -1.2 &amp; -0.4 \end{bmatrix}, \quad G_{22} = \begin{bmatrix} 0.8 &amp; 1.2 \\ 0.4 &amp; 0.6 \end{bmatrix}\]</span>
+<ul>
+<li>Eigenvalues of <span class="math inline">\(G_{11}\)</span>: <span class="math inline">\(\lambda_1 = 0.5, \; \lambda_2 = -0.4\)</span>.</li>
+<li>Eigenvalues of <span class="math inline">\(G_{22}\)</span>: <span class="math display">\[\det(G_{22} - \lambda I) = (0.8 - \lambda)(0.6 - \lambda) - (1.2)(0.4) = 0.48 - 1.4\lambda + \lambda^2 - 0.48 = 0\]</span> <span class="math display">\[\lambda^2 - 1.4\lambda = 0 \implies \lambda(\lambda - 1.4) = 0 \implies \lambda_3 = 0, \; \lambda_4 = 1.4\]</span></li>
+</ul></li>
+<li>The spectral radius is <span class="math inline">\(\mathbf{\rho(G) = \max(|0.5|, |-0.4|, |0|, |1.4|) = 1.4}\)</span>.<br/>
+Since <span class="math inline">\(\mathbf{\rho(G) = 1.4 &gt; 1}\)</span>, the scheme <strong>diverges unconditionally</strong>.</li>
+</ol>
+<hr/>
+<h4 id="leq-question-2-3-marks">Question 2 [3 Marks]</h4>
+<p>In the Conjugate Gradient method for an SPD matrix <span class="math inline">\(A\)</span>:</p>
+<ol type="1">
+<li>State the Chebyshev polynomial error bound for <span class="math inline">\(\|e_k\|_A\)</span> in terms of condition number <span class="math inline">\(\kappa_2(A)\)</span>.</li>
+<li>If <span class="math inline">\(\kappa_2(A) = 10,000\)</span>, calculate the theoretical number of iterations required to reduce the initial energy norm of error by <span class="math inline">\(10^{-6}\)</span>.</li>
+<li>How many iterations would the Method of Steepest Descent take for the same problem?</li>
+</ol>
+<p><strong>Solution</strong>:</p>
+<ol type="1">
+<li>The Chebyshev bound is: <span class="math display">\[\|e_k\|_A \le 2 \left( \frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1} \right)^k \|e_0\|_A\]</span></li>
+<li>For <span class="math inline">\(\kappa = 10,000 \implies \sqrt{\kappa} = 100\)</span>: <span class="math display">\[\rho_{CG} = \frac{100 - 1}{100 + 1} = \frac{99}{101} \approx 0.980198\]</span> To achieve <span class="math inline">\(2 \rho_{CG}^k \le 10^{-6} \implies \rho_{CG}^k \le 0.5 \times 10^{-6}\)</span>: <span class="math display">\[k \ge \frac{\ln(5 \times 10^{-7})}{\ln(0.980198)} = \frac{-14.50866}{-0.02000} \approx \mathbf{726\text{ iterations}}\]</span></li>
+<li>For Steepest Descent: <span class="math display">\[\rho_{SD} = \frac{\kappa - 1}{\kappa + 1} = \frac{9999}{10001} \approx 0.99980002\]</span> <span class="math display">\[k \ge \frac{\ln(10^{-6})}{\ln(0.99980002)} = \frac{-13.81551}{-0.00020} \approx \mathbf{69,078\text{ iterations}}\]</span> <strong>CG is approximately <span class="math inline">\(95\times\)</span> faster!</strong></li>
+</ol>
+<hr/>
+<h4 id="leq-question-3-3-marks">Question 3 [3 Marks]</h4>
+<p>Explain the concept of <strong>Preconditioning</strong> for Krylov subspace methods. Why is the condition <span class="math inline">\(M \approx A\)</span> insufficient on its own when selecting a practical preconditioner? State the three criteria for an effective preconditioner.</p>
+<p><strong>Solution</strong>:</p>
+<ol type="1">
+<li>Preconditioning transforms the original ill-conditioned system <span class="math inline">\(Ax = b\)</span> into an equivalent system <span class="math inline">\(M^{-1} A x = M^{-1} b\)</span> whose coefficient matrix <span class="math inline">\(M^{-1} A\)</span> has clustered eigenvalues and a vastly reduced condition number (<span class="math inline">\(\kappa(M^{-1}A) \ll \kappa(A)\)</span>).</li>
+<li>The condition <span class="math inline">\(M \approx A\)</span> alone is insufficient because taking <span class="math inline">\(M = A\)</span> yields <span class="math inline">\(M^{-1} A = I\)</span> (which converges in 1 iteration), but solving <span class="math inline">\(M z = r \iff A z = r\)</span> requires solving the exact original problem, defeating the purpose!</li>
+<li>The <strong>Three Golden Criteria</strong> are:
+<ul>
+<li><strong>Spectral Clustering</strong>: <span class="math inline">\(M^{-1} A\)</span> must be well-conditioned with eigenvalues tightly clustered near 1.</li>
+<li><strong>Inexpensive Inversion</strong>: The linear system <span class="math inline">\(M z = r\)</span> must be computationally cheap to solve in each iteration (<span class="math inline">\(O(N)\)</span> operations, e.g., triangular solves).</li>
+<li><strong>Low Memory Overhead</strong>: Storing the preconditioner matrix must require minimal additional RAM (<span class="math inline">\(O(N)\)</span> or zero extra storage).</li>
+</ul></li>
+</ol>
+<hr/>
+<h4 id="question-4-3-marks">Question 4 [3 Marks]</h4>
+<p>A sequential program executes in <span class="math inline">\(T_s = 100\text{ seconds}\)</span>, with <span class="math inline">\(75\%\)</span> of its operations parallelizable.</p>
+<ol type="1">
+<li>What is the theoretical maximum speedup possible according to Amdahl's Law on an infinite number of processors (<span class="math inline">\(p \to \infty\)</span>)?</li>
+<li>If communication overhead on <span class="math inline">\(p\)</span> processors is <span class="math inline">\(T_{\text{comm}}(p) = 0.5 \times \log_2 p\text{ seconds}\)</span>, calculate the actual speedup on <span class="math inline">\(p = 64\)</span> processors.</li>
+</ol>
+<p><strong>Solution</strong>:</p>
+<ol type="1">
+<li>Serial fraction <span class="math inline">\(f = 1 - 0.75 = 0.25\)</span>. <span class="math display">\[S_{\max} = \frac{1}{f} = \frac{1}{0.25} = \mathbf{4.0\times}\]</span></li>
+<li>On <span class="math inline">\(p = 64\)</span> processors:
+<ul>
+<li>Serial computation time: <span class="math inline">\(T_{\text{serial}} = 0.25 \times 100 = 25\text{ s}\)</span>.</li>
+<li>Parallel computation time: <span class="math inline">\(T_{\text{parallel}} = \frac{75}{64} \approx 1.1719\text{ s}\)</span>.</li>
+<li>Communication overhead: <span class="math inline">\(T_{\text{comm}} = 0.5 \times \log_2(64) = 0.5 \times 6 = 3.0\text{ s}\)</span>.</li>
+<li>Total parallel runtime: <span class="math display">\[T_p(64) = 25 + 1.1719 + 3.0 = \mathbf{29.1719\text{ s}}\]</span></li>
+<li>Actual Speedup: <span class="math display">\[\mathbf{S(64) = \frac{100}{29.1719} \approx \mathbf{3.428\times}}\]</span></li>
+</ul></li>
+</ol>
+<hr/>
+<h4 id="question-5-3-marks">Question 5 [3 Marks]</h4>
+<p>Differentiate between <strong>Uniform Memory Access (UMA)</strong> and <strong>Non-Uniform Memory Access (NUMA)</strong> shared-memory architectures. Why does a naive loop stride cause severe performance degradation on NUMA systems?</p>
+<p><strong>Solution</strong>:</p>
+<ol type="1">
+<li><strong>UMA (Symmetric Multiprocessing)</strong>: All CPU cores connect to a centralized DRAM through a shared system bus or crossbar. Every processor has identical latency and bandwidth to any physical memory address.</li>
+<li><strong>NUMA</strong>: Memory is physically segmented and attached directly to individual processor sockets. All cores can address all memory locations via an integrated interconnect (e.g., Intel UPI, AMD Infinity Fabric). Accessing <strong>local memory</strong> (same socket) is fast (<span class="math inline">\(40\text{ ns}\)</span>), whereas accessing <strong>remote memory</strong> (adjacent socket) incurs significantly higher latency (<span class="math inline">\(120\text{ ns}\)</span>) and lower bandwidth.</li>
+<li><strong>NUMA Degradation</strong>: If an OpenMP thread on Socket 1 frequently accesses data initialized and allocated on Socket 0 (violating NUMA "first-touch" affinity), memory requests must continuously traverse the inter-socket interconnect, saturating cross-socket bandwidth and inducing massive processor wait states.</li>
+</ol>
+<hr/>
+<h3 id="leq-part-b-10-marks">Part B (10 Marks)</h3>
+<h4 id="question-6-10-marks">Question 6 [10 Marks]</h4>
+<p>Consider a sparse matrix <span class="math inline">\(A \in \mathbb{R}^{6 \times 6}\)</span> stored in <strong>Diagonal Storage (DIA)</strong> format with diagonal offset array <span class="math inline">\(\text{IOFF} = [-2, 0, 1]\)</span> and 2D array <code>DIAG</code> given below:</p>
+<p><span class="math display">\[\text{IOFF} = [-2, \quad 0, \quad +1]\]</span></p>
+<p><span class="math display">\[\text{DIAG} = \begin{bmatrix}
+* &amp; 4.0 &amp; 1.0 \\
+* &amp; 5.0 &amp; -1.0 \\
+2.0 &amp; 6.0 &amp; 2.0 \\
+-1.0 &amp; 4.0 &amp; 1.0 \\
+1.0 &amp; 5.0 &amp; * \\
+3.0 &amp; 7.0 &amp; *
+\end{bmatrix}, \qquad b = \begin{bmatrix} 5.0 \\ 3.0 \\ 16.0 \\ 10.0 \\ 11.0 \\ 25.0 \end{bmatrix}\]</span> where <code>*</code> represents boundary zero padding.</p>
+<ol type="1">
+<li><strong>[4 Marks]</strong> Explicitly reconstruct the full <span class="math inline">\(6 \times 6\)</span> coefficient matrix <span class="math inline">\(A\)</span>.</li>
+<li><strong>[2 Marks]</strong> Verify whether matrix <span class="math inline">\(A\)</span> is Strictly Diagonally Dominant (SDD).</li>
+<li><strong>[4 Marks]</strong> Perform the <strong>first iteration of the Gauss-Seidel method</strong> starting with initial guess <span class="math inline">\(x^{(0)} = [0, 0, 0, 0, 0, 0]^T\)</span>. Show all numerical calculations for <span class="math inline">\(x_1^{(1)}\)</span> through <span class="math inline">\(x_6^{(1)}\)</span>.</li>
+</ol>
+<h4 id="full-step-by-step-solution-26">Full Step-by-Step Solution:</h4>
+<ol type="1">
+<li><p><strong>Reconstruction of Matrix <span class="math inline">\(A\)</span></strong>:</p>
+<ul>
+<li><span class="math inline">\(\text{IOFF}(1) = -2 \implies\)</span> second sub-diagonal: <span class="math inline">\(a_{i, i-2} = \text{DIAG}(i, 1)\)</span> for <span class="math inline">\(i = 3, 4, 5, 6\)</span>.</li>
+<li><span class="math inline">\(\text{IOFF}(2) = 0 \implies\)</span> main diagonal: <span class="math inline">\(a_{i, i} = \text{DIAG}(i, 2)\)</span> for <span class="math inline">\(i = 1, \dots, 6\)</span>.</li>
+<li><span class="math inline">\(\text{IOFF}(3) = +1 \implies\)</span> first super-diagonal: <span class="math inline">\(a_{i, i+1} = \text{DIAG}(i, 3)\)</span> for <span class="math inline">\(i = 1, \dots, 5\)</span>.</li>
+</ul>
+<p>Filling entry by entry:</p>
+<ul>
+<li><strong>Row 1</strong>: <span class="math inline">\(a_{11} = 4.0, \; a_{12} = 1.0\)</span>.</li>
+<li><strong>Row 2</strong>: <span class="math inline">\(a_{22} = 5.0, \; a_{23} = -1.0\)</span>.</li>
+<li><strong>Row 3</strong>: <span class="math inline">\(a_{31} = 2.0, \; a_{33} = 6.0, \; a_{34} = 2.0\)</span>.</li>
+<li><strong>Row 4</strong>: <span class="math inline">\(a_{42} = -1.0, \; a_{44} = 4.0, \; a_{45} = 1.0\)</span>.</li>
+<li><strong>Row 5</strong>: <span class="math inline">\(a_{53} = 1.0, \; a_{55} = 5.0\)</span>.</li>
+<li><strong>Row 6</strong>: <span class="math inline">\(a_{64} = 3.0, \; a_{66} = 7.0\)</span>.</li>
+</ul>
+<p><span class="math display">\[A = \begin{bmatrix}
+4.0 &amp;  1.0 &amp;  0.0 &amp;  0.0 &amp;  0.0 &amp;  0.0 \\
+0.0 &amp;  5.0 &amp; -1.0 &amp;  0.0 &amp;  0.0 &amp;  0.0 \\
+2.0 &amp;  0.0 &amp;  6.0 &amp;  2.0 &amp;  0.0 &amp;  0.0 \\
+0.0 &amp; -1.0 &amp;  0.0 &amp;  4.0 &amp;  1.0 &amp;  0.0 \\
+0.0 &amp;  0.0 &amp;  1.0 &amp;  0.0 &amp;  5.0 &amp;  0.0 \\
+0.0 &amp;  0.0 &amp;  0.0 &amp;  3.0 &amp;  0.0 &amp;  7.0
+\end{bmatrix}\]</span></p></li>
+<li><p><strong>Strict Diagonal Dominance Verification</strong>: Check <span class="math inline">\(|a_{ii}| &gt; \sum_{j \ne i} |a_{ij}|\)</span> for each row:</p>
+<ul>
+<li>Row 1: <span class="math inline">\(|4.0| &gt; |1.0| = 1.0\)</span> (True: <span class="math inline">\(4 &gt; 1\)</span>)</li>
+<li>Row 2: <span class="math inline">\(|5.0| &gt; |-1.0| = 1.0\)</span> (True: <span class="math inline">\(5 &gt; 1\)</span>)</li>
+<li>Row 3: <span class="math inline">\(|6.0| &gt; |2.0| + |2.0| = 4.0\)</span> (True: <span class="math inline">\(6 &gt; 4\)</span>)</li>
+<li>Row 4: <span class="math inline">\(|4.0| &gt; |-1.0| + |1.0| = 2.0\)</span> (True: <span class="math inline">\(4 &gt; 2\)</span>)</li>
+<li>Row 5: <span class="math inline">\(|5.0| &gt; |1.0| = 1.0\)</span> (True: <span class="math inline">\(5 &gt; 1\)</span>)</li>
+<li>Row 6: <span class="math inline">\(|7.0| &gt; |3.0| = 3.0\)</span> (True: <span class="math inline">\(7 &gt; 3\)</span>) <strong>Conclusion</strong>: Every row strictly satisfies the dominance condition. Matrix <span class="math inline">\(A\)</span> is <strong>Strictly Diagonally Dominant (SDD)</strong>. Gauss-Seidel and Jacobi iterations are guaranteed to converge!</li>
+</ul></li>
+<li><p><strong>Gauss-Seidel Iteration 1 (<span class="math inline">\(x^{(0)} = \mathbf{0}\)</span>)</strong>: Recall Gauss-Seidel updates in-place using newly computed components immediately: <span class="math display">\[x_i^{(1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j &lt; i} a_{ij} x_j^{(1)} - \sum_{j &gt; i} a_{ij} x_j^{(0)} \right)\]</span></p>
+<ul>
+<li><p><strong><span class="math inline">\(i = 1\)</span></strong>: <span class="math display">\[x_1^{(1)} = \frac{b_1 - a_{12} x_2^{(0)}}{a_{11}} = \frac{5.0 - 1.0(0)}{4.0} = \mathbf{1.25}\]</span></p></li>
+<li><p><strong><span class="math inline">\(i = 2\)</span></strong>: <span class="math display">\[x_2^{(1)} = \frac{b_2 - a_{23} x_3^{(0)}}{a_{22}} = \frac{3.0 - (-1.0)(0)}{5.0} = \mathbf{0.60}\]</span></p></li>
+<li><p><strong><span class="math inline">\(i = 3\)</span></strong>: <span class="math display">\[x_3^{(1)} = \frac{b_3 - a_{31} x_1^{(1)} - a_{34} x_4^{(0)}}{a_{33}} = \frac{16.0 - 2.0(1.25) - 2.0(0)}{6.0} = \frac{16.0 - 2.5}{6.0} = \frac{13.5}{6.0} = \mathbf{2.25}\]</span></p></li>
+<li><p><strong><span class="math inline">\(i = 4\)</span></strong>: <span class="math display">\[x_4^{(1)} = \frac{b_4 - a_{42} x_2^{(1)} - a_{45} x_5^{(0)}}{a_{44}} = \frac{10.0 - (-1.0)(0.60) - 1.0(0)}{4.0} = \frac{10.0 + 0.60}{4.0} = \frac{10.60}{4.0} = \mathbf{2.65}\]</span></p></li>
+<li><p><strong><span class="math inline">\(i = 5\)</span></strong>: <span class="math display">\[x_5^{(1)} = \frac{b_5 - a_{53} x_3^{(1)}}{a_{55}} = \frac{11.0 - 1.0(2.25)}{5.0} = \frac{8.75}{5.0} = \mathbf{1.75}\]</span></p></li>
+<li><p><strong><span class="math inline">\(i = 6\)</span></strong>: <span class="math display">\[x_6^{(1)} = \frac{b_6 - a_{64} x_4^{(1)}}{a_{66}} = \frac{25.0 - 3.0(2.65)}{7.0} = \frac{25.0 - 7.95}{7.0} = \frac{17.05}{7.0} \approx \mathbf{2.4357}\]</span></p></li>
+</ul>
+<p><strong>Result after Iteration 1</strong>: <span class="math display">\[\mathbf{x^{(1)} = \begin{bmatrix} 1.2500 \\ 0.6000 \\ 2.2500 \\ 2.6500 \\ 1.7500 \\ 2.4357 \end{bmatrix}}\]</span></p></li>
+</ol>
+<hr/>
+<h2 id="dart-master-exam-tips--scoring-strategy">🎯 Master Exam Tips &amp; Scoring Strategy</h2>
+<ol type="1">
+<li><strong>Watch Matrix Symmetry in Krylov Methods</strong>: Always verify if <span class="math inline">\(A = A^T\)</span>. If an exam problem introduces boundary conditions (like Neumann or Robin) that cause <span class="math inline">\(a_{ij} \ne a_{ji}\)</span>, do NOT apply the Conjugate Gradient algorithm! State clearly that GMRES or BiCGSTAB must be used.</li>
+<li><strong>Spectral Radius Shortcuts</strong>: When analyzing block triangular iteration matrices: <span class="math display">\[\det(G - \lambda I) = \prod_k \det(G_{kk} - \lambda I)\]</span> Do not waste time computing the determinant of the full <span class="math inline">\(4 \times 4\)</span> or <span class="math inline">\(6 \times 6\)</span> matrix.</li>
+<li><strong>Sparse Storage Index Offsets</strong>: Pay close attention to whether the problem specifies <strong>0-indexing</strong> (C-style) or <strong>1-indexing</strong> (Fortran-style). In MSR, <code>JA(1:n)</code> points to off-diagonal start locations; if <code>JA(k) == JA(k+1)</code>, row <span class="math inline">\(k\)</span> contains no off-diagonal entries.</li>
+<li><strong>Young's Theorem for SOR</strong>: Remember that for <span class="math inline">\(\omega \ge \omega_{opt}\)</span>, the spectral radius is given directly by: <span class="math display">\[\rho(G_{SOR}) = \omega - 1\]</span> This simple relation allows instant derivation of error contraction without computing matrix powers!</li>
+</ol>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-19.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">The Ultimate Last-Night Cramming Guide & Complete Notation Decryptor</span>
+      </a>
+    
+      
+      <a href="previous-years-question-papers.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Previous Years Examination Question Papers: Detailed Solutions & Analysis</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Projection Methods & the Method of Steepest Descent | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-08" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-07.html" class="btn-nav-control" title="Previous: Orthogonalization, Gram-Schmidt & QR Factorization">← Prev</a>
+      <a href="chapter-09.html" class="btn-nav-control" title="Next: Krylov Subspace Methods I: Arnoldi, FOM & Lanczos">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 08</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Projection Methods & the Method of Steepest Descent</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-08" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-08-projection-methods--the-method-of-steepest-descent">Chapter 08: Projection Methods &amp; the Method of Steepest Descent</h1>
+<hr/>
+<h2 id="1-general-petrov-galerkin-projection-framework">1. General Petrov-Galerkin Projection Framework</h2>
+<p>Most modern iterative solvers for large sparse linear systems <span class="math inline">\(Ax = b\)</span> can be understood within the unified mathematical framework of <strong>projection methods</strong>.</p>
+<pre><code>                           R^n Vector Space
+                ┌───────────────────────────────────────┐
+                │                                       │
+                │        Initial Guess x₀               │
+                │              •                        │
+                │               \                       │
+                │                \   Search Subspace K  │
+                │                 ▼  (dimension m)      │
+                │      Approximate Solution x_m         │
+                │              •                        │
+                │              │                        │
+                │              │ Residual r_m = b - Ax_m │
+                │              ▼                        │
+                │   ────────────────────────            │
+                │     Constraint Subspace L             │
+                │       (r_m is orthogonal to L)        │
+                └───────────────────────────────────────┘</code></pre>
+<h3 id="11-formal-definition-of-a-projection-process">1.1 Formal Definition of a Projection Process</h3>
+<p>Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> be a real square matrix. Let <span class="math inline">\(\mathcal{K}\)</span> and <span class="math inline">\(\mathcal{L}\)</span> be two <span class="math inline">\(m\)</span>-dimensional subspaces of <span class="math inline">\(\mathbb{R}^n\)</span>:</p>
+<ul>
+<li><span class="math inline">\(\mathcal{K}\)</span> is the <strong>Search Subspace</strong> (from which candidate corrections are drawn).</li>
+<li><span class="math inline">\(\mathcal{L}\)</span> is the <strong>Constraint Subspace</strong> (or Test Subspace, against which orthogonality is enforced).</li>
+</ul>
+<p>Given an initial guess <span class="math inline">\(x_0 \in \mathbb{R}^n\)</span> with initial residual <span class="math inline">\(r_0 = b - A x_0\)</span>: A <strong>projection technique onto <span class="math inline">\(\mathcal{K}\)</span> orthogonal to <span class="math inline">\(\mathcal{L}\)</span></strong> finds an approximate solution <span class="math inline">\(x_m \in x_0 + \mathcal{K}\)</span> such that the new residual <span class="math inline">\(r_m = b - A x_m\)</span> satisfies the <strong>Petrov-Galerkin Condition</strong>: <span class="math display">\[\mathbf{r_m \perp \mathcal{L} \iff \langle w, b - A x_m \rangle = 0 \quad \text{for all } w \in \mathcal{L}}\]</span></p>
+<ul>
+<li><strong>Orthogonal Projection (Galerkin Method)</strong>: When <span class="math inline">\(\mathcal{L} = \mathcal{K}\)</span> (search and constraint spaces are identical).</li>
+<li><strong>Oblique Projection (Petrov-Galerkin Method)</strong>: When <span class="math inline">\(\mathcal{L} \ne \mathcal{K}\)</span>.</li>
+</ul>
+<h3 id="12-matrix-formulation-of-the-general-projection-method">1.2 Matrix Formulation of the General Projection Method</h3>
+<p>Let the columns of <span class="math inline">\(V_m \in \mathbb{R}^{n \times m}\)</span> form a basis for search space <span class="math inline">\(\mathcal{K}\)</span>: <span class="math display">\[V_m = [v_1, v_2, \dots, v_m]\]</span> Let the columns of <span class="math inline">\(W_m \in \mathbb{R}^{n \times m}\)</span> form a basis for constraint space <span class="math inline">\(\mathcal{L}\)</span>: <span class="math display">\[W_m = [w_1, w_2, \dots, w_m]\]</span></p>
+<p>Any candidate vector <span class="math inline">\(x_m \in x_0 + \mathcal{K}\)</span> can be uniquely written as: <span class="math display">\[\mathbf{x_m = x_0 + V_m y_m}\]</span> where <span class="math inline">\(y_m \in \mathbb{R}^m\)</span> is a coordinate vector to be determined.</p>
+<p>The new residual vector is: <span class="math display">\[r_m = b - A x_m = b - A (x_0 + V_m y_m) = (b - A x_0) - A V_m y_m = r_0 - A V_m y_m\]</span></p>
+<p>Enforcing the Petrov-Galerkin condition <span class="math inline">\(r_m \perp \mathcal{L}\)</span>: Every basis vector <span class="math inline">\(w_i\)</span> of <span class="math inline">\(\mathcal{L}\)</span> must be orthogonal to <span class="math inline">\(r_m\)</span>: <span class="math display">\[w_i^T r_m = 0 \quad \text{for all } i = 1, \dots, m \iff W_m^T r_m = \mathbf{0}\]</span> Substitute the expression for <span class="math inline">\(r_m\)</span>: <span class="math display">\[W_m^T (r_0 - A V_m y_m) = \mathbf{0} \implies \mathbf{(W_m^T A V_m) y_m = W_m^T r_0}\]</span></p>
+<p>Assuming the projected <span class="math inline">\(m \times m\)</span> matrix <span class="math inline">\(W_m^T A V_m\)</span> is non-singular: <span class="math display">\[\mathbf{y_m = (W_m^T A V_m)^{-1} W_m^T r_0}\]</span> The updated solution is: <span class="math display">\[\mathbf{x_m = x_0 + V_m (W_m^T A V_m)^{-1} W_m^T r_0}\]</span></p>
+<hr/>
+<h2 id="2-one-dimensional-projection-processes-m--1">2. One-Dimensional Projection Processes (<span class="math inline">\(m = 1\)</span>)</h2>
+<p>When <span class="math inline">\(m = 1\)</span>, the subspaces <span class="math inline">\(\mathcal{K}\)</span> and <span class="math inline">\(\mathcal{L}\)</span> are 1-dimensional lines spanned by vectors <span class="math inline">\(v \in \mathbb{R}^n\)</span> and <span class="math inline">\(w \in \mathbb{R}^n\)</span>, respectively. The update takes the form of a line search: <span class="math display">\[x^{(k+1)} = x^{(k)} + \alpha_k v_k\]</span> where <span class="math inline">\(\alpha_k\)</span> is a scalar step length. The residual is: <span class="math display">\[r_{k+1} = r_k - \alpha_k A v_k\]</span> Enforcing <span class="math inline">\(w_k^T r_{k+1} = 0\)</span>: <span class="math display">\[w_k^T (r_k - \alpha_k A v_k) = 0 \implies w_k^T r_k - \alpha_k w_k^T A v_k = 0\]</span> <span class="math display">\[\mathbf{\alpha_k = \frac{w_k^T r_k}{w_k^T A v_k}}\]</span></p>
+<p>Depending on the choices of <span class="math inline">\(v_k\)</span> and <span class="math inline">\(w_k\)</span>, we obtain three fundamental 1D iterative algorithms:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Method</th>
+<th style="text-align: center;">Search Direction (<span class="math inline">\(v_k\)</span>)</th>
+<th style="text-align: center;">Constraint Direction (<span class="math inline">\(w_k\)</span>)</th>
+<th style="text-align: center;">Step Length (<span class="math inline">\(\alpha_k\)</span>)</th>
+<th style="text-align: left;">Matrix Applicability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Steepest Descent (SD)</strong></td>
+<td style="text-align: center;"><span class="math inline">\(r_k\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(r_k\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{r_k^T r_k}{r_k^T A r_k}\)</span></td>
+<td style="text-align: left;">Symmetric Positive Definite</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Minimum Residual (MR)</strong></td>
+<td style="text-align: center;"><span class="math inline">\(r_k\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(A r_k\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{r_k^T A r_k}{|A r_k|_2^2}\)</span></td>
+<td style="text-align: left;">Positive Definite (<span class="math inline">\(\frac{A+A^T}{2} &gt; 0\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Residue Norm SD</strong></td>
+<td style="text-align: center;"><span class="math inline">\(A^T r_k\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(A v_k = A A^T r_k\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{|v_k|_2^2}{|A v_k|_2^2}\)</span></td>
+<td style="text-align: left;">Any Non-Singular Square Matrix</td>
+</tr>
+</tbody>
+</table>
+<h3 id="21-the-minimum-residual-mr-method">2.1 The Minimum Residual (MR) Method</h3>
+<ul>
+<li><strong>Formulation</strong>: <span class="math inline">\(v_k = r_k\)</span> and <span class="math inline">\(w_k = A r_k\)</span>.</li>
+<li><strong>Minimization Property</strong>: At each step, <span class="math inline">\(\alpha_k\)</span> minimizes the Euclidean norm of the new residual: <span class="math display">\[\alpha_k = \arg\min_\alpha \|b - A(x_k + \alpha r_k)\|_2^2\]</span></li>
+<li><strong>Convergence Theorem</strong>: If the symmetric part of <span class="math inline">\(A\)</span>, <span class="math inline">\(M_s = \frac{A + A^T}{2}\)</span>, is positive definite with minimum eigenvalue <span class="math inline">\(\mu = \lambda_{\min}(M_s) &gt; 0\)</span>, and <span class="math inline">\(\sigma = \|A\|_2\)</span>: <span class="math display">\[\mathbf{\|r_{k+1}\|_2 \le \left( 1 - \frac{\mu^2}{\sigma^2} \right)^{1/2} \|r_k\|_2}\]</span> The method converges monotonically for any initial guess <span class="math inline">\(x_0\)</span>!</li>
+</ul>
+<h3 id="22-the-residue-norm-steepest-descent-method">2.2 The Residue Norm Steepest Descent Method</h3>
+<ul>
+<li><strong>Formulation</strong>: <span class="math inline">\(v_k = A^T r_k\)</span> and <span class="math inline">\(w_k = A v_k\)</span>.</li>
+<li><strong>Equivalent System</strong>: This is mathematically identical to applying the Steepest Descent algorithm to the <strong>Normal Equations</strong>: <span class="math display">\[A^T A x = A^T b\]</span> Since <span class="math inline">\(A^T A\)</span> is always symmetric positive definite for any non-singular matrix <span class="math inline">\(A\)</span>, this method converges for <strong>any square non-singular matrix</strong>!</li>
+</ul>
+<hr/>
+<h2 id="3-the-method-of-steepest-descent-in-depth">3. The Method of Steepest Descent in Depth</h2>
+<p>The Steepest Descent method is the foundational gradient-based iterative solver for Symmetric Positive Definite (SPD) systems.</p>
+<h3 id="31-the-quadratic-energy-functional">3.1 The Quadratic Energy Functional</h3>
+<p>Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> be an SPD matrix (<span class="math inline">\(A = A^T\)</span> and <span class="math inline">\(x^T A x &gt; 0\)</span> for <span class="math inline">\(x \ne \mathbf{0}\)</span>), and <span class="math inline">\(b \in \mathbb{R}^n\)</span>. Define the <strong>quadratic functional</strong> <span class="math inline">\(J: \mathbb{R}^n \to \mathbb{R}\)</span>: <span class="math display">\[\mathbf{J(x) = \frac{1}{2} x^T A x - x^T b = \frac{1}{2} \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j - \sum_{i=1}^n b_i x_i}\]</span></p>
+<h3 id="32-equivalence-of-minimizing-jx-and-solving-ax--b">3.2 Equivalence of Minimizing <span class="math inline">\(J(x)\)</span> and Solving <span class="math inline">\(Ax = b\)</span></h3>
+<blockquote>
+<p><strong>Theorem</strong>: If <span class="math inline">\(A\)</span> is Symmetric Positive Definite, then <span class="math inline">\(x^*\)</span> is the unique global minimizer of <span class="math inline">\(J(x)\)</span> if and only if <span class="math inline">\(Ax^* = b\)</span>.</p>
+</blockquote>
+<h4 id="complete-mathematical-proof-from-slides-476480">Complete Mathematical Proof (From Slides 476–480)</h4>
+<ol type="1">
+<li><p><strong>Compute the Gradient <span class="math inline">\(\nabla J(x)\)</span></strong>: Evaluate the partial derivative with respect to component <span class="math inline">\(x_k\)</span>: <span class="math display">\[\frac{\partial J}{\partial x_k} = \frac{\partial}{\partial x_k} \left[ \frac{1}{2} \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j - \sum_{i=1}^n b_i x_i \right]\]</span> The double sum contains <span class="math inline">\(x_k\)</span> when <span class="math inline">\(i = k\)</span>, when <span class="math inline">\(j = k\)</span>, and when <span class="math inline">\(i = j = k\)</span>: <span class="math display">\[\frac{\partial J}{\partial x_k} = \frac{1}{2} \left[ \sum_{j=1}^n a_{kj} x_j + \sum_{i=1}^n a_{ik} x_i \right] - b_k\]</span> Because <span class="math inline">\(A\)</span> is symmetric (<span class="math inline">\(a_{ik} = a_{ki}\)</span>), the two sums are identical: <span class="math display">\[\frac{\partial J}{\partial x_k} = \frac{1}{2} \left[ 2 \sum_{j=1}^n a_{kj} x_j \right] - b_k = \sum_{j=1}^n a_{kj} x_j - b_k = (Ax)_k - b_k\]</span> In vector form: <span class="math display">\[\mathbf{\nabla J(x) = Ax - b = -r(x)}\]</span></p></li>
+<li><p><strong>Compute the Hessian <span class="math inline">\(\nabla^2 J(x)\)</span></strong>: <span class="math display">\[\frac{\partial^2 J}{\partial x_k \partial x_l} = \frac{\partial}{\partial x_l} \left( \sum_{j=1}^n a_{kj} x_j - b_k \right) = a_{kl} \implies \mathbf{\nabla^2 J(x) = A}\]</span> Since <span class="math inline">\(A\)</span> is positive definite (<span class="math inline">\(A &gt; 0\)</span>), the Hessian is strictly positive definite everywhere! Therefore, <span class="math inline">\(J(x)\)</span> is <strong>strictly convex</strong>, possessing no local maxima or saddle points, but exactly <strong>one unique global minimum</strong> where <span class="math inline">\(\nabla J(x) = \mathbf{0}\)</span>: <span class="math display">\[\nabla J(x^*) = \mathbf{0} \iff A x^* - b = \mathbf{0} \iff \mathbf{Ax^* = b} \quad \blacksquare\]</span></p></li>
+</ol>
+<h3 id="33-exact-line-search-along-the-negative-gradient">3.3 Exact Line Search along the Negative Gradient</h3>
+<p>At any point <span class="math inline">\(x_k\)</span>, the direction of steepest descent (fastest decrease of <span class="math inline">\(J\)</span>) is the negative gradient: <span class="math display">\[v_k = -\nabla J(x_k) = -(Ax_k - b) = b - Ax_k = \mathbf{r_k}\]</span> We search along the ray <span class="math inline">\(x(\alpha) = x_k + \alpha r_k\)</span> to find the optimal step length <span class="math inline">\(\alpha_k\)</span> that minimizes <span class="math inline">\(J\)</span>: <span class="math display">\[\alpha_k = \arg\min_{\alpha \in \mathbb{R}} J(x_k + \alpha r_k)\]</span></p>
+<h4 id="complete-algebraic-derivation-of-alpha_k-from-slides-486487">Complete Algebraic Derivation of <span class="math inline">\(\alpha_k\)</span> (From Slides 486–487)</h4>
+<p>Define <span class="math inline">\(f(\alpha) = J(x_k + \alpha r_k)\)</span>: <span class="math display">\[f(\alpha) = \frac{1}{2} (x_k + \alpha r_k)^T A (x_k + \alpha r_k) - (x_k + \alpha r_k)^T b\]</span> Expanding: <span class="math display">\[f(\alpha) = \frac{1}{2} \left[ x_k^T A x_k + 2\alpha r_k^T A x_k + \alpha^2 r_k^T A r_k \right] - x_k^T b - \alpha r_k^T b\]</span> <span class="math display">\[f(\alpha) = \left[ \frac{1}{2} x_k^T A x_k - x_k^T b \right] + \alpha \left[ r_k^T A x_k - r_k^T b \right] + \frac{\alpha^2}{2} r_k^T A r_k\]</span> <span class="math display">\[f(\alpha) = J(x_k) - \alpha r_k^T (b - Ax_k) + \frac{\alpha^2}{2} r_k^T A r_k = J(x_k) - \alpha r_k^T r_k + \frac{\alpha^2}{2} r_k^T A r_k\]</span></p>
+<p>To find the minimum, set the derivative <span class="math inline">\(\frac{df}{d\alpha} = 0\)</span>: <span class="math display">\[\frac{df}{d\alpha} = -r_k^T r_k + \alpha r_k^T A r_k = 0\]</span> <span class="math display">\[\mathbf{\alpha_k = \frac{r_k^T r_k}{r_k^T A r_k}}\]</span></p>
+<h3 id="34-crucial-geometric-property-orthogonality-of-successive-residuals">3.4 Crucial Geometric Property: Orthogonality of Successive Residuals</h3>
+<blockquote>
+<p><strong>Theorem</strong>: In the Steepest Descent method, consecutive residual vectors are <strong>strictly orthogonal</strong>: <span class="math display">\[\mathbf{r_{k+1}^T r_k = 0 \quad (\text{i.e., } r_{k+1} \perp r_k)}\]</span></p>
+</blockquote>
+<h4 id="ch08-mathematical-proof">Mathematical Proof</h4>
+<p>The residual at step <span class="math inline">\(k+1\)</span> is: <span class="math display">\[r_{k+1} = b - A x_{k+1} = b - A (x_k + \alpha_k r_k) = (b - A x_k) - \alpha_k A r_k = \mathbf{r_k - \alpha_k A r_k}\]</span> Take the dot product of <span class="math inline">\(r_{k+1}\)</span> with <span class="math inline">\(r_k\)</span>: <span class="math display">\[r_{k+1}^T r_k = (r_k - \alpha_k A r_k)^T r_k = r_k^T r_k - \alpha_k (r_k^T A r_k)\]</span> Substitute <span class="math inline">\(\alpha_k = \frac{r_k^T r_k}{r_k^T A r_k}\)</span>: <span class="math display">\[r_{k+1}^T r_k = r_k^T r_k - \left( \frac{r_k^T r_k}{r_k^T A r_k} \right) (r_k^T A r_k) = r_k^T r_k - r_k^T r_k = 0 \quad \blacksquare\]</span></p>
+<ul>
+<li><strong>Geometric Interpretation</strong>: At the minimum along a line search, the search trajectory is exactly <strong>tangent to an iso-contour of <span class="math inline">\(J(x)\)</span></strong>. The gradient at that point (<span class="math inline">\(r_{k+1}\)</span>) is perpendicular to the tangent (<span class="math inline">\(r_k\)</span>). Thus, the search must turn <span class="math inline">\(90^\circ\)</span> at every step!</li>
+</ul>
+<hr/>
+<h2 id="4-operational-algorithm-and-work-reduction">4. Operational Algorithm and Work Reduction</h2>
+<p>A naive implementation computes <span class="math inline">\(r_{k+1} = b - A x_{k+1}\)</span> via matrix multiplication at each step, requiring two SpMVs per iteration. By reusing <span class="math inline">\(p_k = A r_k\)</span>, we reduce this to <strong>only ONE matrix-vector product per iteration</strong>:</p>
+<pre><code>Algorithm: Optimized Method of Steepest Descent
+Input: Matrix A (SPD), vector b, initial guess x_0, tolerance ε
+Output: Converged solution x
+
+1. Compute initial state:
+   r = b - A * x_0
+   p = A * r
+
+2. While (norm(r) &gt; ε) do:
+   alpha = (r^T * r) / (r^T * p)     // 2 dot products
+   x = x + alpha * r                 // Vector AXPY
+   r = r - alpha * p                 // Vector AXPY (cheap residual update!)
+   p = A * r                         // ONLY 1 SpMV per iteration!
+end while</code></pre>
+<ul>
+<li><strong>Per-Iteration Computational Cost</strong>:
+<ul>
+<li><span class="math inline">\(1\)</span> Sparse Matrix-Vector product (<span class="math inline">\(p = A r\)</span>).</li>
+<li><span class="math inline">\(2\)</span> Vector Dot Products (<span class="math inline">\(r^T r\)</span> and <span class="math inline">\(r^T p\)</span>).</li>
+<li><span class="math inline">\(2\)</span> Vector Updates (AXPY).</li>
+<li><strong>Total Work</strong>: <span class="math inline">\(\approx 2 N_{nz} + 6n\)</span> FLOPs.</li>
+</ul></li>
+</ul>
+<hr/>
+<h2 id="5-convergence-rate-and-the-zigzagging-pathology">5. Convergence Rate and the "Zigzagging" Pathology</h2>
+<h3 id="51-convergence-bound-in-the-a-norm">5.1 Convergence Bound in the <span class="math inline">\(A\)</span>-Norm</h3>
+<p>Let <span class="math inline">\(e_k = x_k - x^*\)</span> be the error vector. The <span class="math inline">\(A\)</span>-norm (energy norm) is <span class="math inline">\(\|e_k\|_A = \sqrt{e_k^T A e_k}\)</span>.</p>
+<blockquote>
+<p><strong>Theorem (Kantorovich)</strong>: For an SPD matrix <span class="math inline">\(A\)</span>, the error in Steepest Descent satisfies: <span class="math display">\[\mathbf{\|e_{k+1}\|_A \le \left( \frac{\lambda_{\max} - \lambda_{\min}}{\lambda_{\max} + \lambda_{\min}} \right) \|e_k\|_A = \left( \frac{\kappa_2(A) - 1}{\kappa_2(A) + 1} \right) \|e_k\|_A}\]</span> where <span class="math inline">\(\kappa_2(A) = \lambda_{\max}/\lambda_{\min}\)</span> is the spectral condition number.</p>
+</blockquote>
+<h3 id="52-the-zigzagging-pathology">5.2 The "Zigzagging" Pathology</h3>
+<ul>
+<li><strong>Case 1: Well-Conditioned Matrix (<span class="math inline">\(\kappa_2(A) \approx 1 \implies \lambda_{\max} \approx \lambda_{\min}\)</span>)</strong>:
+<ul>
+<li>The iso-contours of <span class="math inline">\(J(x)\)</span> are spherical (circular).</li>
+<li>The negative gradient <span class="math inline">\(-\nabla J(x_0)\)</span> points directly toward the center (solution <span class="math inline">\(x^*\)</span>).</li>
+<li>The method reaches the exact solution in <strong>a single iteration</strong>!</li>
+</ul></li>
+<li><strong>Case 2: Ill-Conditioned Matrix (<span class="math inline">\(\kappa_2(A) \gg 1\)</span>)</strong>:
+<ul>
+<li>The iso-contours are extremely elongated, needle-thin ellipsoidal valleys.</li>
+<li>Because each step is strictly orthogonal to the previous one (<span class="math inline">\(r_{k+1} \perp r_k\)</span>), the trajectory bounces back and forth across the valley walls at <span class="math inline">\(90^\circ\)</span> angles (<strong>zigzagging</strong>).</li>
+<li>The convergence factor <span class="math inline">\(\frac{\kappa - 1}{\kappa + 1} \approx 1 - \frac{2}{\kappa} \to 1\)</span>.</li>
+<li>Progress along the bottom of the valley toward <span class="math inline">\(x^*\)</span> becomes infinitesimally slow!</li>
+</ul></li>
+</ul>
+<pre><code>Iso-contours of J(x) for ill-conditioned A (κ &gt;&gt; 1):
+        ┌────────────────────────────────────────────────────────┐
+        │                 .-'""'-.                               │
+        │             .-'          '-.                           │
+        │         .-'        x₀        '-.                       │
+        │      .-'            \           '-.                    │
+        │    .'                \             '.                  │
+        │   /     x*            \ 90°          \                 │
+        │  │      • ◄──┐         \              │  Zigzagging    │
+        │   \          │ 90°    .'             /   trajectory!   │
+        │    '.        └───┘  .'             .'                  │
+        │      '-.          .'            .-'                    │
+        │         '-.    .-'           .-'                       │
+        │            '--'          .-'                           │
+        └────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="53-algebraic-emergence-of-the-krylov-subspace-slide-196">5.3 Algebraic Emergence of the Krylov Subspace (Slide 196)</h3>
+<p>Examining the algebraic progression of Steepest Descent iterates reveals a fundamental mathematical pattern:</p>
+<ol type="1">
+<li><strong>Step 0 to 1</strong>: <span class="math display">\[r_0 = b - A x_0\]</span> <span class="math display">\[x_1 = x_0 + \alpha_0 r_0\]</span></li>
+<li><strong>Step 1 to 2</strong>: <span class="math display">\[r_1 = b - A x_1 = b - A(x_0 + \alpha_0 r_0) = r_0 - \alpha_0 A r_0\]</span> <span class="math display">\[x_2 = x_1 + \alpha_1 r_1 = x_0 + \alpha_0 r_0 + \alpha_1 (r_0 - \alpha_0 A r_0) = x_0 + (\alpha_0 + \alpha_1) r_0 - \alpha_0 \alpha_1 A r_0\]</span></li>
+<li><strong>Step 2 to 3</strong>: <span class="math display">\[r_2 = r_1 - \alpha_1 A r_1 = r_0 - (\alpha_0 + \alpha_1) A r_0 + \alpha_0 \alpha_1 A^2 r_0\]</span> <span class="math display">\[x_3 = x_2 + \alpha_2 r_2 = x_0 + (\alpha_0 + \alpha_1 + \alpha_2) r_0 - (\alpha_1 + \alpha_2) A r_0 + \alpha_2 A^2 r_0\]</span></li>
+<li><strong>General Iterate (<span class="math inline">\(p\)</span>-th Iteration)</strong>: By induction, expanding in matrix powers of <span class="math inline">\(A\)</span>: <span class="math display">\[\mathbf{x_p = x_0 + \beta_0 r_0 + \beta_1 A r_0 + \beta_2 A^2 r_0 + \dots + \beta_{p-1} A^{p-1} r_0}\]</span> <span class="math display">\[\mathbf{x_p \in x_0 + \text{span}\{r_0, A r_0, A^2 r_0, \dots, A^{p-1} r_0\} = x_0 + \mathcal{K}_p(A, r_0)}\]</span></li>
+</ol>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>Key Conceptual Revelation</strong>: Every iterate of Steepest Descent naturally belongs to the Krylov subspace <span class="math inline">\(\mathcal{K}_p(A, r_0)\)</span>. However, because Steepest Descent chooses the scalar coefficients <span class="math inline">\(\alpha_k\)</span> greedily one step at a time, it falls victim to severe zigzagging. If we instead search for the <strong>globally optimal</strong> linear combination of all <span class="math inline">\(p\)</span> vectors <span class="math inline">\(\{r_0, A r_0, \dots, A^{p-1} r_0\}\)</span> simultaneously, we arrive directly at <strong>Krylov Subspace Projection Methods (Arnoldi, FOM, Lanczos, and Conjugate Gradients)</strong>!</p>
+</div>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-07.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Orthogonalization, Gram-Schmidt & QR Factorization</span>
+      </a>
+    
+      
+      <a href="chapter-09.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Krylov Subspace Methods I: Arnoldi, FOM & Lanczos</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

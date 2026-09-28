@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Direct Solvers, Factorization & TDMA | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-04" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-03.html" class="btn-nav-control" title="Previous: PDE Discretization (FDM/FEM) & Sparse Storage Schemes">← Prev</a>
+      <a href="chapter-05.html" class="btn-nav-control" title="Next: Classical Iterative Solvers & Convergence Theory">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 04</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Direct Solvers, Factorization & TDMA</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-04" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-04-direct-solvers-factorization-techniques--the-thomas-algorithm">Chapter 04: Direct Solvers, Factorization Techniques &amp; the Thomas Algorithm</h1>
+<hr/>
+<h2 id="1-limitations-of-direct-solvers-in-large-scale-scientific-computing">1. Limitations of Direct Solvers in Large-Scale Scientific Computing</h2>
+<p>A <strong>direct solver</strong> computes the exact solution to a linear system <span class="math inline">\(Ax = b\)</span> in a finite, predetermined sequence of arithmetic operations (in the absence of round-off error).</p>
+<h3 id="11-the-classical-direct-solvers">1.1 The Classical Direct Solvers</h3>
+<ul>
+<li><strong>Gaussian Elimination</strong>: Converts <span class="math inline">\(A\)</span> into an upper triangular system <span class="math inline">\(U x = c\)</span> via elementary row operations, followed by backward substitution.</li>
+<li><strong>LU Factorization</strong>: Decomposes <span class="math inline">\(A = L U\)</span>, where <span class="math inline">\(L\)</span> is unit lower triangular and <span class="math inline">\(U\)</span> is upper triangular.</li>
+<li><strong>Cholesky Factorization</strong>: Decomposes symmetric positive definite <span class="math inline">\(A = L L^T\)</span>.</li>
+<li><strong>Cramer’s Rule</strong>: Explicit determinant-based formula.</li>
+</ul>
+<h3 id="12-the-three-fundamental-failures-of-direct-solvers-for-large-pdes">1.2 The Three Fundamental Failures of Direct Solvers for Large PDEs</h3>
+<ol type="1">
+<li><p><strong>Prohibitive Computational Complexity</strong>:</p>
+<ul>
+<li>For a general dense <span class="math inline">\(N \times N\)</span> matrix, Gaussian elimination and LU decomposition require: <span class="math display">\[\text{FLOPs} = \frac{2}{3} N^3 + O(N^2)\]</span></li>
+<li>In a 3D physical simulation on an <span class="math inline">\(M \times M \times M\)</span> grid, the number of unknowns is <span class="math inline">\(N = M^3\)</span>.</li>
+<li>For a modest grid of <span class="math inline">\(M = 100 \implies N = 10^6\)</span> unknowns: <span class="math display">\[\text{FLOPs} = \frac{2}{3} (10^6)^3 = \frac{2}{3} \times 10^{18}\text{ FLOPs} \approx 6.7 \times 10^{17}\text{ FLOPs}\]</span></li>
+<li>On a fast workstation (<span class="math inline">\(10\text{ GFLOPS}\)</span>), this single solve takes <span class="math inline">\(&gt; 2\text{ years}\)</span>!</li>
+</ul></li>
+<li><p><strong>The "Fill-In" Phenomenon and Memory Explosion</strong>:</p>
+<ul>
+<li>The original PDE coefficient matrix <span class="math inline">\(A\)</span> is <strong>sparse</strong> (only <span class="math inline">\(O(N)\)</span> non-zero entries).</li>
+<li>During Gaussian elimination, subtracting row multiples introduces non-zero entries into positions that were originally zero. This is known as <strong>fill-in</strong>.</li>
+<li>For a 2D grid (<span class="math inline">\(N = M^2\)</span>, bandwidth <span class="math inline">\(W \sim M = \sqrt{N}\)</span>), the banded LU factors suffer fill-in within the band, requiring <span class="math inline">\(O(N^{3/2})\)</span> storage and <span class="math inline">\(O(N^2)\)</span> operations.</li>
+<li>For a 3D grid (<span class="math inline">\(N = M^3\)</span>, bandwidth <span class="math inline">\(W \sim M^2 = N^{2/3}\)</span>), fill-in requires <span class="math inline">\(O(N^{5/3})\)</span> memory and <span class="math inline">\(O(N^{7/3})\)</span> operations!</li>
+<li>This destroys the <span class="math inline">\(O(N)\)</span> memory advantage of sparse discretization.</li>
+</ul></li>
+<li><p><strong>Accumulation of Finite-Precision Round-Off Errors</strong>:</p>
+<ul>
+<li>As <span class="math inline">\(N\)</span> grows, error in each elimination step accumulates over <span class="math inline">\(O(N^3)\)</span> operations, leading to severe numerical loss of significance unless expensive pivoting strategies are employed.</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="2-gaussian-elimination--lu-decomposition">2. Gaussian Elimination &amp; LU Decomposition</h2>
+<h3 id="21-standard-lu-decomposition-a--lu">2.1 Standard LU Decomposition (<span class="math inline">\(A = LU\)</span>)</h3>
+<p>Any non-singular matrix <span class="math inline">\(A\)</span> (admitting non-zero pivots without row interchanges) can be uniquely factored into: <span class="math display">\[A = L U\]</span> where: <span class="math display">\[L = \begin{bmatrix} 1 &amp; 0 &amp; \dots &amp; 0 \\ l_{21} &amp; 1 &amp; \dots &amp; 0 \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ l_{n1} &amp; l_{n2} &amp; \dots &amp; 1 \end{bmatrix}, \quad U = \begin{bmatrix} u_{11} &amp; u_{12} &amp; \dots &amp; u_{1n} \\ 0 &amp; u_{22} &amp; \dots &amp; u_{2n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; \dots &amp; u_{nn} \end{bmatrix}\]</span></p>
+<ul>
+<li><strong>Doolittle Algorithm</strong>: <span class="math inline">\(l_{ii} = 1\)</span> (unit lower triangular).</li>
+<li><strong>Crout Algorithm</strong>: <span class="math inline">\(u_{ii} = 1\)</span> (unit upper triangular).</li>
+</ul>
+<h3 id="22-solving-ax--b-via-two-stage-triangular-substitution">2.2 Solving <span class="math inline">\(Ax = b\)</span> via Two-Stage Triangular Substitution</h3>
+<p>Once <span class="math inline">\(A = LU\)</span> is established:</p>
+<ol type="1">
+<li><strong>Forward Substitution</strong> (<span class="math inline">\(L y = b\)</span>): <span class="math display">\[y_1 = b_1\]</span> <span class="math display">\[y_i = b_i - \sum_{j=1}^{i-1} l_{ij} y_j, \quad i = 2, 3, \dots, n \quad \left[\text{Work: } \frac{n^2}{2}\text{ FLOPs}\right]\]</span></li>
+<li><strong>Backward Substitution</strong> (<span class="math inline">\(U x = y\)</span>): <span class="math display">\[x_n = \frac{y_n}{u_{nn}}\]</span> <span class="math display">\[x_i = \frac{1}{u_{ii}} \left( y_i - \sum_{j=i+1}^n u_{ij} x_j \right), \quad i = n-1, n-2, \dots, 1 \quad \left[\text{Work: } \frac{n^2}{2}\text{ FLOPs}\right]\]</span></li>
+</ol>
+<h3 id="23-multiple-right-hand-sides">2.3 Multiple Right-Hand Sides</h3>
+<ul>
+<li>In time-dependent or parametric problems, the operator <span class="math inline">\(A\)</span> remains fixed while the source term <span class="math inline">\(b(t)\)</span> changes.</li>
+<li>The expensive <span class="math inline">\(LU\)</span> factorization (<span class="math inline">\(\frac{2}{3} N^3\)</span>) is performed <strong>once</strong>.</li>
+<li>Subsequent solutions require only forward and backward substitution (<span class="math inline">\(O(N^2)\)</span> FLOPs per time-step).</li>
+</ul>
+<h3 id="24-partial-pivoting-p-a--l-u">2.4 Partial Pivoting (<span class="math inline">\(P A = L U\)</span>)</h3>
+<ul>
+<li>If a pivot <span class="math inline">\(|a_{kk}^{(k-1)}| \approx 0\)</span>, division by near-zero causes catastrophic round-off error amplification.</li>
+<li><strong>Partial Pivoting</strong>: At step <span class="math inline">\(k\)</span>, search the current column <span class="math inline">\(k\)</span> for the element with maximum absolute magnitude: <span class="math display">\[p = \arg\max_{i \ge k} |a_{ik}^{(k-1)}|\]</span></li>
+<li>Swap row <span class="math inline">\(k\)</span> with row <span class="math inline">\(p\)</span>. Encoded as permutation matrix <span class="math inline">\(P\)</span>: <span class="math display">\[P A = L U\]</span></li>
+<li><strong>HPC Drawback of Pivoting</strong>: Row interchanges introduce global dependencies, hinder fine-grained parallelization, and ruin banded matrix storage.</li>
+</ul>
+<hr/>
+<h2 id="3-cholesky-factorization-for-symmetric-positive-definite-matrices">3. Cholesky Factorization for Symmetric Positive Definite Matrices</h2>
+<p>When matrix <span class="math inline">\(A\)</span> is <strong>Symmetric Positive Definite (SPD)</strong> (<span class="math inline">\(A = A^T\)</span> and <span class="math inline">\(x^T A x &gt; 0\)</span> for all <span class="math inline">\(x \ne \mathbf{0}\)</span>):</p>
+<ul>
+<li>Pivoting is <strong>never required</strong>! The diagonal entries remain strictly positive throughout elimination (<span class="math inline">\(a_{kk}^{(k-1)} &gt; 0\)</span>).</li>
+<li><span class="math inline">\(A\)</span> can be factored into: <span class="math display">\[\mathbf{A = L L^T}\]</span> where <span class="math inline">\(L\)</span> is a real lower triangular matrix with strictly positive diagonal elements.</li>
+</ul>
+<h3 id="31-derivation-of-the-cholesky-algorithm">3.1 Derivation of the Cholesky Algorithm</h3>
+<p>Equating entries of <span class="math inline">\(A = L L^T\)</span>: <span class="math display">\[a_{ij} = \sum_{k=1}^n l_{ik} l_{jk} = \sum_{k=1}^{\min(i, j)} l_{ik} l_{jk}\]</span></p>
+<ol type="1">
+<li><strong>For Diagonal Elements (<span class="math inline">\(i = j\)</span>)</strong>: <span class="math display">\[a_{jj} = \sum_{k=1}^{j-1} l_{jk}^2 + l_{jj}^2 \implies \mathbf{l_{jj} = \sqrt{a_{jj} - \sum_{k=1}^{j-1} l_{jk}^2}}\]</span></li>
+<li><strong>For Off-Diagonal Elements (<span class="math inline">\(i &gt; j\)</span>)</strong>: <span class="math display">\[a_{ij} = \sum_{k=1}^{j-1} l_{ik} l_{jk} + l_{ij} l_{jj} \implies \mathbf{l_{ij} = \frac{1}{l_{jj}} \left( a_{ij} - \sum_{k=1}^{j-1} l_{ik} l_{jk} \right)}\]</span></li>
+</ol>
+<h3 id="32-computational-savings">3.2 Computational Savings</h3>
+<ul>
+<li><strong>FLOP Count</strong>: <span class="math inline">\(\frac{1}{3} N^3\)</span> FLOPs — <strong>exactly half</strong> the operations of general LU factorization!</li>
+<li><strong>Memory Footprint</strong>: Only the lower triangular part of <span class="math inline">\(L\)</span> (<span class="math inline">\(N(N+1)/2\)</span> words) needs to be computed and stored.</li>
+</ul>
+<hr/>
+<h2 id="4-tridiagonal-matrix-algorithm-tdma--thomas-algorithm">4. Tridiagonal Matrix Algorithm (TDMA / Thomas Algorithm)</h2>
+<p>For 1D boundary value problems (or directional sweeps in multidimensional ADI methods), the discretization matrix is <strong>tridiagonal</strong>. The Thomas Algorithm is a streamlined, specialized Gaussian elimination taking advantage of zero entries.</p>
+<h3 id="41-problem-formulation">4.1 Problem Formulation</h3>
+<p>Consider the <span class="math inline">\(N \times N\)</span> tridiagonal linear system: <span class="math display">\[\begin{bmatrix} b_1 &amp; c_1 &amp; 0 &amp; 0 &amp; \dots &amp; 0 \\ a_2 &amp; b_2 &amp; c_2 &amp; 0 &amp; \dots &amp; 0 \\ 0 &amp; a_3 &amp; b_3 &amp; c_3 &amp; \dots &amp; 0 \\ \vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \vdots \\ 0 &amp; \dots &amp; 0 &amp; a_{N-1} &amp; b_{N-1} &amp; c_{N-1} \\ 0 &amp; \dots &amp; 0 &amp; 0 &amp; a_N &amp; b_N \end{bmatrix} \begin{bmatrix} T_1 \\ T_2 \\ T_3 \\ \vdots \\ T_{N-1} \\ T_N \end{bmatrix} = \begin{bmatrix} d_1 \\ d_2 \\ d_3 \\ \vdots \\ d_{N-1} \\ d_N \end{bmatrix}\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(b_i\)</span> are the main diagonal elements.</li>
+<li><span class="math inline">\(c_i\)</span> are the super-diagonal elements (<span class="math inline">\(c_N = 0\)</span>).</li>
+<li><span class="math inline">\(a_i\)</span> are the sub-diagonal elements (<span class="math inline">\(a_1 = 0\)</span>).</li>
+<li><span class="math inline">\(d_i\)</span> are the right-hand side source values.</li>
+</ul>
+<p>Component-wise equation <span class="math inline">\(i\)</span>: <span class="math display">\[a_i T_{i-1} + b_i T_i + c_i T_{i+1} = d_i, \quad i = 1, 2, \dots, N\]</span></p>
+<h3 id="42-complete-mathematical-derivation">4.2 Complete Mathematical Derivation</h3>
+<ol type="1">
+<li><p><strong>First Row (<span class="math inline">\(i = 1\)</span>)</strong>: <span class="math display">\[b_1 T_1 + c_1 T_2 = d_1 \implies T_1 = \frac{d_1}{b_1} - \frac{c_1}{b_1} T_2\]</span> Express this in the canonical form: <span class="math display">\[\mathbf{T_1 = \gamma_1 - \frac{c_1}{\beta_1} T_2}\]</span> where: <span class="math display">\[\mathbf{\beta_1 = b_1, \quad \gamma_1 = \frac{d_1}{b_1} = \frac{d_1}{\beta_1}}\]</span></p></li>
+<li><p><strong>Inductive Hypothesis</strong>: Assume that for row <span class="math inline">\(i-1\)</span>, <span class="math inline">\(T_{i-1}\)</span> has already been expressed in terms of <span class="math inline">\(T_i\)</span>: <span class="math display">\[T_{i-1} = \gamma_{i-1} - \frac{c_{i-1}}{\beta_{i-1}} T_i \quad \text{--- (Eq. A)}\]</span></p></li>
+<li><p><strong>Elimination at Row <span class="math inline">\(i\)</span></strong>: Substitute Eq. (A) into the <span class="math inline">\(i\)</span>-th equation: <span class="math display">\[a_i \left( \gamma_{i-1} - \frac{c_{i-1}}{\beta_{i-1}} T_i \right) + b_i T_i + c_i T_{i+1} = d_i\]</span> Grouping terms containing <span class="math inline">\(T_i\)</span>: <span class="math display">\[\left( b_i - \frac{a_i c_{i-1}}{\beta_{i-1}} \right) T_i + c_i T_{i+1} = d_i - a_i \gamma_{i-1}\]</span> Isolating <span class="math inline">\(T_i\)</span>: <span class="math display">\[T_i = \frac{d_i - a_i \gamma_{i-1}}{b_i - \frac{a_i c_{i-1}}{\beta_{i-1}}} - \frac{c_i}{b_i - \frac{a_i c_{i-1}}{\beta_{i-1}}} T_{i+1} \quad \text{--- (Eq. B)}\]</span></p></li>
+<li><p><strong>Derivation of the Recursive Relations</strong>: Matching Eq. (B) with the canonical recurrence <span class="math inline">\(T_i = \gamma_i - \frac{c_i}{\beta_i} T_{i+1}\)</span>: <span class="math display">\[\mathbf{\beta_i = b_i - \frac{a_i c_{i-1}}{\beta_{i-1}}, \quad i = 2, 3, \dots, N}\]</span> <span class="math display">\[\mathbf{\gamma_i = \frac{d_i - a_i \gamma_{i-1}}{\beta_i}, \quad i = 2, 3, \dots, N}\]</span></p></li>
+<li><p><strong>Terminal Row (<span class="math inline">\(i = N\)</span>)</strong>: At the <span class="math inline">\(N\)</span>-th row, <span class="math inline">\(c_N = 0\)</span>: <span class="math display">\[T_N = \gamma_N - \frac{c_N}{\beta_N} T_{N+1} = \gamma_N - 0 \implies \mathbf{T_N = \gamma_N}\]</span></p></li>
+<li><p><strong>Backward Substitution Sweep</strong>: Knowing <span class="math inline">\(T_N\)</span>, compute preceding unknowns backwards from <span class="math inline">\(N-1\)</span> down to 1: <span class="math display">\[\mathbf{T_i = \gamma_i - \left(\frac{c_i}{\beta_i}\right) T_{i+1}, \quad i = N-1, N-2, \dots, 1}\]</span></p></li>
+</ol>
+<h3 id="43-tdma-algorithm-summary">4.3 TDMA Algorithm Summary</h3>
+<pre><code>Algorithm: Tridiagonal Matrix Algorithm (TDMA / Thomas)
+Input: Vectors a (sub-diag), b (main-diag), c (super-diag), d (RHS) of length N
+Output: Solution vector T
+
+1. Initialize forward elimination:
+   β[1] = b[1]
+   γ[1] = d[1] / β[1]
+
+2. Forward sweep (elimination of sub-diagonal):
+   for i = 2 to N do
+       β[i] = b[i] - (a[i] * c[i-1]) / β[i-1]
+       γ[i] = (d[i] - a[i] * γ[i-1]) / β[i]
+   end for
+
+3. Terminal boundary condition:
+   T[N] = γ[N]
+
+4. Backward sweep (back substitution):
+   for i = N-1 down to 1 do
+       T[i] = γ[i] - (c[i] / β[i]) * T[i+1]
+   end for</code></pre>
+<h3 id="44-complexity-and-performance-comparison">4.4 Complexity and Performance Comparison</h3>
+<ul>
+<li><strong>Operation Count</strong>:
+<ul>
+<li>Forward sweep: <span class="math inline">\(2\)</span> multiplications, <span class="math inline">\(2\)</span> divisions, <span class="math inline">\(2\)</span> subtractions per node <span class="math inline">\(\approx 5N\)</span> operations.</li>
+<li>Backward sweep: <span class="math inline">\(1\)</span> multiplication, <span class="math inline">\(1\)</span> subtraction per node <span class="math inline">\(\approx 2N\)</span> operations.</li>
+<li><strong>Total Work</strong>: <span class="math inline">\(\mathbf{\approx 8N \text{ operations} = O(N)}\)</span>!</li>
+</ul></li>
+<li><strong>Concrete Example Comparison (From Slide 285)</strong>:
+<ul>
+<li>For an <span class="math inline">\(N = 5\)</span> matrix:
+<ul>
+<li><strong>TDMA</strong>: Takes <span class="math inline">\(\mathbf{10\text{ operations}}\)</span>!</li>
+<li><strong>Gaussian Elimination</strong>: Takes <span class="math inline">\(\mathbf{75\text{ operations}}\)</span>!</li>
+<li>Speedup factor for <span class="math inline">\(N = 5\)</span> is <span class="math inline">\(7.5\times\)</span>. For <span class="math inline">\(N = 1000\)</span>, speedup is <span class="math inline">\(&gt; 80,000\times\)</span>!</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="45-condition-for-numerical-stability">4.5 Condition for Numerical Stability</h3>
+<p>The Thomas algorithm does not use pivoting. It is guaranteed to be unconditionally stable against round-off error accumulation if the matrix is <strong>strictly or irreducibly diagonally dominant</strong>: <span class="math display">\[|b_i| \ge |a_i| + |c_i| \quad \text{for all } i, \text{ with } |b_i| &gt; |a_i| + |c_i| \text{ for at least one } i\]</span> Under this condition, <span class="math inline">\(\beta_i \ne 0\)</span> for all <span class="math inline">\(i\)</span>, guaranteeing that division by zero never occurs.</p>
+<hr/>
+<h2 id="5-the-sherman-morrison-formula-for-perturbed-systems">5. The Sherman-Morrison Formula for Perturbed Systems</h2>
+<h3 id="51-theorem-statement">5.1 Theorem Statement</h3>
+<p>Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> be an invertible square matrix, and let <span class="math inline">\(u, v \in \mathbb{R}^n\)</span> be column vectors. The matrix <span class="math inline">\(A + u v^T\)</span> is a <strong>rank-1 update (perturbation)</strong> of <span class="math inline">\(A\)</span>. If <span class="math inline">\(1 + v^T A^{-1} u \ne 0\)</span>, then <span class="math inline">\(A + u v^T\)</span> is invertible, and its inverse is given exactly by: <span class="math display">\[\mathbf{(A + u v^T)^{-1} = A^{-1} - \frac{A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u}}\]</span></p>
+<h3 id="52-mathematical-proof">5.2 Mathematical Proof</h3>
+<p>We multiply <span class="math inline">\((A + u v^T)\)</span> by the proposed inverse and verify that it equals the identity matrix <span class="math inline">\(I\)</span>: <span class="math display">\[(A + u v^T) \left[ A^{-1} - \frac{A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u} \right]\]</span> Expanding: <span class="math display">\[= A A^{-1} - \frac{A A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u} + u v^T A^{-1} - \frac{u v^T A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u}\]</span> Notice that <span class="math inline">\(v^T A^{-1} u\)</span> is a scalar quantity, denoted <span class="math inline">\(\alpha = v^T A^{-1} u\)</span>. <span class="math display">\[= I - \frac{u v^T A^{-1}}{1 + \alpha} + u v^T A^{-1} - \frac{u \alpha (v^T A^{-1})}{1 + \alpha}\]</span> Factoring out <span class="math inline">\(u v^T A^{-1}\)</span>: <span class="math display">\[= I + u v^T A^{-1} \left[ 1 - \frac{1}{1 + \alpha} - \frac{\alpha}{1 + \alpha} \right] = I + u v^T A^{-1} \left[ 1 - \frac{1 + \alpha}{1 + \alpha} \right] = I + u v^T A^{-1} (0) = I \quad \blacksquare\]</span></p>
+<h3 id="53-solving-perturbed-systems-without-re-factoring">5.3 Solving Perturbed Systems Without Re-Factoring</h3>
+<p>To solve <span class="math inline">\((A + u v^T) x = b\)</span>:</p>
+<ol type="1">
+<li>Solve <span class="math inline">\(A y = b\)</span> (cost of 1 solver call).</li>
+<li>Solve <span class="math inline">\(A z = u\)</span> (cost of 1 solver call).</li>
+<li>Compute scalars: <span class="math inline">\(v^T y\)</span> and <span class="math inline">\(v^T z\)</span>.</li>
+<li>Then <span class="math inline">\(x\)</span> is obtained by a simple vector update: <span class="math display">\[\mathbf{x = y - \left( \frac{v^T y}{1 + v^T z} \right) z}\]</span> This requires <strong>zero modification</strong> to the original solver of <span class="math inline">\(A\)</span>!</li>
+</ol>
+<h3 id="54-application-to-cyclic-tridiagonal-matrices">5.4 Application to Cyclic Tridiagonal Matrices</h3>
+<p>In physical systems with <strong>periodic boundary conditions</strong> (<span class="math inline">\(T(0) = T(L)\)</span>):</p>
+<ul>
+<li>The boundary equations connect node 1 to node <span class="math inline">\(N\)</span>, placing non-zero entries in the top-right (<span class="math inline">\(c_N\)</span>) and bottom-left (<span class="math inline">\(a_1\)</span>) corners.</li>
+<li>This breaks the standard tridiagonal band: <span class="math display">\[A_{cyclic} = \begin{bmatrix} b_1 &amp; c_1 &amp; 0 &amp; \dots &amp; a_1 \\ a_2 &amp; b_2 &amp; c_2 &amp; \dots &amp; 0 \\ \vdots &amp; \ddots &amp; \ddots &amp; \ddots &amp; \vdots \\ c_N &amp; \dots &amp; 0 &amp; a_N &amp; b_N \end{bmatrix} = A_{tridiag} + u v^T\]</span></li>
+<li>Using the Sherman-Morrison formula, <span class="math inline">\(A_{cyclic} x = b\)</span> can be solved via <strong>two standard TDMA passes</strong> on <span class="math inline">\(A_{tridiag}\)</span>, preserving <span class="math inline">\(O(N)\)</span> computational complexity without expensive general elimination!</li>
+</ul>
+<hr/>
+<h2 id="6-alternating-direction-implicit-adi-method">6. Alternating Direction Implicit (ADI) Method</h2>
+<p>For 2D elliptic PDEs (<span class="math inline">\(\nabla^2 T = 0\)</span>), direct TDMA cannot be applied directly because the 5-point stencil produces a pentadiagonal matrix with wide band offsets <span class="math inline">\(\pm N_x\)</span>. The <strong>ADI method</strong> circumvents this by splitting each multidimensional iteration into two alternating 1D directional steps.</p>
+<pre><code>       Step 1: Horizontal Sweep (x-sweep)         Step 2: Vertical Sweep (y-sweep)
+         Implicit along x, Explicit in y            Implicit along y, Explicit in x
+              j=3 ──► TDMA along row 3                    i=1     i=2     i=3
+              j=2 ──► TDMA along row 2                     ▲       ▲       ▲
+              j=1 ──► TDMA along row 1                     │       │       │
+                                                         TDMA    TDMA    TDMA</code></pre>
+<h3 id="61-mathematical-formulation-of-adi-sweeps">6.1 Mathematical Formulation of ADI Sweeps</h3>
+<p>Discretizing the 2D equation: <span class="math display">\[\frac{T_{i-1, j} - 2 T_{i, j} + T_{i+1, j}}{\Delta x^2} + \frac{T_{i, j-1} - 2 T_{i, j} + T_{i, j+1}}{\Delta y^2} = 0\]</span></p>
+<ol type="1">
+<li><p><strong>Sweep 1 (<span class="math inline">\(x\)</span>-Direction Implicit Sweep)</strong>: Treat the <span class="math inline">\(x\)</span>-derivatives implicitly at intermediate state <span class="math inline">\(T^{(k+1/2)}\)</span> while evaluating <span class="math inline">\(y\)</span>-derivatives explicitly using available values <span class="math inline">\(T^{(k)}\)</span>: <span class="math display">\[\frac{T_{i-1, j}^{(k+1/2)} - 2 T_{i, j}^{(k+1/2)} + T_{i+1, j}^{(k+1/2)}}{\Delta x^2} = -\left[ \frac{T_{i, j-1}^{(k)} - 2 T_{i, j}^{(k)} + T_{i, j+1}^{(k)}}{\Delta y^2} \right]\]</span></p>
+<ul>
+<li>Along each horizontal grid line <span class="math inline">\(j\)</span>, this forms an independent <strong>1D tridiagonal system</strong> in unknowns <span class="math inline">\(\{T_{i, j}^{(k+1/2)}\}_{i=1}^{N_x}\)</span>.</li>
+<li>Solved in <span class="math inline">\(O(N_x)\)</span> operations per row using TDMA!</li>
+</ul></li>
+<li><p><strong>Sweep 2 (<span class="math inline">\(y\)</span>-Direction Implicit Sweep)</strong>: Treat the <span class="math inline">\(y\)</span>-derivatives implicitly at final state <span class="math inline">\(T^{(k+1)}\)</span> using updated intermediate values <span class="math inline">\(T^{(k+1/2)}\)</span>: <span class="math display">\[\frac{T_{i, j-1}^{(k+1)} - 2 T_{i, j}^{(k+1)} + T_{i, j+1}^{(k+1)}}{\Delta y^2} = -\left[ \frac{T_{i-1, j}^{(k+1/2)} - 2 T_{i, j}^{(k+1/2)} + T_{i+1, j}^{(k+1/2)}}{\Delta x^2} \right]\]</span></p>
+<ul>
+<li>Along each vertical grid line <span class="math inline">\(i\)</span>, this forms an independent <strong>1D tridiagonal system</strong> in unknowns <span class="math inline">\(\{T_{i, j}^{(k+1)}\}_{j=1}^{N_y}\)</span>.</li>
+<li>Solved in <span class="math inline">\(O(N_y)\)</span> operations per column using TDMA!</li>
+</ul></li>
+</ol>
+<h3 id="62-key-advantages-for-hpc">6.2 Key Advantages for HPC</h3>
+<ul>
+<li><strong>Optimal Complexity</strong>: Each full ADI iteration requires <span class="math inline">\(O(N_x N_y) = O(N)\)</span> arithmetic operations.</li>
+<li><strong>Inherent Parallelism</strong>: All horizontal rows in Sweep 1 are completely decoupled and can be solved simultaneously on separate processor cores! Likewise, all vertical columns in Sweep 2 are completely decoupled.</li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-03.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">PDE Discretization (FDM/FEM) & Sparse Storage Schemes</span>
+      </a>
+    
+      
+      <a href="chapter-05.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Classical Iterative Solvers & Convergence Theory</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

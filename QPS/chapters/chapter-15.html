@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Parallel Program Design, Decomposition & Foster's Methodology | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-15" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-14.html" class="btn-nav-control" title="Previous: Parallel Computer Architectures, Flynn's Taxonomy & Interconnects">← Prev</a>
+      <a href="chapter-16.html" class="btn-nav-control" title="Next: Parallel Performance Analysis, Amdahl's Law & Isoefficiency">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 15</span><span class="hub-badge badge-primary">Part II</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Parallel Program Design, Decomposition & Foster's Methodology</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-15" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-15-parallel-program-design-decomposition--fosters-methodology">Chapter 15: Parallel Program Design, Decomposition &amp; Foster's Methodology</h1>
+<hr/>
+<h2 id="1-principles-of-parallel-algorithm-design">1. Principles of Parallel Algorithm Design</h2>
+<p>Transforming a sequential scientific computation into an efficient parallel program requires orchestrating four fundamental activities:</p>
+<ol type="1">
+<li><strong>Decomposition</strong>: Dividing total computational work into concurrent primitive tasks.</li>
+<li><strong>Communication</strong>: Coordinating data exchanges and dependencies between tasks.</li>
+<li><strong>Agglomeration</strong>: Clustering primitive tasks into larger grains to optimize locality.</li>
+<li><strong>Mapping</strong>: Assigning agglomerated composite tasks to physical hardware cores.</li>
+</ol>
+<hr/>
+<h2 id="2-task-dependency-graphs--directed-acyclic-graphs-dags">2. Task Dependency Graphs &amp; Directed Acyclic Graphs (DAGs)</h2>
+<p>The structural workflow of a parallel algorithm is formally modeled as a <strong>Task Dependency Graph</strong> (a Directed Acyclic Graph, DAG).</p>
+<pre><code>       Start: Task 1 (Initialize Grid)
+                     │
+         ┌───────────┴───────────┐
+         ▼                       ▼
+      Task 2 (North Half)     Task 3 (South Half)    ◄── Concurrency = 2
+         │                       │
+         └───────────┬───────────┘
+                     ▼
+             Task 4 (Exchange Boundaries)
+                     │
+                     ▼
+             Task 5 (Compute Global Residual)</code></pre>
+<h3 id="21-formal-components-of-a-dag">2.1 Formal Components of a DAG</h3>
+<ul>
+<li><strong>Nodes (<span class="math inline">\(V\)</span>)</strong>: Individual, indivisible units of computation called <strong>tasks</strong>.</li>
+<li><strong>Directed Edges (<span class="math inline">\(E\)</span>)</strong>: Data or control dependencies. A directed edge from Task <span class="math inline">\(A\)</span> to Task <span class="math inline">\(B\)</span> (<span class="math inline">\(A \to B\)</span>) indicates that Task <span class="math inline">\(B\)</span> cannot begin execution until Task <span class="math inline">\(A\)</span> completes and its output data becomes available.</li>
+</ul>
+<h3 id="22-crucial-dag-metrics">2.2 Crucial DAG Metrics</h3>
+<ol type="1">
+<li><strong>Total Work (<span class="math inline">\(W\)</span> or <span class="math inline">\(T_1\)</span>)</strong>: The total computational time spent executing all tasks sequentially on a single processor: <span class="math display">\[W = \sum_{v \in V} t(v)\]</span></li>
+<li><strong>Critical Path</strong>: The longest directed path from an entry node to an exit node in the DAG.</li>
+<li><strong>Critical Path Length (<span class="math inline">\(T_\infty\)</span>)</strong>: The execution time of the tasks along the critical path.
+<ul>
+<li><strong>Theoretical Foundation</strong>: Even if an infinite number of processors are available (<span class="math inline">\(p = \infty\)</span>), the parallel execution time can <strong>never be less than <span class="math inline">\(T_\infty\)</span></strong>: <span class="math display">\[\mathbf{T_p \ge T_\infty}\]</span></li>
+</ul></li>
+<li><strong>Maximum Degree of Concurrency</strong>: The maximum number of independent tasks that can execute simultaneously at any point in time.</li>
+<li><strong>Average Degree of Concurrency</strong>: The ratio of total sequential work to the critical path length: <span class="math display">\[\mathbf{\text{Average Concurrency} = \frac{W}{T_\infty}}\]</span>
+<ul>
+<li><strong>Exam Significance</strong>: The average degree of concurrency represents an upper bound on the number of processors that can be productively utilized before diminishing returns dominate!</li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="23-worked-case-study-database-query-dag-optimization-slides-316321">2.3 Worked Case Study: Database Query DAG Optimization (Slides 316–321)</h3>
+<p>Consider processing a complex database query across a student registry: <span class="math display">\[\text{Query: } (\text{Fee} \le 12000) \;\mathbf{AND}\; (\text{Board} = \text{State}) \;\mathbf{AND}\; \Big(\text{Medium} = \text{'Hindi'} \;\mathbf{OR}\; \text{Medium} = \text{'English'}\Big)\]</span></p>
+<p>The same algorithm can be structured into two distinct task dependency graphs with identical operational outputs:</p>
+<pre><code>        Abstraction-1 (Balanced Tree)                    Abstraction-2 (Cascade)
+
+  Task 4     Task 3     Task 2     Task 1          Task 4     Task 3     Task 2     Task 1
+ (Fee≤12k)  (State)    (Hindi)    (English)       (Fee≤12k)  (State)    (Hindi)    (English)
+  [t = 10]   [t = 10]   [t = 10]   [t = 10]        [t = 10]   [t = 10]   [t = 10]   [t = 10]
+     │          │          │          │               │          │          │          │
+     └────┬─────┘          └────┬─────┘               │          │          └────┬─────┘
+          ▼                     ▼                     │          │               ▼
+        Task 6                Task 5                  │          │             Task 5
+    (Intersection)           (Union)                  │          │         (Union, t = 6)
+       [t = 9]               [t = 6]                  │          │               │
+          │                     │                     │          └───────┬───────┘
+          └──────────┬──────────┘                     │                  ▼
+                     ▼                                │                Task 6
+                   Task 7                             │            (Intersection)
+             (Final Filter)                           │               [t = 11]
+                [t = 8]                               │                  │
+                                                      └──────────┬───────┘
+                                                                 ▼
+                                                               Task 7
+                                                           (Final Filter)
+                                                              [t = 7]</code></pre>
+<h4 id="quantitative-performance-comparison">Quantitative Performance Comparison:</h4>
+<ol type="1">
+<li><p><strong>Abstraction-1</strong>:</p>
+<ul>
+<li><strong>Total Work (<span class="math inline">\(W\)</span>)</strong>: <span class="math inline">\(10 + 10 + 10 + 10 + 6 + 9 + 8 = \mathbf{63}\)</span>.</li>
+<li><strong>Critical Path</strong>: <span class="math inline">\(\text{Task 4} \to \text{Task 6} \to \text{Task 7}\)</span> (or <span class="math inline">\(\text{Task 3} \to 6 \to 7\)</span>).</li>
+<li><strong>Critical Path Length (<span class="math inline">\(T_\infty\)</span>)</strong>: <span class="math inline">\(10 + 9 + 8 = \mathbf{27}\)</span>.</li>
+<li><strong>Average Degree of Concurrency</strong>: <span class="math display">\[\frac{W}{T_\infty} = \frac{63}{27} = \mathbf{2.33}\]</span></li>
+<li><strong>Maximum Concurrency</strong>: 4 simultaneous tasks (Tasks 1, 2, 3, 4 at start).</li>
+</ul></li>
+<li><p><strong>Abstraction-2</strong>:</p>
+<ul>
+<li><strong>Total Work (<span class="math inline">\(W\)</span>)</strong>: <span class="math inline">\(10 + 10 + 10 + 10 + 6 + 11 + 7 = \mathbf{64}\)</span>.</li>
+<li><strong>Critical Path</strong>: <span class="math inline">\(\text{Task 1} \to \text{Task 5} \to \text{Task 6} \to \text{Task 7}\)</span>.</li>
+<li><strong>Critical Path Length (<span class="math inline">\(T_\infty\)</span>)</strong>: <span class="math inline">\(10 + 6 + 11 + 7 = \mathbf{34}\)</span>.</li>
+<li><strong>Average Degree of Concurrency</strong>: <span class="math display">\[\frac{W}{T_\infty} = \frac{64}{34} = \mathbf{1.88}\]</span></li>
+<li><strong>Maximum Concurrency</strong>: 2 simultaneous tasks (Tasks 1 and 2; Task 3 must idle waiting for Task 5, Task 4 idles waiting for Task 6).</li>
+</ul></li>
+</ol>
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><strong>Exam Conclusion</strong>: Abstraction-1 is significantly superior for parallel execution because its <strong>shorter critical path (<span class="math inline">\(27 &lt; 34\)</span>)</strong> provides a <strong>higher average degree of concurrency (<span class="math inline">\(2.33 &gt; 1.88\)</span>)</strong>, maximizing parallel efficiency.</p>
+</div>
+<hr/>
+<h2 id="3-decomposition-techniques">3. Decomposition Techniques</h2>
+<p>Parallel algorithms employ four foundational decomposition strategies:</p>
+<h3 id="31-recursive-decomposition-divide-and-conquer">3.1 Recursive Decomposition (Divide-and-Conquer)</h3>
+<ul>
+<li><strong>Concept</strong>: A problem is recursively decomposed into smaller, independent subproblems of the same type until a primitive base case is reached. Subproblem solutions are subsequently combined.</li>
+<li><strong>Examples</strong>:
+<ul>
+<li>Parallel Merge Sort and Quick Sort.</li>
+<li>Tree-based global reductions (e.g., computing the sum or maximum of an array across <span class="math inline">\(p\)</span> processors).</li>
+</ul></li>
+</ul>
+<h3 id="32-data-decomposition-domain-decomposition">3.2 Data Decomposition (Domain Decomposition)</h3>
+<p>The most ubiquitous strategy in High Performance Scientific Computing. The problem is partitioned by slicing the underlying data structures.</p>
+<pre><code>       Input Data Decomposition                Output Data Decomposition
+       (e.g., Numerical Quadrature)            (e.g., Matrix Multiplication C = A x B)
+       ┌──────┬──────┬──────┬──────┐           ┌───────────┬───────────┐
+       │P0    │P1    │P2    │P3    │           │ Task 1:   │ Task 2:   │
+       │x0..x1│x1..x2│x2..x3│x3..x4│           │ C11 = ... │ C12 = ... │
+       └──────┴──────┴──────┴──────┘           ├───────────┼───────────┤
+         ▲      ▲      ▲      ▲                │ Task 3:   │ Task 4:   │
+         └──────┴──────┼──────┘                │ C21 = ... │ C22 = ... │
+                       ▼                       └───────────┴───────────┘
+                Global Reduction (Sum)</code></pre>
+<ol type="1">
+<li><strong>Partitioning the Output Data</strong>:
+<ul>
+<li>Each task is responsible for computing a designated subset of the output data.</li>
+<li><em>Example: 2D Block Matrix Multiplication</em>: <span class="math display">\[\begin{bmatrix} C_{11} &amp; C_{12} \\ C_{21} &amp; C_{22} \end{bmatrix} = \begin{bmatrix} A_{11} &amp; A_{12} \\ A_{21} &amp; A_{22} \end{bmatrix} \begin{bmatrix} B_{11} &amp; B_{12} \\ B_{21} &amp; B_{22} \end{bmatrix}\]</span>
+<ul>
+<li>Task 1 computes <span class="math inline">\(C_{11} = A_{11} B_{11} + A_{12} B_{21}\)</span>.</li>
+<li>Task 2 computes <span class="math inline">\(C_{12} = A_{11} B_{12} + A_{12} B_{22}\)</span>.</li>
+<li>Task 3 computes <span class="math inline">\(C_{21} = A_{21} B_{11} + A_{22} B_{21}\)</span>.</li>
+<li>Task 4 computes <span class="math inline">\(C_{22} = A_{21} B_{12} + A_{22} B_{22}\)</span>.</li>
+</ul></li>
+</ul></li>
+<li><strong>Partitioning the Input Data</strong>:
+<ul>
+<li>Input data is divided among processes, each performing local calculations on its partition, followed by an aggregation step.</li>
+<li><em>Example: Numerical Integration (Trapezoidal Rule)</em>: <span class="math display">\[I = \int_a^b f(x) \, dx = \sum_{i=1}^p \text{LocalSum}_i \quad \text{where } \text{LocalSum}_i = \int_{x_{i-1}}^{x_i} f(x) \, dx\]</span></li>
+</ul></li>
+<li><strong>The Owner Computes Rule</strong>: A cardinal rule in distributed-memory programming: <strong>A process executes only the computations that determine data elements it officially owns in local memory</strong>.</li>
+</ol>
+<h3 id="33-exploratory-decomposition">3.3 Exploratory Decomposition</h3>
+<ul>
+<li>Used when searching through large, irregular discrete search spaces (e.g., game-tree search, graph backtracking, integer programming).</li>
+<li>Different processors search distinct branches of the state space concurrently. As soon as one processor finds the optimal solution, it broadcasts an abort signal to prune remaining branches.</li>
+</ul>
+<h3 id="34-speculative-decomposition">3.4 Speculative Decomposition</h3>
+<ul>
+<li>Used when dependencies between tasks are uncertain. A processor begins executing a tentative task before knowing whether its input data will be valid.</li>
+<li>If the speculation proves correct, latency is saved; if incorrect, the work is rolled back.</li>
+</ul>
+<hr/>
+<h2 id="4-mapping--load-balancing">4. Mapping &amp; Load Balancing</h2>
+<p><strong>Load Imbalance</strong> is a primary source of parallel performance degradation. If <span class="math inline">\(p-1\)</span> processors finish in <span class="math inline">\(1\text{ second}\)</span> but 1 processor requires <span class="math inline">\(10\text{ seconds}\)</span>, the overall parallel execution time is <span class="math inline">\(10\text{ seconds}\)</span>, and the <span class="math inline">\(p-1\)</span> processors sit idle (<span class="math inline">\(90\%\)</span> wasted capacity).</p>
+<pre><code>       Load Imbalance:                       Balanced Load:
+       P0: [████████████████████] (10s)      P0: [██████████] (5s)
+       P1: [████] idle............ (2s)      P1: [██████████] (5s)
+       P2: [██████] idle.......... (3s)      P2: [██████████] (5s)
+       P3: [██] idle.............. (1s)      P3: [██████████] (5s)</code></pre>
+<h3 id="41-static-mapping-strategies">4.1 Static Mapping Strategies</h3>
+<p>Decisions are made prior to execution and remain fixed throughout runtime.</p>
+<ol type="1">
+<li><strong>Block Distribution</strong>:
+<ul>
+<li>Continuous arrays of size <span class="math inline">\(N\)</span> are partitioned into contiguous blocks of size <span class="math inline">\(N/p\)</span> assigned to processor <span class="math inline">\(k\)</span>: <span class="math display">\[\text{Elements on Processor } k: \quad \left[ k \cdot \frac{N}{p}, \; (k+1) \frac{N}{p} - 1 \right]\]</span></li>
+<li><em>Pros</em>: Minimizes communication surface area in grid stencils; excellent spatial cache locality.</li>
+</ul></li>
+<li><strong>Cyclic (Round-Robin) Distribution</strong>:
+<ul>
+<li>Elements are assigned round-robin: element <span class="math inline">\(i\)</span> maps to processor <span class="math inline">\(i \pmod p\)</span>.</li>
+<li><em>Best Use Case</em>: Used when computational effort per index increases or decreases monotonically (e.g., LU decomposition or Gaussian elimination, where rows become progressively shorter as elimination proceeds).</li>
+</ul></li>
+<li><strong>Block-Cyclic Distribution</strong>:
+<ul>
+<li>Divides the array into blocks of size <span class="math inline">\(b\)</span>, and distributes these blocks cyclically across processors.</li>
+<li>Balances the trade-off between cache locality (block size <span class="math inline">\(b\)</span>) and load balancing (cyclic distribution). Foundation of ScaLAPACK.</li>
+</ul></li>
+<li><strong>Graph Partitioning (e.g., METIS, ParMETIS)</strong>:
+<ul>
+<li>For unstructured FEM/FVM meshes, the dual connectivity graph is partitioned such that:
+<ol type="1">
+<li>Each processor receives an equal number of mesh elements (load balance).</li>
+<li>The number of cut edges between partitions (inter-processor communication volume) is strictly minimized.</li>
+</ol></li>
+</ul></li>
+</ol>
+<h3 id="42-dynamic-mapping-strategies">4.2 Dynamic Mapping Strategies</h3>
+<p>Used when task runtimes are unpredictable, highly irregular, or data-dependent.</p>
+<ol type="1">
+<li><strong>Centralized Master-Slave / Work-Pool Model</strong>:
+<ul>
+<li>A master process maintains a queue of available tasks.</li>
+<li>Idle worker processes send a request to the master, receive a task, compute the result, and return for the next task.</li>
+<li><em>Limitation</em>: The master becomes a communication bottleneck if tasks are too fine-grained.</li>
+</ul></li>
+<li><strong>Distributed Work Stealing</strong>:
+<ul>
+<li>Each processor maintains a local double-ended queue (deque) of tasks.</li>
+<li>When a processor exhausts its local work, it becomes a "thief" and steals tasks from the deque of a randomly chosen neighboring processor.</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="5-parallel-algorithm-models">5. Parallel Algorithm Models</h2>
+<ol type="1">
+<li><strong>Data-Parallel Model</strong>:
+<ul>
+<li>Processors execute uniform operations simultaneously on distinct partitions of a large dataset.</li>
+<li>High data locality, minimal synchronization.</li>
+</ul></li>
+<li><strong>Task-Graph Model</strong>:
+<ul>
+<li>Tasks with arbitrary dependencies are represented as a DAG and executed as their predecessor tasks complete.</li>
+</ul></li>
+<li><strong>Work-Pool Model</strong>:
+<ul>
+<li>Unordered collection of tasks dynamically assigned to available workers.</li>
+</ul></li>
+<li><strong>Master-Slave Model</strong>:
+<ul>
+<li>One master coordinates execution, manages I/O, and assigns work to worker processes.</li>
+</ul></li>
+<li><strong>Pipeline / Producer-Consumer Model</strong>:
+<ul>
+<li>Computation is partitioned into sequential stages. Data streams continuously through the stages in an assembly-line fashion.</li>
+</ul></li>
+<li><strong>Hybrid Model</strong>:
+<ul>
+<li>Hierarchical composition of multiple models (e.g., pipelined stages, where each individual stage is internally data-parallel).</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="6-fosters-design-methodology-pcam">6. Foster's Design Methodology (PCAM)</h2>
+<p>In 1995, Prof. Ian Foster formulated the <strong>PCAM Methodology</strong>, a systematic 4-stage engineering pipeline for parallel algorithm design:</p>
+<pre><code>            Problem Specification
+                      │
+        1. PARTITIONING │ (Divide into maximum fine-grained tasks)
+                      ▼
+        2. COMMUNICATION│ (Define local vs global data exchanges)
+                      ▼
+        3. AGGLOMERATION│ (Combine tasks to increase granularity)
+                      ▼
+        4. MAPPING      │ (Assign to physical cores for load balance)
+                      ▼
+             Parallel Algorithm</code></pre>
+<h3 id="stage-1-partitioning">Stage 1: Partitioning</h3>
+<ul>
+<li><strong>Objective</strong>: Decompose total computation and data into the <strong>maximum possible number of primitive tasks</strong>.</li>
+<li>Ignore machine architecture, number of physical cores, and practical constraints.</li>
+<li>Maximize potential concurrency.</li>
+</ul>
+<h3 id="stage-2-communication">Stage 2: Communication</h3>
+<ul>
+<li><strong>Objective</strong>: Analyze the data dependencies between primitive tasks.</li>
+<li>Classify communications:
+<ul>
+<li><strong>Local Communication</strong>: Tasks exchange data with immediate neighbors (e.g., stencil neighbor exchanges).</li>
+<li><strong>Global Communication</strong>: All tasks participate in collective data operations (e.g., global sum reduction, broadcasts).</li>
+</ul></li>
+<li>Identify communication bottlenecks and eliminate unnecessary data transfers.</li>
+</ul>
+<h3 id="stage-3-agglomeration">Stage 3: Agglomeration</h3>
+<ul>
+<li><strong>Objective</strong>: Group primitive tasks into larger composite tasks to <strong>increase granularity</strong> and <strong>reduce communication overhead</strong>.</li>
+<li><em>Design Trade-off</em>:
+<ul>
+<li>If tasks are too fine-grained: Communication overhead overwhelms arithmetic execution.</li>
+<li>If tasks are too coarse: Available concurrency drops, leaving physical cores idle.</li>
+</ul></li>
+<li>Agglomeration combines tasks that share high communication volumes, converting inter-processor network traffic into zero-cost internal memory accesses!</li>
+</ul>
+<h3 id="stage-4-mapping">Stage 4: Mapping</h3>
+<ul>
+<li><strong>Objective</strong>: Assign agglomerated composite tasks to physical processing cores.</li>
+<li>Goals:
+<ol type="1">
+<li>Equalize computational load across all cores (Load Balancing).</li>
+<li>Map tasks that communicate frequently to the same processor socket or neighboring physical nodes to minimize network hop distance and latency.</li>
+</ol></li>
+</ul>
+<hr/>
+<h2 id="7-concrete-examples-of-fosters-methodology-slides-338339">7. Concrete Examples of Foster's Methodology (Slides 338–339)</h2>
+<h3 id="example-1-domain-decomposition-for-2d-heat-conduction">Example 1: Domain Decomposition for 2D Heat Conduction</h3>
+<ul>
+<li><strong>Step 1 (Partitioning)</strong>: Every discrete grid point <span class="math inline">\((i, j)\)</span> in the 2D domain is treated as a single primitive task (updating temperature <span class="math inline">\(T_{i, j}\)</span> via the 5-point stencil).</li>
+<li><strong>Step 2 (Communication)</strong>: Each grid point <span class="math inline">\((i, j)\)</span> requires values from its 4 immediate spatial neighbors <span class="math inline">\((i \pm 1, j)\)</span> and <span class="math inline">\((i, j \pm 1)\)</span> at every iteration (Local Communication).</li>
+<li><strong>Step 3 (Agglomeration)</strong>: Primitive grid nodes are grouped into contiguous 2D rectangular sub-domains of size <span class="math inline">\(m \times m\)</span> (agglomerating <span class="math inline">\(m^2\)</span> grid points per sub-domain).
+<ul>
+<li><em>Surface-to-Volume Ratio</em>:
+<ul>
+<li>Internal computations: <span class="math inline">\(O(m^2)\)</span> operations.</li>
+<li>Boundary communication: Only <span class="math inline">\(4m\)</span> edge boundary values need to be communicated across the network!</li>
+<li>As sub-domain size <span class="math inline">\(m\)</span> grows, the communication-to-computation ratio drops as <span class="math inline">\(\frac{4m}{m^2} = \frac{4}{m} \to 0\)</span>.</li>
+</ul></li>
+</ul></li>
+<li><strong>Step 4 (Mapping)</strong>: Each agglomerated rectangular block is mapped to one processor core. Neighboring sub-domains are mapped to neighboring processors on the physical network mesh/torus.</li>
+</ul>
+<hr/>
+<h3 id="example-2-finding-the-maximum-of-n-numbers-reduction-tree">Example 2: Finding the Maximum of <span class="math inline">\(n\)</span> Numbers (Reduction Tree)</h3>
+<ul>
+<li><strong>Step 1 (Partitioning)</strong>: Computing the pairwise comparison <span class="math inline">\(\max(x_a, x_b)\)</span> is a primitive task. A total of <span class="math inline">\(n-1\)</span> comparison tasks are required.</li>
+<li><strong>Step 2 (Communication)</strong>: Each comparison task requires inputs from two previous tasks, forming a directed binary tree.</li>
+<li><strong>Step 3 (Agglomeration)</strong>: If <span class="math inline">\(p \ll n\)</span>, assigning 1 comparison per task is wildly inefficient. Agglomerate <span class="math inline">\(n/p\)</span> numbers onto each of the <span class="math inline">\(p\)</span> processors. Each processor sequentially finds its local maximum in <span class="math inline">\((n/p) - 1\)</span> steps with <strong>zero communication</strong>.</li>
+<li><strong>Step 4 (Mapping)</strong>: The <span class="math inline">\(p\)</span> local maxima are reduced to the global maximum using a binary reduction tree across the <span class="math inline">\(p\)</span> processors in <span class="math inline">\(\log_2 p\)</span> steps, terminating at root processor <span class="math inline">\(P_0\)</span>.</li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-14.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Parallel Computer Architectures, Flynn's Taxonomy & Interconnects</span>
+      </a>
+    
+      
+      <a href="chapter-16.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Parallel Performance Analysis, Amdahl's Law & Isoefficiency</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

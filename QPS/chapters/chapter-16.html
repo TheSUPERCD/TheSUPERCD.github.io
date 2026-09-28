@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Parallel Performance Analysis, Amdahl's Law & Isoefficiency | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-16" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-15.html" class="btn-nav-control" title="Previous: Parallel Program Design, Decomposition & Foster's Methodology">← Prev</a>
+      <a href="chapter-17.html" class="btn-nav-control" title="Next: Parallel Numerical Linear Algebra & Memory Management">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 16</span><span class="hub-badge badge-primary">Part II</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Parallel Performance Analysis, Amdahl's Law & Isoefficiency</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-16" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-16-parallel-performance-analysis-scalability-amdahls-law--isoefficiency">Chapter 16: Parallel Performance Analysis, Scalability, Amdahl's Law &amp; Isoefficiency</h1>
+<hr/>
+<h2 id="1-quantitative-parallel-performance-metrics">1. Quantitative Parallel Performance Metrics</h2>
+<p>To evaluate whether a parallel implementation delivers real performance gains, parallel computer scientists utilize a formal framework of metrics:</p>
+<h3 id="11-sequential-execution-time-t_s-or-w">1.1 Sequential Execution Time (<span class="math inline">\(T_s\)</span> or <span class="math inline">\(W\)</span>)</h3>
+<ul>
+<li><strong>Definition</strong>: The wall-clock execution time taken by the <strong>fastest known sequential algorithm</strong> executing on a single core of the target architecture.</li>
+<li><strong>Exam Rule</strong>: <span class="math inline">\(T_s\)</span> must <strong>never</strong> be measured by simply running the parallel code on one processor (<span class="math inline">\(p = 1\)</span>), because the parallel code contains communication setup and indexing overheads that artificially inflate the baseline.</li>
+</ul>
+<h3 id="12-parallel-execution-time-t_p">1.2 Parallel Execution Time (<span class="math inline">\(T_p\)</span>)</h3>
+<ul>
+<li><strong>Definition</strong>: The elapsed wall-clock time from the moment the parallel algorithm initiates to the moment the very last processor completes its execution.</li>
+</ul>
+<h3 id="13-speedup-s-or-s_p">1.3 Speedup (<span class="math inline">\(S\)</span> or <span class="math inline">\(S_p\)</span>)</h3>
+<p>The ratio of sequential execution time to parallel execution time: <span class="math display">\[\mathbf{S(p) = \frac{T_s}{T_p}}\]</span></p>
+<ul>
+<li><strong>Linear Speedup</strong>: <span class="math inline">\(S(p) = p\)</span> (ideal benchmark: <span class="math inline">\(p\)</span> processors execute <span class="math inline">\(p\)</span> times faster).</li>
+<li><strong>Sublinear Speedup</strong>: <span class="math inline">\(S(p) &lt; p\)</span> (the normal real-world regime, caused by communication, idling, and synchronization).</li>
+<li><strong>Superlinear Speedup</strong>: <span class="math inline">\(S(p) &gt; p\)</span> (occurs under special architectural or algorithmic conditions).</li>
+</ul>
+<h4 id="why-does-superlinear-speedup-occur">Why Does Superlinear Speedup Occur?</h4>
+<ol type="1">
+<li><strong>Aggregate Cache Memory Effects (Most Common)</strong>:
+<ul>
+<li>When a massive problem of size <span class="math inline">\(N\)</span> runs on a single core, its data cannot fit into L1/L2/L3 caches, forcing continuous high-latency DRAM page thrashing.</li>
+<li>When distributed across <span class="math inline">\(p\)</span> cores, each core handles a sub-domain of size <span class="math inline">\(N/p\)</span>.</li>
+<li>The aggregated cache capacity (<span class="math inline">\(p \times \text{Cache}\)</span>) is large enough to fit the entire dataset in fast on-chip SRAM cache! Memory stall cycles vanish, yielding <span class="math inline">\(S(p) &gt; p\)</span>.</li>
+</ul></li>
+<li><strong>Exploratory Search Pruning</strong>:
+<ul>
+<li>In combinatorial or state-space searches, parallel threads explore different sub-trees. One thread may encounter a pruning solution early, eliminating massive sub-trees that the serial code would have systematically explored.</li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="14-efficiency-e-or-e_p">1.4 Efficiency (<span class="math inline">\(E\)</span> or <span class="math inline">\(E_p\)</span>)</h3>
+<p>Efficiency measures the fraction of time processors spend engaged in productive computation: <span class="math display">\[\mathbf{E(p) = \frac{S(p)}{p} = \frac{T_s}{p T_p}}\]</span></p>
+<ul>
+<li>Ideal linear speedup corresponds to <strong><span class="math inline">\(100\%\)</span> efficiency (<span class="math inline">\(E = 1.0\)</span>)</strong>.</li>
+<li>As the number of processors <span class="math inline">\(p\)</span> increases for a fixed problem size, efficiency monotonically declines toward zero (<span class="math inline">\(E \to 0\)</span>).</li>
+</ul>
+<hr/>
+<h3 id="15-total-parallel-overhead-t_o">1.5 Total Parallel Overhead (<span class="math inline">\(T_o\)</span>)</h3>
+<p>The total overhead <span class="math inline">\(T_o\)</span> represents the collective wasted time spent by all <span class="math inline">\(p\)</span> processors on non-serial activities (communication latency, idling, synchronization barriers, and redundant calculations): <span class="math display">\[\mathbf{T_o(W, p) = p T_p - T_s}\]</span> Rearranging for parallel execution time: <span class="math display">\[\mathbf{T_p = \frac{T_s + T_o(W, p)}{p}}\]</span> Substituting into the efficiency equation: <span class="math display">\[\mathbf{E = \frac{T_s}{p T_p} = \frac{T_s}{T_s + T_o(W, p)} = \frac{1}{1 + \frac{T_o(W, p)}{T_s}} = \frac{1}{1 + \frac{T_o(W, p)}{W}}}\]</span> And speedup: <span class="math display">\[\mathbf{S = \frac{p}{1 + \frac{T_o(W, p)}{W}}}\]</span></p>
+<hr/>
+<h2 id="2-benchmark-case-study-parallel-reduction-adding-n-numbers-on-p-processors">2. Benchmark Case Study: Parallel Reduction (Adding <span class="math inline">\(n\)</span> Numbers on <span class="math inline">\(p\)</span> Processors)</h2>
+<p>The lecture slides detail a fundamental benchmark: summing <span class="math inline">\(n\)</span> numbers distributed across <span class="math inline">\(p\)</span> processors (Slides 376–377).</p>
+<pre><code>    Processor Work:                  Binary Tree Reduction Across Processors:
+    P0: Adds n/p numbers locally      P0 ◄── P1   P2 ◄── P3   P4 ◄── P5   P6 ◄── P7  (Step 1)
+    P1: Adds n/p numbers locally       \    /      \    /      \    /      \    /
+    ...                                 P0   ◄────── P2         P4   ◄────── P6      (Step 2)
+    Pp-1: Adds n/p numbers locally        \            /          \            /
+                                           P0         ◄──────────── P4                   (Step 3)</code></pre>
+<h3 id="21-derivation-of-runtimes-and-overhead">2.1 Derivation of Runtimes and Overhead</h3>
+<ol type="1">
+<li><strong>Local Sequential Phase</strong>: Each processor adds <span class="math inline">\(n/p\)</span> local numbers in <span class="math inline">\(O(n/p)\)</span> time.</li>
+<li><strong>Global Reduction Phase</strong>: The <span class="math inline">\(p\)</span> partial sums are aggregated across a binary tree network of depth <span class="math inline">\(\log_2 p\)</span>. At each tree level, a communication and addition occur, taking <span class="math inline">\(2 \log_2 p\)</span> time.</li>
+<li><strong>Parallel Execution Time</strong>: <span class="math display">\[T_p = \frac{n}{p} + 2 \log_2 p\]</span></li>
+<li><strong>Total Overhead</strong>: <span class="math display">\[T_o = p T_p - T_s = p \left( \frac{n}{p} + 2 \log_2 p \right) - n = \mathbf{2 p \log_2 p}\]</span></li>
+</ol>
+<h3 id="22-analytical-efficiency-and-speedup-expressions">2.2 Analytical Efficiency and Speedup Expressions</h3>
+<p><span class="math display">\[E = \frac{n}{p T_p} = \frac{n}{p \left( \frac{n}{p} + 2 \log_2 p \right)} = \mathbf{\frac{1}{1 + \frac{2 p \log_2 p}{n}}}\]</span> <span class="math display">\[S = p E = \mathbf{\frac{p}{1 + \frac{2 p \log_2 p}{n}} = \frac{1}{\frac{1}{p} + \frac{2 \log_2 p}{n}}}\]</span></p>
+<h3 id="23-the-two-fundamental-observations-slide-377">2.3 The Two Fundamental Observations (Slide 377)</h3>
+<ol type="1">
+<li><strong>Processor Scaling at Fixed Problem Size (<span class="math inline">\(n = \text{const}, p \to \infty\)</span>)</strong>: <span class="math display">\[\lim_{p \to \infty} \frac{2 p \log_2 p}{n} = \infty \implies E \to 0, \quad S \to \frac{n}{2 \log_2 p} \quad (\text{Speedup flattens out!})\]</span> Adding processors indefinitely to a fixed-size problem causes communication overhead to dominate completely.</li>
+<li><strong>Problem Size Scaling at Fixed Processor Count (<span class="math inline">\(p = \text{const}, n \to \infty\)</span>)</strong>: <span class="math display">\[\lim_{n \to \infty} \frac{2 p \log_2 p}{n} = 0 \implies \mathbf{E \to 1, \quad S \to p}\]</span> As problem size increases, the computational volume (<span class="math inline">\(O(n/p)\)</span>) overwhelms the communication overhead (<span class="math inline">\(O(\log p)\)</span>), yielding near-perfect linear speedup!</li>
+</ol>
+<hr/>
+<h2 id="3-strong-scaling-vs-weak-scaling">3. Strong Scaling vs. Weak Scaling</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Strong Scaling (Amdahl's Metric)</th>
+<th style="text-align: left;">Weak Scaling (Gustafson's Metric)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Problem Size (<span class="math inline">\(W\)</span>)</strong></td>
+<td style="text-align: left;"><strong>Fixed</strong> as <span class="math inline">\(p\)</span> increases</td>
+<td style="text-align: left;"><strong>Grows proportionally</strong> with <span class="math inline">\(p\)</span> (<span class="math inline">\(W/p = \text{const}\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Primary Goal</strong></td>
+<td style="text-align: left;">Minimize time to solution for a fixed problem</td>
+<td style="text-align: left;">Maximize simulation resolution in fixed time</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Typical Behavior</strong></td>
+<td style="text-align: left;">Efficiency declines rapidly beyond a critical <span class="math inline">\(p\)</span></td>
+<td style="text-align: left;">Efficiency remains near constant up to massive <span class="math inline">\(p\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scaling Limit</strong></td>
+<td style="text-align: left;">Dictated by Amdahl's serial fraction <span class="math inline">\(f\)</span></td>
+<td style="text-align: left;">Dictated by memory bandwidth and network latency</td>
+</tr>
+</tbody>
+</table>
+<pre><code>    Speedup
+       ▲
+       │                                     Weak Scaling (S ~ p)
+       │                                   .´
+       │                                 .´
+       │                               .´
+       │                             .´
+       │                           .´  Strong Scaling (Saturation curve)
+       │                      ...─´
+       │               .─-─´´
+       │        .─-─´´
+       │  .─-─´´
+       └────────────────────────────────────────► Number of Processors (p)</code></pre>
+<hr/>
+<h2 id="4-the-isoefficiency-metric--function">4. The Isoefficiency Metric &amp; Function</h2>
+<h3 id="41-concept-and-purpose">4.1 Concept and Purpose</h3>
+<p>Because efficiency drops as <span class="math inline">\(p\)</span> increases for a fixed <span class="math inline">\(W\)</span>, and efficiency rises as <span class="math inline">\(W\)</span> increases for a fixed <span class="math inline">\(p\)</span>, a parallel system can maintain a <strong>constant target efficiency <span class="math inline">\(E\)</span></strong> if the problem size <span class="math inline">\(W\)</span> is scaled upwards simultaneously with <span class="math inline">\(p\)</span>. The <strong>Isoefficiency Function</strong> <span class="math inline">\(W = f(p)\)</span> defines the exact rate at which problem size <span class="math inline">\(W\)</span> must grow as a function of <span class="math inline">\(p\)</span> to keep efficiency <span class="math inline">\(E\)</span> strictly constant.</p>
+<h3 id="42-complete-mathematical-derivation-slides-378380">4.2 Complete Mathematical Derivation (Slides 378–380)</h3>
+<p>From the fundamental relation: <span class="math display">\[E = \frac{1}{1 + \frac{T_o(W, p)}{W}}\]</span> Rearranging: <span class="math display">\[1 + \frac{T_o(W, p)}{W} = \frac{1}{E} \implies \frac{T_o(W, p)}{W} = \frac{1 - E}{E}\]</span> Inverting: <span class="math display">\[\frac{W}{T_o(W, p)} = \frac{E}{1 - E}\]</span> Define the constant <span class="math inline">\(K = \frac{E}{1 - E}\)</span>: <span class="math display">\[\mathbf{W = K \cdot T_o(W, p)}\]</span></p>
+<h3 id="43-isoefficiency-example-adding-n-numbers">4.3 Isoefficiency Example: Adding <span class="math inline">\(n\)</span> Numbers</h3>
+<p>For our reduction example, <span class="math inline">\(T_o = 2 p \log_2 p\)</span>: <span class="math display">\[W = K (2 p \log_2 p) \implies \mathbf{W = O(p \log p)}\]</span></p>
+<ul>
+<li><strong>Interpretation</strong>: To maintain an efficiency of <span class="math inline">\(E = 0.80\)</span> while doubling the number of processors from <span class="math inline">\(p\)</span> to <span class="math inline">\(2p\)</span>, the problem size <span class="math inline">\(W\)</span> only needs to increase by slightly more than double (<span class="math inline">\(O(p \log p)\)</span>).</li>
+<li><strong>Scalability Ranking</strong>:
+<ul>
+<li><span class="math inline">\(W = O(p)\)</span>: Perfectly scalable.</li>
+<li><span class="math inline">\(W = O(p \log p)\)</span>: <strong>Highly scalable</strong> (e.g., FFT, Reduction).</li>
+<li><span class="math inline">\(W = O(p^{1.5})\)</span>: Moderately scalable (e.g., Cannon’s Matrix Multiply).</li>
+<li><span class="math inline">\(W = O(p^2)\)</span> or higher: <strong>Poorly scalable</strong> (requires massive data explosion to maintain efficiency).</li>
+</ul></li>
+</ul>
+<h3 id="44-worked-isoefficiency-problem-from-lecture-slide-380">4.4 Worked Isoefficiency Problem from Lecture (Slide 380)</h3>
+<blockquote>
+<p><strong>Exam Problem (Slide 380)</strong>: Consider a hypothetical parallel program running on a given architecture with <span class="math inline">\(p\)</span> processors with an overhead function: <span class="math display">\[T_o = p^{3/4} W^{3/4}\]</span></p>
+<ol type="1">
+<li>Determine the isoefficiency function relating <span class="math inline">\(W\)</span> and <span class="math inline">\(p\)</span>.</li>
+<li>If the problem size increases by a factor of <span class="math inline">\(m\)</span>, by what factor must the number of processors be increased to maintain constant efficiency?</li>
+</ol>
+</blockquote>
+<h4 id="analytical-solution">Analytical Solution</h4>
+<ol type="1">
+<li>Using the isoefficiency relationship <span class="math inline">\(W = k T_o(W, p)\)</span> where <span class="math inline">\(k = \frac{E}{1 - E}\)</span>: <span class="math display">\[W = k \left( p^{3/4} W^{3/4} \right)\]</span> Dividing both sides by <span class="math inline">\(W^{3/4}\)</span>: <span class="math display">\[W^{1/4} = k p^{3/4}\]</span> Raising both sides to the 4th power: <span class="math display">\[\mathbf{W = k^4 p^3 \implies W = O(p^3)}\]</span></li>
+<li>Inverting to express processors as a function of workload: <span class="math display">\[p = \left( \frac{W}{k^4} \right)^{1/3} \propto W^{1/3}\]</span> Therefore, if the problem workload increases by a factor of <span class="math inline">\(m\)</span> (<span class="math inline">\(W_{\text{new}} = m W\)</span>): <span class="math display">\[p_{\text{new}} \propto (m W)^{1/3} = m^{1/3} W^{1/3} = \mathbf{m^{1/3} p}\]</span> <strong>Conclusion</strong>: To maintain constant efficiency, the number of processors must be increased by a factor of <strong><span class="math inline">\(m^{1/3}\)</span></strong>.</li>
+</ol>
+<hr/>
+<h2 id="5-amdahls-law">5. Amdahl's Law</h2>
+<p>Gene Amdahl (1967) established the theoretical upper bound on speedup for fixed-size workloads.</p>
+<h3 id="51-step-by-step-mathematical-derivation-slides-381382">5.1 Step-by-Step Mathematical Derivation (Slides 381–382)</h3>
+<p>Let a serial program on data size <span class="math inline">\(n\)</span> run in time <span class="math inline">\(T_s\)</span>, decomposed into two parts:</p>
+<ol type="1">
+<li><strong><span class="math inline">\(\Phi_s(n)\)</span></strong>: The inherently sequential component that cannot be parallelized (thread joining, barrier synchronization, sequential I/O).</li>
+<li><strong><span class="math inline">\(\Psi(n)\)</span></strong>: The perfectly parallelizable component. <span class="math display">\[T_s = \Phi_s(n) + \Psi(n)\]</span></li>
+</ol>
+<p>When executed on <span class="math inline">\(p\)</span> processors with overhead <span class="math inline">\(T_o(n, p)\)</span>: <span class="math display">\[T_p = \Phi_s(n) + \frac{\Psi(n)}{p} + T_o(n, p)\]</span> The actual parallel speedup is: <span class="math display">\[S = \frac{T_s}{T_p} = \frac{\Phi_s(n) + \Psi(n)}{\Phi_s(n) + \frac{\Psi(n)}{p} + T_o(n, p)}\]</span></p>
+<p>Since overhead <span class="math inline">\(T_o(n, p) \ge 0\)</span>, the upper bound on speedup is: <span class="math display">\[S \le \frac{\Phi_s(n) + \Psi(n)}{\Phi_s(n) + \frac{\Psi(n)}{p}}\]</span></p>
+<p>Define the fraction of the serial algorithm that cannot be parallelized as <span class="math inline">\(f\)</span> (Slide 382): <span class="math display">\[f = \frac{\Phi_s(n)}{\Phi_s(n) + \Psi(n)} \implies \Phi_s(n) + \Psi(n) = \frac{\Phi_s(n)}{f}\]</span> From which: <span class="math display">\[\frac{\Psi(n)}{\Phi_s(n)} = \frac{1}{f} - 1 \implies \Psi(n) = \Phi_s(n) \left(\frac{1}{f} - 1\right)\]</span></p>
+<p>Substituting into the speedup bound: <span class="math display">\[S \le \frac{\frac{\Phi_s(n)}{f}}{\Phi_s(n) + \frac{\Phi_s(n) \left( \frac{1}{f} - 1 \right)}{p}} = \frac{\frac{1}{f}}{1 + \frac{1 - f}{f p}} = \frac{1}{f \left( 1 + \frac{1 - f}{f p} \right)} = \mathbf{\frac{1}{f + \frac{1 - f}{p}}}\]</span></p>
+<p><span class="math display">\[\mathbf{S(p) \le \frac{1}{f + \frac{1 - f}{p}}}\]</span></p>
+<h3 id="52-the-asymptotic-speedup-limit">5.2 The Asymptotic Speedup Limit</h3>
+<p>Taking the mathematical limit as the number of processors approaches infinity (<span class="math inline">\(p \to \infty\)</span>): <span class="math display">\[\mathbf{S_{\max} = \lim_{p \to \infty} S(p) = \frac{1}{f + 0} = \frac{1}{f}}\]</span></p>
+<h4 id="concrete-numerical-examples">Concrete Numerical Examples</h4>
+<ul>
+<li>If <strong><span class="math inline">\(5\%\)</span> of a code is sequential</strong> (<span class="math inline">\(f = 0.05\)</span>): <span class="math display">\[S_{\max} = \frac{1}{0.05} = \mathbf{20\times}\]</span> Even on a supercomputer with <span class="math inline">\(1,000,000\)</span> cores, the maximum theoretical speedup can <strong>never exceed 20</strong>!</li>
+<li>If <strong><span class="math inline">\(1\%\)</span> of a code is sequential</strong> (<span class="math inline">\(f = 0.01\)</span>): <span class="math display">\[S_{\max} = \frac{1}{0.01} = \mathbf{100\times}\]</span></li>
+</ul>
+<h3 id="53-limiting-cases-analyzed-in-lecture-slide-383">5.3 Limiting Cases Analyzed in Lecture (Slide 383)</h3>
+<ol type="1">
+<li><strong>Strictly Sequential Algorithm (<span class="math inline">\(f \to 1\)</span>)</strong>: <span class="math display">\[S \le 1\]</span> Because real systems incur overhead (<span class="math inline">\(T_o &gt; 0\)</span>), the parallel execution time is strictly worse than running on a single sequential processor (<span class="math inline">\(S &lt; 1\)</span>)!</li>
+<li><strong>Negligible Sequential Component (<span class="math inline">\(f \to 0\)</span>)</strong>: <span class="math display">\[S \le p\]</span> Speedup is bounded strictly by communication overhead and hardware limits.</li>
+</ol>
+<hr/>
+<h2 id="6-gustafson-barsiss-law-scaled-speedup">6. Gustafson-Barsis's Law (Scaled Speedup)</h2>
+<p>John Gustafson (1988) pointed out the fundamental flaw in Amdahl’s premise:</p>
+<ul>
+<li>Amdahl assumed that problem size <span class="math inline">\(W\)</span> remains fixed as we acquire larger supercomputers.</li>
+<li>In reality, scientists use more powerful supercomputers to solve <strong>larger, higher-resolution problems</strong>, not to run tiny problems in milliseconds!</li>
+</ul>
+<h3 id="61-derivation-of-scaled-speedup">6.1 Derivation of Scaled Speedup</h3>
+<p>Let <span class="math inline">\(s\)</span> be the fraction of time spent executing the sequential part on the <strong>parallel machine</strong> on a scaled problem: <span class="math display">\[T_p = s + (1 - s) = 1 \quad (\text{normalized parallel time})\]</span> To run this scaled problem sequentially on a single core, the sequential fraction requires time <span class="math inline">\(s\)</span>, while the parallel fraction requires <span class="math inline">\(p \times (1 - s)\)</span>: <span class="math display">\[T_s = s + p (1 - s)\]</span> The <strong>Scaled Speedup</strong> is: <span class="math display">\[S_{\text{scaled}}(p) = \frac{T_s}{T_p} = \frac{s + p (1 - s)}{1}\]</span> <span class="math display">\[\mathbf{S_{\text{scaled}}(p) = p - (p - 1) s}\]</span></p>
+<h4 id="comparison-example">Comparison Example</h4>
+<p>Suppose <span class="math inline">\(s = 0.05\)</span> (<span class="math inline">\(5\%\)</span> serial) on <span class="math inline">\(p = 1024\)</span> processors:</p>
+<ul>
+<li><strong>Amdahl’s Law (Fixed Workload)</strong>: <span class="math display">\[S \le \frac{1}{0.05 + \frac{0.95}{1024}} \approx \frac{1}{0.05 + 0.00093} \approx \mathbf{19.64\times}\]</span></li>
+<li><strong>Gustafson’s Law (Scaled Workload)</strong>: <span class="math display">\[S_{\text{scaled}} = 1024 - (1023)(0.05) = 1024 - 51.15 = \mathbf{972.85\times}\]</span> <strong>Core Lesson</strong>: Parallelism is viable and massively scalable when problem sizes are scaled to match the compute capacity of the machine!</li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-15.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Parallel Program Design, Decomposition & Foster's Methodology</span>
+      </a>
+    
+      
+      <a href="chapter-17.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Parallel Numerical Linear Algebra & Memory Management</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

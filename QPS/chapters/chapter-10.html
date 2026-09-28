@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Krylov Subspace Methods II: Conjugate Gradient (CG) | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-10" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-09.html" class="btn-nav-control" title="Previous: Krylov Subspace Methods I: Arnoldi, FOM & Lanczos">← Prev</a>
+      <a href="chapter-11.html" class="btn-nav-control" title="Next: Krylov Subspace Methods III: GMRES, BiCG, CGS & BiCGSTAB">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 10</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Krylov Subspace Methods II: Conjugate Gradient (CG)</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-10" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-10-krylov-subspace-methods-ii-the-conjugate-gradient-method">Chapter 10: Krylov Subspace Methods II: The Conjugate Gradient Method</h1>
+<hr/>
+<h2 id="1-introduction-and-foundations">1. Introduction and Foundations</h2>
+<p>The <strong>Conjugate Gradient (CG) Method</strong>, introduced by Magnus Hestenes and Eduard Stiefel (1952), is regarded as the premier iterative algorithm for solving large, sparse <strong>Symmetric Positive Definite (SPD)</strong> linear systems: <span class="math display">\[Ax = b\]</span> where <span class="math inline">\(A = A^T \in \mathbb{R}^{n \times n}\)</span> and <span class="math inline">\(x^T A x &gt; 0\)</span> for all <span class="math inline">\(x \ne \mathbf{0}\)</span>.</p>
+<h3 id="11-motivation-eliminating-the-zigzagging-of-steepest-descent">1.1 Motivation: Eliminating the Zigzagging of Steepest Descent</h3>
+<p>Recall from Chapter 08 that the Method of Steepest Descent minimizes the quadratic functional: <span class="math display">\[J(x) = \frac{1}{2} x^T A x - x^T b\]</span> by searching along the negative gradient <span class="math inline">\(r_k = b - Ax_k\)</span>. Because successive search directions are strictly orthogonal in the Euclidean metric (<span class="math inline">\(r_{k+1} \perp r_k\)</span>), the search trajectory zigzags across narrow, elongated valleys when <span class="math inline">\(\kappa_2(A) \gg 1\)</span>. <strong>The Breakthrough of Conjugate Gradient</strong>: Instead of making each search direction orthogonal to the previous one in the standard Euclidean inner product, CG constructs search directions that are <strong>orthogonal in the inner product defined by matrix <span class="math inline">\(A\)</span> (the energy inner product)</strong>!</p>
+<hr/>
+<h2 id="2-theory-of-a-conjugate-directions">2. Theory of <span class="math inline">\(A\)</span>-Conjugate Directions</h2>
+<h3 id="21-definition-of-a-conjugacy-a-orthogonality">2.1 Definition of <span class="math inline">\(A\)</span>-Conjugacy (<span class="math inline">\(A\)</span>-Orthogonality)</h3>
+<p>Two non-zero vectors <span class="math inline">\(u, v \in \mathbb{R}^n\)</span> are said to be <strong><span class="math inline">\(A\)</span>-conjugate</strong> (or <strong><span class="math inline">\(A\)</span>-orthogonal</strong>) if: <span class="math display">\[\mathbf{\langle u, v \rangle_A = u^T A v = 0}\]</span></p>
+<p>A set of non-zero vectors <span class="math inline">\(\{p_0, p_1, \dots, p_{k-1}\}\)</span> is mutually <span class="math inline">\(A\)</span>-conjugate if: <span class="math display">\[p_i^T A p_j = 0 \quad \text{for all } i \ne j\]</span></p>
+<h3 id="22-theorem-linear-independence-of-a-conjugate-vectors">2.2 Theorem: Linear Independence of <span class="math inline">\(A\)</span>-Conjugate Vectors</h3>
+<blockquote>
+<p><strong>Theorem</strong>: If <span class="math inline">\(A\)</span> is Symmetric Positive Definite and the non-zero vectors <span class="math inline">\(\{p_0, p_1, \dots, p_{k-1}\}\)</span> are mutually <span class="math inline">\(A\)</span>-conjugate, then they are <strong>linearly independent</strong>.</p>
+</blockquote>
+<h4 id="ch10-mathematical-proof">Mathematical Proof</h4>
+<p>Suppose there exist scalars <span class="math inline">\(c_0, c_1, \dots, c_{k-1}\)</span> such that: <span class="math display">\[\sum_{j=0}^{k-1} c_j p_j = \mathbf{0}\]</span> Multiply from the left by <span class="math inline">\(p_i^T A\)</span> (for any fixed <span class="math inline">\(i \in \{0, \dots, k-1\}\)</span>): <span class="math display">\[p_i^T A \left( \sum_{j=0}^{k-1} c_j p_j \right) = \sum_{j=0}^{k-1} c_j (p_i^T A p_j) = 0\]</span> Due to mutual <span class="math inline">\(A\)</span>-conjugacy, <span class="math inline">\(p_i^T A p_j = 0\)</span> for all <span class="math inline">\(j \ne i\)</span>. The summation collapses to a single term: <span class="math display">\[c_i (p_i^T A p_i) = 0\]</span> Since <span class="math inline">\(A\)</span> is positive definite and <span class="math inline">\(p_i \ne \mathbf{0}\)</span>, the quadratic form <span class="math inline">\(p_i^T A p_i &gt; 0\)</span>. Dividing by <span class="math inline">\(p_i^T A p_i\)</span> gives: <span class="math display">\[c_i = 0\]</span> Since this holds for every <span class="math inline">\(i \in \{0, \dots, k-1\}\)</span>, all coefficients must be identically zero. Thus, <span class="math inline">\(\{p_0, \dots, p_{k-1}\}\)</span> are linearly independent. <span class="math inline">\(\blacksquare\)</span></p>
+<h3 id="23-optimization-along-conjugate-directions">2.3 Optimization along Conjugate Directions</h3>
+<p>If we minimize <span class="math inline">\(J(x)\)</span> successively along <span class="math inline">\(A\)</span>-conjugate directions <span class="math inline">\(p_0, p_1, \dots\)</span>:</p>
+<ul>
+<li>The minimization along direction <span class="math inline">\(p_k\)</span> <strong>does not undo or degrade</strong> the minimization achieved along previous directions <span class="math inline">\(p_0, \dots, p_{k-1}\)</span>!</li>
+<li>After <span class="math inline">\(m\)</span> steps, <span class="math inline">\(x_m\)</span> is the <strong>exact minimizer of <span class="math inline">\(J(x)\)</span> over the entire <span class="math inline">\(m\)</span>-dimensional subspace</strong> spanned by <span class="math inline">\(\{p_0, \dots, p_{m-1}\}\)</span>.</li>
+</ul>
+<hr/>
+<h2 id="3-complete-derivation-of-the-conjugate-gradient-algorithm">3. Complete Derivation of the Conjugate Gradient Algorithm</h2>
+<p>The algorithm proceeds by generating sequences of iterates <span class="math inline">\(x_j\)</span>, residuals <span class="math inline">\(r_j = b - A x_j\)</span>, and conjugate search directions <span class="math inline">\(p_j\)</span>.</p>
+<h3 id="31-update-equations">3.1 Update Equations</h3>
+<ol type="1">
+<li><strong>Solution Update</strong>: <span class="math display">\[x_{j+1} = x_j + \alpha_j p_j \quad \text{--- (1)}\]</span></li>
+<li><strong>Residual Update</strong>: Multiplying Eq. (1) by <span class="math inline">\(A\)</span> and subtracting from <span class="math inline">\(b\)</span>: <span class="math display">\[b - A x_{j+1} = b - A x_j - \alpha_j A p_j\]</span> <span class="math display">\[\mathbf{r_{j+1} = r_j - \alpha_j A p_j \quad \text{--- (2)}}\]</span></li>
+<li><strong>Search Direction Update</strong>: The new search direction <span class="math inline">\(p_{j+1}\)</span> is formed by taking the new steepest descent residual <span class="math inline">\(r_{j+1}\)</span> and adding a scaled multiple of the previous direction: <span class="math display">\[\mathbf{p_{j+1} = r_{j+1} + \beta_j p_j \quad \text{--- (3)}}\]</span> with <span class="math inline">\(p_0 = r_0\)</span>.</li>
+</ol>
+<hr/>
+<h3 id="32-derivation-of-the-step-length-alpha_j">3.2 Derivation of the Step Length <span class="math inline">\(\alpha_j\)</span></h3>
+<p>We demand that <span class="math inline">\(x_{j+1}\)</span> minimizes <span class="math inline">\(J(x_j + \alpha p_j)\)</span> along direction <span class="math inline">\(p_j\)</span>. From exact line search, the directional derivative along <span class="math inline">\(p_j\)</span> must vanish: <span class="math display">\[\nabla J(x_{j+1}) \cdot p_j = 0 \iff -r_{j+1}^T p_j = 0 \implies \mathbf{p_j^T r_{j+1} = 0}\]</span> Substitute Eq. (2) into this condition: <span class="math display">\[p_j^T (r_j - \alpha_j A p_j) = 0 \implies p_j^T r_j - \alpha_j p_j^T A p_j = 0\]</span> <span class="math display">\[\alpha_j = \frac{p_j^T r_j}{p_j^T A p_j}\]</span> Now, using Eq. (3) at step <span class="math inline">\(j-1\)</span>: <span class="math inline">\(p_j = r_j + \beta_{j-1} p_{j-1}\)</span>. Multiply by <span class="math inline">\(r_j^T\)</span>: <span class="math display">\[p_j^T r_j = (r_j + \beta_{j-1} p_{j-1})^T r_j = r_j^T r_j + \beta_{j-1} (p_{j-1}^T r_j)\]</span> Because <span class="math inline">\(p_{j-1}^T r_j = 0\)</span> from the previous line search, the second term vanishes! <span class="math display">\[p_j^T r_j = r_j^T r_j\]</span> Therefore: <span class="math display">\[\mathbf{\alpha_j = \frac{r_j^T r_j}{p_j^T A p_j}}\]</span></p>
+<hr/>
+<h3 id="33-derivation-of-the-conjugacy-coefficient-beta_j">3.3 Derivation of the Conjugacy Coefficient <span class="math inline">\(\beta_j\)</span></h3>
+<p>We enforce that the new direction <span class="math inline">\(p_{j+1}\)</span> is <span class="math inline">\(A\)</span>-conjugate to the previous direction <span class="math inline">\(p_j\)</span>: <span class="math display">\[\mathbf{p_j^T A p_{j+1} = 0}\]</span> Substitute Eq. (3) for <span class="math inline">\(p_{j+1}\)</span>: <span class="math display">\[p_j^T A (r_{j+1} + \beta_j p_j) = 0\]</span> <span class="math display">\[p_j^T A r_{j+1} + \beta_j p_j^T A p_j = 0\]</span> Solving for <span class="math inline">\(\beta_j\)</span>: <span class="math display">\[\beta_j = -\frac{p_j^T A r_{j+1}}{p_j^T A p_j} = -\frac{r_{j+1}^T A p_j}{p_j^T A p_j} \quad (\text{since } A = A^T) \quad \text{--- (4)}\]</span></p>
+<p>From the residual update Eq. (2): <span class="math display">\[r_{j+1} = r_j - \alpha_j A p_j \implies A p_j = \frac{r_j - r_{j+1}}{\alpha_j}\]</span> Substitute <span class="math inline">\(A p_j\)</span> into the numerator of Eq. (4): <span class="math display">\[r_{j+1}^T A p_j = r_{j+1}^T \left( \frac{r_j - r_{j+1}}{\alpha_j} \right) = \frac{r_{j+1}^T r_j - r_{j+1}^T r_{j+1}}{\alpha_j}\]</span> Because <span class="math inline">\(r_{j+1}\)</span> is orthogonal to <span class="math inline">\(r_j\)</span> (<span class="math inline">\(r_{j+1}^T r_j = 0\)</span>): <span class="math display">\[r_{j+1}^T A p_j = -\frac{r_{j+1}^T r_{j+1}}{\alpha_j}\]</span> Substitute this back into Eq. (4): <span class="math display">\[\beta_j = -\frac{-\frac{r_{j+1}^T r_{j+1}}{\alpha_j}}{p_j^T A p_j} = \frac{r_{j+1}^T r_{j+1}}{\alpha_j (p_j^T A p_j)}\]</span> Now substitute <span class="math inline">\(\alpha_j = \frac{r_j^T r_j}{p_j^T A p_j}\)</span>: <span class="math display">\[\beta_j = \frac{r_{j+1}^T r_{j+1}}{\left( \frac{r_j^T r_j}{p_j^T A p_j} \right) (p_j^T A p_j)} = \mathbf{\frac{r_{j+1}^T r_{j+1}}{r_j^T r_j}}\]</span> This is the famous <strong>Fletcher-Reeves Formula</strong>: <span class="math display">\[\mathbf{\beta_j = \frac{\|r_{j+1}\|_2^2}{\|r_j\|_2^2}}\]</span></p>
+<hr/>
+<h2 id="4-fundamental-theorems-and-invariances-of-cg">4. Fundamental Theorems and Invariances of CG</h2>
+<p>At each iteration <span class="math inline">\(k\)</span> of the Conjugate Gradient algorithm:</p>
+<ol type="1">
+<li><strong>Orthogonality of Residuals</strong>: <span class="math display">\[\mathbf{r_i^T r_j = 0 \quad \text{for all } i \ne j}\]</span></li>
+<li><strong>Mutual <span class="math inline">\(A\)</span>-Conjugacy of Directions</strong>: <span class="math display">\[\mathbf{p_i^T A p_j = 0 \quad \text{for all } i \ne j}\]</span></li>
+<li><strong>Subspace Equivalence</strong>: <span class="math display">\[\mathbf{\text{span}\{p_0, p_1, \dots, p_{k-1}\} = \text{span}\{r_0, r_1, \dots, r_{k-1}\} = \mathcal{K}_k(A, r_0)}\]</span></li>
+<li><strong>Energy Norm Minimization (Galerkin Optimality)</strong>: The iterate <span class="math inline">\(x_k\)</span> is the unique vector in the affine subspace <span class="math inline">\(x_0 + \mathcal{K}_k(A, r_0)\)</span> that minimizes the error in the <span class="math inline">\(A\)</span>-norm: <span class="math display">\[\mathbf{\|x_k - x^*\|_A = \min_{x \in x_0 + \mathcal{K}_k(A, r_0)} \|x - x^*\|_A}\]</span> where <span class="math inline">\(\|e\|_A = \sqrt{e^T A e} = \sqrt{(x - x^*)^T A (x - x^*)}\)</span>.</li>
+</ol>
+<hr/>
+<h2 id="5-the-complete-conjugate-gradient-algorithm">5. The Complete Conjugate Gradient Algorithm</h2>
+<pre><code>Algorithm: Conjugate Gradient (CG) Method
+Input: Matrix A (SPD), vector b, initial guess x_0, tolerance ε
+Output: Solution vector x
+
+1. Initialization:
+   r_0 = b - A * x_0
+   p_0 = r_0
+   ρ_0 = r_0^T * r_0
+   k = 0
+
+2. While (sqrt(ρ_k) &gt; ε) do:
+       w_k = A * p_k                      // ONLY ONE SpMV per iteration!
+       gamma = p_k^T * w_k                // Dot product
+       
+       α_k = ρ_k / gamma                  // Step size
+       x_{k+1} = x_k + α_k * p_k          // AXPY update
+       r_{k+1} = r_k - α_k * w_k          // AXPY residual update
+       
+       ρ_{k+1} = r_{k+1}^T * r_{k+1}      // Dot product
+       β_k = ρ_{k+1} / ρ_k                // Fletcher-Reeves ratio
+       p_{k+1} = r_{k+1} + β_k * p_k      // AXPY search direction update
+       
+       k = k + 1
+   end while</code></pre>
+<h3 id="51-per-iteration-computational-and-storage-breakdown-slide-221">5.1 Per-Iteration Computational and Storage Breakdown (Slide 221)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Operation</th>
+<th style="text-align: left;">Expression</th>
+<th style="text-align: left;">FLOP Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Sparse Matrix-Vector Multiply</strong></td>
+<td style="text-align: left;"><span class="math inline">\(w = A p\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(2 N_{nz}\)</span> FLOPs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Vector Dot Products (2)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(p^T w\)</span> and <span class="math inline">\(r_{new}^T r_{new}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(4n\)</span> FLOPs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Vector AXPY Updates (3)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(x \leftarrow x + \alpha p\)</span>, <span class="math inline">\(r \leftarrow r - \alpha w\)</span>, <span class="math inline">\(p \leftarrow r + \beta p\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(6n\)</span> FLOPs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Total Work per Step</strong></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong><span class="math inline">\(\mathbf{2 N_{nz} + 10n}\)</span> FLOPs</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Vector Storage Footprint</strong></td>
+<td style="text-align: left;">Arrays: <code>x</code>, <code>r</code>, <code>p</code>, <code>w</code></td>
+<td style="text-align: left;"><strong>Only <span class="math inline">\(4n\)</span> floating-point words!</strong></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="6-convergence-analysis--chebyshev-error-bounds">6. Convergence Analysis &amp; Chebyshev Error Bounds</h2>
+<h3 id="61-exact-arithmetic-termination">6.1 Exact Arithmetic Termination</h3>
+<p>In theoretical exact arithmetic:</p>
+<ul>
+<li>The search directions <span class="math inline">\(p_0, p_1, \dots, p_{n-1}\)</span> form an <span class="math inline">\(A\)</span>-orthogonal basis of <span class="math inline">\(\mathbb{R}^n\)</span>.</li>
+<li>Therefore, the algorithm must terminate with <span class="math inline">\(r_m = \mathbf{0}\)</span> in <strong>at most <span class="math inline">\(m \le n\)</span> iterations</strong>!</li>
+<li>In practice, round-off errors destroy finite termination; CG behaves as a truly infinite iterative method governed by the eigenvalue distribution.</li>
+</ul>
+<h3 id="62-the-master-chebyshev-convergence-theorem-slide-222">6.2 The Master Chebyshev Convergence Theorem (Slide 222)</h3>
+<blockquote>
+<p><strong>Theorem</strong>: Let <span class="math inline">\(x_m\)</span> be the <span class="math inline">\(m\)</span>-th iterate of the Conjugate Gradient method applied to an SPD matrix <span class="math inline">\(A\)</span>, and let <span class="math inline">\(x^*\)</span> be the exact solution. Let <span class="math inline">\(\kappa = \lambda_{\max}/\lambda_{\min}\)</span> be the spectral condition number. Then: <span class="math display">\[\mathbf{\|x_m - x^*\|_A \le \frac{\|x_0 - x^*\|_A}{C_m(1 + 2\eta)} \le 2 \left( \frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1} \right)^m \|x_0 - x^*\|_A}\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(\eta = \frac{\lambda_{\min}}{\lambda_{\max} - \lambda_{\min}}\)</span>.</li>
+<li><span class="math inline">\(C_m(t)\)</span> is the <strong>Chebyshev polynomial of the first kind</strong> of degree <span class="math inline">\(m\)</span>: <span class="math display">\[C_m(t) = \frac{1}{2} \left[ \left( t + \sqrt{t^2 - 1} \right)^m + \left( t - \sqrt{t^2 - 1} \right)^m \right]\]</span></li>
+</ul>
+</blockquote>
+<h3 id="63-decisive-comparison-steepest-descent-vs-conjugate-gradient">6.3 Decisive Comparison: Steepest Descent vs. Conjugate Gradient</h3>
+<p>The asymptotic error reduction factors per iteration are: <span class="math display">\[\text{Steepest Descent}: \quad \rho_{SD} = \frac{\kappa - 1}{\kappa + 1}\]</span> <span class="math display">\[\text{Conjugate Gradient}: \quad \mathbf{\rho_{CG} = \frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1}}\]</span></p>
+<h4 id="quantitative-benchmark-kappa--100">Quantitative Benchmark (<span class="math inline">\(\kappa = 100\)</span>)</h4>
+<ul>
+<li><strong>Steepest Descent</strong>: <span class="math display">\[\rho_{SD} = \frac{100 - 1}{100 + 1} = \frac{99}{101} \approx 0.9802\]</span> Iterations to reduce error by <span class="math inline">\(10^{-6}\)</span>: <span class="math display">\[k \ge \frac{\ln(10^{-6})}{\ln(0.9802)} \approx \frac{-13.8155}{-0.0200} \approx \mathbf{691\text{ iterations}}\]</span></li>
+<li><strong>Conjugate Gradient</strong>: <span class="math display">\[\sqrt{\kappa} = \sqrt{100} = 10 \implies \rho_{CG} = \frac{10 - 1}{10 + 1} = \frac{9}{11} \approx 0.8182\]</span> Iterations to reduce error by <span class="math inline">\(10^{-6}\)</span>: <span class="math display">\[k \ge \frac{\ln(10^{-6})}{\ln(0.8182)} \approx \frac{-13.8155}{-0.2007} \approx \mathbf{69\text{ iterations}}\]</span></li>
+<li><strong>Result</strong>: Conjugate Gradient converges <strong><span class="math inline">\(10\times\)</span> faster</strong>! For <span class="math inline">\(\kappa = 10,000\)</span>, CG is <strong><span class="math inline">\(100\times\)</span> faster</strong>!</li>
+</ul>
+<h3 id="64-superlinear-convergence-and-clustered-eigenvalues">6.4 Superlinear Convergence and Clustered Eigenvalues</h3>
+<p>If the eigenvalues of <span class="math inline">\(A\)</span> are clustered into <span class="math inline">\(p\)</span> tight clusters (with a few outliers), CG eliminates the outlying eigenvalues within the first few iterations. Once the outliers are eliminated, CG converges at a rate governed by the clustered condition number, exhibiting <strong>superlinear convergence</strong> (the error decreases faster than any fixed geometric factor)!</p>
+<h3 id="65-comprehensive-empirical-multi-solver-benchmark-slide-221">6.5 Comprehensive Empirical Multi-Solver Benchmark (Slide 221)</h3>
+<p>To demonstrate the dramatic supremacy of the Conjugate Gradient method over classical stationary and gradient algorithms on discretized 2D elliptic PDEs, the course presents the following benchmark across mesh sizes <span class="math inline">\(N = 16\)</span> to <span class="math inline">\(N = 256\)</span> to reach convergence tolerances <span class="math inline">\(\epsilon \approx 10^{-10}\)</span> to <span class="math inline">\(10^{-11}\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Solver Method</th>
+<th style="text-align: left;"><span class="math inline">\(N = 16\)</span> Iter (Residual)</th>
+<th style="text-align: left;"><span class="math inline">\(N = 32\)</span> Iter (Residual)</th>
+<th style="text-align: left;"><span class="math inline">\(N = 64\)</span> Iter (Residual)</th>
+<th style="text-align: left;"><span class="math inline">\(N = 128\)</span> Iter (Residual)</th>
+<th style="text-align: left;"><span class="math inline">\(N = 256\)</span> Iter (Residual)</th>
+<th style="text-align: left;">Dense FLOPs / Iter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Jacobi (<code>jac</code>)</strong></td>
+<td style="text-align: left;">1,253 (<span class="math inline">\(9.89 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">4,446 (<span class="math inline">\(9.98 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">16,106 (<span class="math inline">\(9.99 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">58,828 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;">215,057 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(n^2 + 2n\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Gauss-Seidel (<code>gs</code>)</strong></td>
+<td style="text-align: left;">624 (<span class="math inline">\(9.72 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">2,216 (<span class="math inline">\(9.98 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">8,038 (<span class="math inline">\(9.99 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">29,383 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;">107,466 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(n^2 + 2n\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Minimal Residual (<code>mr</code>)</strong></td>
+<td style="text-align: left;">1,335 (<span class="math inline">\(9.52 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">4,746 (<span class="math inline">\(9.99 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">17,562 (<span class="math inline">\(9.99 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">65,725 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;">252,191 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(n^2 + 3n\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Steepest Descent (<code>sd</code>)</strong></td>
+<td style="text-align: left;">1,313 (<span class="math inline">\(9.93 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">4,830 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;">17,891 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;">67,021 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;">247,067 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(n^2 + 3n\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SOR (<code>sor</code>)</strong></td>
+<td style="text-align: left;">202 (<span class="math inline">\(9.84 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">762 (<span class="math inline">\(9.81 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">2,815 (<span class="math inline">\(9.93 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">10,381 (<span class="math inline">\(9.98 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;">38,221 (<span class="math inline">\(1.00 \times 10^{-10}\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(n^2 + 4n\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Conjugate Gradient (<code>cg</code>)</strong></td>
+<td style="text-align: left;"><strong>32</strong> (<span class="math inline">\(8.50 \times 10^{-15}\)</span>)</td>
+<td style="text-align: left;"><strong>63</strong> (<span class="math inline">\(7.19 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;"><strong>124</strong> (<span class="math inline">\(6.99 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;"><strong>247</strong> (<span class="math inline">\(7.74 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;"><strong>484</strong> (<span class="math inline">\(7.44 \times 10^{-11}\)</span>)</td>
+<td style="text-align: left;"><span class="math inline">\(\mathbf{n^2 + n}\)</span></td>
+</tr>
+</tbody>
+</table>
+<h4 id="critical-exam-observations-from-benchmark">Critical Exam Observations from Benchmark</h4>
+<ol type="1">
+<li><strong>Gauss-Seidel vs. Jacobi</strong>: Gauss-Seidel consistently requires almost exactly <strong>half the iterations of Jacobi</strong> across all mesh resolutions (<span class="math inline">\(624\)</span> vs <span class="math inline">\(1253\)</span> at <span class="math inline">\(N=16\)</span>; <span class="math inline">\(107,466\)</span> vs <span class="math inline">\(215,057\)</span> at <span class="math inline">\(N=256\)</span>), validating the theoretical asymptotic convergence rate <span class="math inline">\(R_\infty(G) \approx 2 R_\infty(J)\)</span>.</li>
+<li><strong>Steepest Descent vs. CG</strong>: While Steepest Descent suffers from severe orthogonal zig-zagging requiring <span class="math inline">\(247,067\)</span> iterations at <span class="math inline">\(N=256\)</span>, Conjugate Gradient enforces <span class="math inline">\(A\)</span>-conjugacy, collapsing the iteration count to just <strong><span class="math inline">\(484\)</span> iterations</strong> — a staggering <strong><span class="math inline">\(510\times\)</span> acceleration</strong>!</li>
+<li><strong>Algorithmic Scaling with Mesh Refinement (<span class="math inline">\(h = 1/N\)</span>)</strong>:
+<ul>
+<li>For Jacobi and Gauss-Seidel, doubling <span class="math inline">\(N\)</span> quadruples the iteration count (<span class="math inline">\(O(N^2) = O(h^{-2})\)</span> iterations).</li>
+<li>For SOR, doubling <span class="math inline">\(N\)</span> roughly doubles the iteration count (<span class="math inline">\(O(N) = O(h^{-1})\)</span> iterations).</li>
+<li>For Conjugate Gradient, doubling <span class="math inline">\(N\)</span> strictly doubles the iteration count (<span class="math inline">\(O(\sqrt{\kappa(A)}) = O(N) = O(h^{-1})\)</span> iterations), but with a dramatically smaller proportionality constant than SOR (<span class="math inline">\(484\)</span> vs <span class="math inline">\(38,221\)</span> at <span class="math inline">\(N=256\)</span>, an <strong><span class="math inline">\(79\times\)</span> speedup over SOR</strong>)!</li>
+</ul></li>
+<li><strong>Computational Cost per Iteration (Slide 221)</strong>:
+<ul>
+<li>For general dense operations, the floating-point count per step is:
+<ul>
+<li><strong>SOR</strong>: <span class="math inline">\(n^2 + 4n\)</span> operations.</li>
+<li><strong>Steepest Descent</strong>: <span class="math inline">\(n^2 + 3n\)</span> operations.</li>
+<li><strong>Conjugate Gradient</strong>: <span class="math inline">\(n^2 + n\)</span> operations (least overhead per step among non-stationary methods!).</li>
+</ul></li>
+<li>In sparse finite-difference implementations, <span class="math inline">\(n^2\)</span> matrix-vector multiplication is replaced by <span class="math inline">\(5n\)</span> or <span class="math inline">\(7n\)</span> stencil operations, making CG overwhelmingly optimal in total runtime.</li>
+</ul></li>
+</ol>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-09.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Krylov Subspace Methods I: Arnoldi, FOM & Lanczos</span>
+      </a>
+    
+      
+      <a href="chapter-11.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Krylov Subspace Methods III: GMRES, BiCG, CGS & BiCGSTAB</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

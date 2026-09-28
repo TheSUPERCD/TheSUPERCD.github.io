@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Parallel Computer Architectures, Flynn's Taxonomy & Interconnects | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-14" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-13.html" class="btn-nav-control" title="Previous: Computer Architecture, Memory Hierarchy & Cache Optimization">← Prev</a>
+      <a href="chapter-15.html" class="btn-nav-control" title="Next: Parallel Program Design, Decomposition & Foster's Methodology">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 14</span><span class="hub-badge badge-primary">Part II</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Parallel Computer Architectures, Flynn's Taxonomy & Interconnects</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-14" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-14-parallel-computer-architectures-flynns-taxonomy-interconnects--communication">Chapter 14: Parallel Computer Architectures, Flynn's Taxonomy, Interconnects &amp; Communication</h1>
+<hr/>
+<h2 id="1-flynns-taxonomy-of-computer-architectures">1. Flynn's Taxonomy of Computer Architectures</h2>
+<p>Michael J. Flynn (1966) classified all computer architectures according to the multiplicity of hardware instruction streams and data streams:</p>
+<pre><code>                              Instruction Streams
+                             Single         Multiple
+                         ┌─────────────┬─────────────┐
+                  Single │    SISD     │    MISD     │
+     Data Streams        ├─────────────┼─────────────┤
+                Multiple │    SIMD     │    MIMD     │
+                         └─────────────┴─────────────┘</code></pre>
+<h3 id="11-single-instruction-single-data-stream-sisd">1.1 Single Instruction, Single Data stream (SISD)</h3>
+<ul>
+<li><strong>Description</strong>: The classic uniprocessor sequential architecture (Von Neumann).</li>
+<li><strong>Operation</strong>: A single control unit decodes a single instruction stream from memory per unit time, operating on a single scalar data element in registers/memory.</li>
+<li><strong>Example</strong>: Legacy single-core CPUs (e.g., Intel 8086, Pentium uniprocessors).</li>
+</ul>
+<h3 id="12-single-instruction-multiple-data-stream-simd">1.2 Single Instruction, Multiple Data stream (SIMD)</h3>
+<ul>
+<li><strong>Description</strong>: Vector processors and data-parallel accelerators.</li>
+<li><strong>Operation</strong>: A single control unit fetches and decodes an instruction, and then <strong>broadcasts that exact same instruction to multiple ALUs</strong>, which execute it synchronously in strict lockstep on distinct, independent data elements.</li>
+<li><strong>Applications</strong>:
+<ul>
+<li>Vector CPU extensions: Intel SSE, AVX-512, ARM Neon (processing 8 or 16 floats per cycle in vector registers).</li>
+<li>Graphics Processing Units (GPUs): Streaming Multiprocessors (SMs) executing warp/wavefront instructions across thousands of threads.</li>
+<li>Matrix-vector multiplication: Each processing element computes one row or one element of the vector dot product simultaneously.</li>
+</ul></li>
+</ul>
+<h3 id="13-multiple-instruction-single-data-stream-misd">1.3 Multiple Instruction, Single Data stream (MISD)</h3>
+<ul>
+<li><strong>Description</strong>: Multiple autonomous processing elements execute distinct instructions on the exact same shared stream of data.</li>
+<li><strong>Applications</strong>: Rare in scientific computing.
+<ul>
+<li>Fault-tolerant aerospace systems: Redundant flight computers executing distinct algorithms on the same sensor data stream, using voting logic to detect component failure.</li>
+<li>Systolic arrays and pipelined streaming data filters.</li>
+</ul></li>
+</ul>
+<h3 id="14-multiple-instruction-multiple-data-stream-mimd">1.4 Multiple Instruction, Multiple Data stream (MIMD)</h3>
+<ul>
+<li><strong>Description</strong>: The dominant architecture for general high-performance parallel computing.</li>
+<li><strong>Operation</strong>: Multiple independent processors operate asynchronously, each possessing its own control unit and ALU, decoding different instruction streams on different data streams.</li>
+<li><strong>Examples</strong>: Multi-core microprocessors, distributed HPC clusters, Top500 supercomputers.</li>
+</ul>
+<hr/>
+<h2 id="2-mimd-architectural-classifications-memory-organization">2. MIMD Architectural Classifications: Memory Organization</h2>
+<p>MIMD systems are categorized by how physical and logical memory are organized across processing elements.</p>
+<pre><code>       Shared Memory (Multiprocessor)        Distributed Memory (Multicomputer)
+       ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐       ┌─────┐┌─────┐   ┌─────┐┌─────┐
+       │CPU 0│ │CPU 1│ │CPU 2│ │CPU 3│       │CPU 0││Mem 0│   │CPU 1││Mem 1│
+       └──┬──┘ └──┬──┘ └──┬──┘ └──┬──┘       └──┬──┘└─────┘   └──┬──┘└─────┘
+          └───────┼───────┼───────┘             │                │
+                  ▼                             ▼ Interconnect   ▼
+       ┌─────────────────────────────┐       ──────────────────────────────
+       │    Global Shared Memory     │         Network (Message Passing)
+       │           (RAM)             │       ──────────────────────────────
+       └─────────────────────────────┘          ▲                ▲
+                                             ┌──┴──┐┌─────┐   ┌──┴──┐┌─────┐
+                                             │CPU 2││Mem 2│   │CPU 3││Mem 3│
+                                             └─────┘└─────┘   └─────┘└─────┘</code></pre>
+<h3 id="21-shared-memory-systems-multiprocessors">2.1 Shared Memory Systems (Multiprocessors)</h3>
+<p>In a shared memory system, all CPUs share a single, unified physical address space:</p>
+<ul>
+<li>Any processor can directly read or write any memory location via conventional load/store instructions.</li>
+<li>Communication is <strong>implicit</strong>: Processor 0 writes data to address <span class="math inline">\(X\)</span>, and Processor 1 subsequently reads from address <span class="math inline">\(X\)</span>.</li>
+</ul>
+<h4 id="sub-classifications">Sub-classifications</h4>
+<ol type="1">
+<li><strong>Uniform Memory Access (UMA / Symmetric Multiprocessing - SMP)</strong>:
+<ul>
+<li>All processors connect to central RAM via a shared bus or crossbar switch.</li>
+<li>Every processor experiences identical access latency and memory bandwidth to all addresses.</li>
+<li>Scalability limit: Typically limited to <span class="math inline">\(16 - 64\)</span> sockets due to physical bus contention.</li>
+</ul></li>
+<li><strong>Non-Uniform Memory Access (NUMA)</strong>:
+<ul>
+<li>Memory is physically distributed across individual processor sockets, but interconnected hardware provides a logically unified global address space.</li>
+<li>Access to <strong>local memory</strong> (on the same socket) is extremely fast. Access to <strong>remote memory</strong> (on another socket across QPI/UPI links) has significantly higher latency and lower bandwidth.</li>
+<li>Programmers must enforce NUMA data affinity to prevent performance degradation.</li>
+</ul></li>
+</ol>
+<h3 id="22-distributed-memory-systems-multicomputers">2.2 Distributed Memory Systems (Multicomputers)</h3>
+<p>In a distributed memory system, each node consists of an autonomous processor and private local memory:</p>
+<ul>
+<li>No shared global address space exists. Processor 0 cannot directly address or load memory from Processor 1.</li>
+<li>Communication is <strong>explicit</strong>: Data exchange occurs exclusively by sending and receiving discrete packets across an interconnection network via <strong>Message Passing</strong> (e.g., MPI - Message Passing Interface).</li>
+</ul>
+<h3 id="23-hybrid-architecture-distributed-shared-memory">2.3 Hybrid Architecture: Distributed-Shared Memory</h3>
+<p>Modern supercomputing clusters (including PARAM Shakti at IIT Kharagpur, Frontier, and Summit) combine both paradigms:</p>
+<ul>
+<li><strong>Node-Level</strong>: Multi-socket, multi-core CPUs and GPUs sharing local node RAM (Shared Memory / NUMA).</li>
+<li><strong>Cluster-Level</strong>: Thousands of nodes interconnected by high-speed, low-latency fabric like InfiniBand or Slingshot (Distributed Memory).</li>
+<li><strong>Hybrid Programming Model</strong>: MPI across nodes + OpenMP / CUDA within each node.</li>
+</ul>
+<h3 id="24-comparative-summary-shared-vs-distributed-memory">2.4 Comparative Summary: Shared vs. Distributed Memory</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Architectural Feature</th>
+<th style="text-align: left;">Shared Memory (Multiprocessor)</th>
+<th style="text-align: left;">Distributed Memory (Multicomputer)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Address Space</strong></td>
+<td style="text-align: left;">Single, globally unified address space</td>
+<td style="text-align: left;">Multiple, disjoint private address spaces</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Communication Mechanism</strong></td>
+<td style="text-align: left;">Implicit (Loads, Stores, Locks, Mutexes)</td>
+<td style="text-align: left;">Explicit Message Passing (<code>MPI_Send</code>, <code>MPI_Recv</code>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Hardware Complexity</strong></td>
+<td style="text-align: left;">High (Complex cache-coherency logic)</td>
+<td style="text-align: left;">Low (Commodity compute nodes + network)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scalability Limit</strong></td>
+<td style="text-align: left;">Moderate (<span class="math inline">\(\le 64\)</span> cores before bus saturates)</td>
+<td style="text-align: left;">Massive (<span class="math inline">\(&gt; 1,000,000\)</span> cores)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Programming Difficulty</strong></td>
+<td style="text-align: left;">Easier for basic tasks (OpenMP directives)</td>
+<td style="text-align: left;">Higher (Requires explicit domain decomposition)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Major Bottlenecks</strong></td>
+<td style="text-align: left;">Cache coherency, false sharing, bus contention</td>
+<td style="text-align: left;">Network latency, message startup overhead (<span class="math inline">\(t_s\)</span>)</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="3-cache-coherency-and-false-sharing-in-shared-memory">3. Cache Coherency and False Sharing in Shared Memory</h2>
+<h3 id="31-the-cache-coherency-problem-slides-458459">3.1 The Cache Coherency Problem (Slides 458–459)</h3>
+<p>Because each processor in an SMP/NUMA system possesses private L1 and L2 caches, multiple cached copies of the exact same memory address can exist simultaneously.</p>
+<h4 id="the-hazard-concurrent-inconsistent-updates-slide-458">The Hazard: Concurrent Inconsistent Updates (Slide 458)</h4>
+<p>Consider an initial shared variable <span class="math inline">\(x = 5\)</span> stored in main memory:</p>
+<pre><code>        Processor-1                     Cache-1
+        [ x = x + 3 ] ───────────────► [ x = 8  ] ────┐
+                                                      │ (Write: x = 8)
+                                                      ▼
+                                                ┌─────────────┐
+                                                │ Main Memory │
+                                                │   x = 5     │
+                                                └─────────────┘
+                                                      ▲
+                                                      │ (Write: x = 10?)
+        Processor-2                     Cache-2       │
+        [ x = x + 5 ] ───────────────► [ x = 10 ] ────┘</code></pre>
+<ol type="1">
+<li>Processor-1 reads <span class="math inline">\(x = 5\)</span> into Cache-1, performs <span class="math inline">\(x \leftarrow x + 3 = 8\)</span>, and writes <span class="math inline">\(x = 8\)</span> to memory.</li>
+<li>Simultaneously, Processor-2 reads <span class="math inline">\(x = 5\)</span> into Cache-2, performs <span class="math inline">\(x \leftarrow x + 5 = 10\)</span>, and attempts to write <span class="math inline">\(x = 10\)</span> to memory.</li>
+<li><strong>The Catastrophic Failure</strong>: Depending on bus arbitration timing, either <span class="math inline">\(x = 8\)</span> or <span class="math inline">\(x = 10\)</span> overwrites memory, completely losing the other arithmetic update (the mathematically correct sequential result is <span class="math inline">\(5 + 3 + 5 = 13\)</span>)! Furthermore, each processor's local cache now contradicts main memory.</li>
+</ol>
+<h4 id="the-solution-hardware-serialization-via-coherency-slide-459">The Solution: Hardware Serialization via Coherency (Slide 459)</h4>
+<p>To prevent inconsistent states, hardware controllers serialize memory operations:</p>
+<pre><code>    Sequential Serialization:
+    1. Processor-1 executes: x = x + 3 = 8.
+       Cache-1 updates to x = 8; broadcasts update/invalidation to memory (x = 8).
+    2. Processor-2 stalls / waits until cache update is completed across the bus.
+    3. Processor-2 resumes, fetches latest value x = 8 into Cache-2.
+    4. Processor-2 executes: x = 8 + 5 = 13.
+       Cache-2 and Main Memory are updated to x = 13!</code></pre>
+<p>Processors must operate sequentially on shared memory addresses to guarantee coherency, enforced via <strong>Snoopy Cache</strong> (broadcast bus) or <strong>Directory-Based</strong> protocols!</p>
+<h3 id="32-coherency-protocols">3.2 Coherency Protocols</h3>
+<p>Hardware controllers enforce coherency through two primary mechanisms:</p>
+<ol type="1">
+<li><strong>Snooping Protocols (Bus-Based Systems)</strong>: All cache controllers constantly monitor ("snoop") the common broadcast bus.
+<ul>
+<li><strong>Write-Invalidate (Most Common)</strong>: When Processor A writes to <span class="math inline">\(X\)</span>, it broadcasts an invalidation signal. All other caches holding <span class="math inline">\(X\)</span> change its status to <strong>Invalid</strong>. If Processor B subsequently accesses <span class="math inline">\(X\)</span>, it suffers a cache miss and re-fetches the updated value from A.</li>
+<li><strong>Write-Update</strong>: Processor A broadcasts the newly written data, updating all caches holding <span class="math inline">\(X\)</span>.</li>
+<li><strong>MESI Protocol</strong>: State machine tracking cache lines: <strong>M</strong>odified (dirty, exclusive), <strong>E</strong>xclusive (clean, only in this cache), <strong>S</strong>hared (clean, present in multiple caches), <strong>I</strong>nvalid.</li>
+</ul></li>
+<li><strong>Directory-Based Protocols (NUMA / Scalable Systems)</strong>: Because broadcasting on a bus does not scale to hundreds of nodes, a centralized or distributed directory tracks which nodes hold copies of each memory block. Point-to-point invalidation messages are sent only to the specific nodes sharing the line.</li>
+</ol>
+<h3 id="33-the-false-sharing-pathology">3.3 The False Sharing Pathology</h3>
+<blockquote>
+<p><strong>Definition</strong>: <strong>False sharing</strong> occurs when two distinct processors independently modify completely different logical variables that happen to reside within the <strong>same 64-byte physical cache line</strong>.</p>
+</blockquote>
+<pre><code>       Physical 64-Byte Cache Line in Memory:
+       ┌────────────────────────────────────────────────────────┐
+       │  A[0]  │  A[1]  │  A[2]  │  A[3]  │ ... │  A[7]        │
+       └────────────────────────────────────────────────────────┘
+           ▲        ▲
+           │        │
+         CPU 0    CPU 1
+       (writes) (writes)</code></pre>
+<ul>
+<li><strong>Mechanism of Performance Collapse</strong>:
+<ul>
+<li>Thread 0 on CPU 0 is assigned to update scalar <span class="math inline">\(A[0]\)</span>.</li>
+<li>Thread 1 on CPU 1 is assigned to update scalar <span class="math inline">\(A[1]\)</span>.</li>
+<li>Logically, there is zero data sharing or race condition.</li>
+<li>However, because <span class="math inline">\(A[0]\)</span> and <span class="math inline">\(A[1]\)</span> sit on the same 64-byte line:
+<ol type="1">
+<li>CPU 0 writes to <span class="math inline">\(A[0]\)</span> <span class="math inline">\(\implies\)</span> marks the entire 64-byte line <strong>Invalid</strong> in CPU 1's cache!</li>
+<li>CPU 1 tries to write to <span class="math inline">\(A[1]\)</span> <span class="math inline">\(\implies\)</span> encounters a cache miss, stalls, and invalidates CPU 0's cache line!</li>
+<li>The cache line bounces endlessly back and forth across the interconnect bus ("ping-ponging" / cache thrashing).</li>
+</ol></li>
+</ul></li>
+<li><strong>HPC Solution</strong>: Pad variables or allocate thread-local variables with at least <span class="math inline">\(64\text{ bytes}\)</span> of padding (<code>alignas(64)</code>), ensuring distinct threads never write to the same cache line.</li>
+</ul>
+<hr/>
+<h2 id="4-interconnection-networks--topological-metrics">4. Interconnection Networks &amp; Topological Metrics</h2>
+<p>In distributed multicomputers, nodes are connected via an interconnection network.</p>
+<h3 id="41-key-topological-metrics">4.1 Key Topological Metrics</h3>
+<p>In an exam, evaluating network topologies requires computing 5 quantitative metrics:</p>
+<ol type="1">
+<li><strong>Node Degree (<span class="math inline">\(d\)</span>)</strong>: The number of physical communication links incident on a single node. Determines hardware complexity and router pin count.</li>
+<li><strong>Diameter (<span class="math inline">\(D\)</span>)</strong>: The maximum shortest-path distance (number of hops) between any pair of nodes in the network. Represents the worst-case communication latency.</li>
+<li><strong>Bisection Width (<span class="math inline">\(B_w\)</span>)</strong>: The minimum number of physical links that must be severed to partition the network into two equal halves with <span class="math inline">\(\lfloor p/2 \rfloor\)</span> nodes each.</li>
+<li><strong>Bisection Bandwidth</strong>: The minimum data transfer rate (in GB/s) across the bisection cut (<span class="math inline">\(B_w \times \text{link bandwidth}\)</span>). Determines vulnerability to global communication bottlenecks.</li>
+<li><strong>Network Cost (Link Count, <span class="math inline">\(C\)</span>)</strong>: The total number of communication links in the network.</li>
+</ol>
+<hr/>
+<h3 id="42-standard-network-topologies-and-metric-comparisons">4.2 Standard Network Topologies and Metric Comparisons</h3>
+<pre><code>    Ring (p=8)             2D Mesh (4x4, p=16)             Hypercube (d=3, p=8)
+      0 ─── 1                0 ─── 1 ─── 2 ─── 3                 011 ───── 111
+    /       \                │     │     │     │                / │       / │
+   7         2               4 ─── 5 ─── 6 ─── 7               001 ───── 101│
+   │         │               │     │     │     │               │  010 ───│─ 110
+   6         3               8 ─── 9 ─── 10─── 11              │ /       │ /
+    \       /                │     │     │     │               000 ───── 100
+      5 ─── 4                12─── 13─── 14─── 15</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Topology</th>
+<th style="text-align: center;">Node Degree (<span class="math inline">\(d\)</span>)</th>
+<th style="text-align: center;">Diameter (<span class="math inline">\(D\)</span>)</th>
+<th style="text-align: center;">Bisection Width (<span class="math inline">\(B_w\)</span>)</th>
+<th style="text-align: center;">Total Link Count (<span class="math inline">\(C\)</span>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Linear Array</strong></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><span class="math inline">\(p - 1\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><span class="math inline">\(p - 1\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Ring</strong></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><span class="math inline">\(\lfloor p/2 \rfloor\)</span></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><span class="math inline">\(p\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2D Mesh (<span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span>)</strong></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;"><span class="math inline">\(2(\sqrt{p} - 1)\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\sqrt{p}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(2(p - \sqrt{p})\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2D Torus (Wrap-around)</strong></td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;"><span class="math inline">\(2 \lfloor \sqrt{p}/2 \rfloor\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(2\sqrt{p}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(2p\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Hypercube (<span class="math inline">\(d\)</span>-cube, <span class="math inline">\(p = 2^d\)</span>)</strong></td>
+<td style="text-align: center;"><span class="math inline">\(d = \log_2 p\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(d = \log_2 p\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p/2\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{p}{2} \log_2 p\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Complete Binary Tree</strong></td>
+<td style="text-align: center;">3 (root has 2)</td>
+<td style="text-align: center;"><span class="math inline">\(2 \log_2 p\)</span></td>
+<td style="text-align: center;">1 (severe bottleneck)</td>
+<td style="text-align: center;"><span class="math inline">\(p - 1\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Fat-Tree</strong></td>
+<td style="text-align: center;">Variable</td>
+<td style="text-align: center;"><span class="math inline">\(2 \log_2 p\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(O(p)\)</span> (no bottleneck!)</td>
+<td style="text-align: center;"><span class="math inline">\(O(p \log p)\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Fully Connected (Crossbar)</strong></td>
+<td style="text-align: center;"><span class="math inline">\(p - 1\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><span class="math inline">\(p^2/4\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(\frac{p(p-1)}{2}\)</span></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Hypercube Property</strong>: In an <span class="math inline">\(n\)</span>-dimensional hypercube, two nodes are connected if and only if their binary address representations differ by <strong>exactly one bit</strong>. (E.g., node <span class="math inline">\(000\)</span> connects to <span class="math inline">\(001, 010, 100\)</span>).</li>
+<li><strong>Fat-Tree Principle</strong>: In a regular binary tree, the bisection width is 1 (the single link at the root), causing massive traffic jams. A <strong>Fat-Tree</strong> increases link capacity and channel width progressively as one ascends toward the root, maintaining constant bisection bandwidth.</li>
+</ul>
+<hr/>
+<h2 id="5-analytical-communication-cost-models">5. Analytical Communication Cost Models</h2>
+<p>When two processes communicate across a network, message delivery incurs latency.</p>
+<h3 id="51-three-components-of-communication-time-slide-356">5.1 Three Components of Communication Time (Slide 356)</h3>
+<ol type="1">
+<li><strong>Startup Time (Latency, <span class="math inline">\(t_s\)</span>)</strong>:
+<ul>
+<li>The time required to prepare the message at the sending node (packetization, appending headers/checksums, routing algorithm execution, initializing network DMA) plus unpacking at the receiver.</li>
+<li>Independent of message size.</li>
+</ul></li>
+<li><strong>Per-Hop Time (Switch Latency, <span class="math inline">\(t_h\)</span>)</strong>:
+<ul>
+<li>The time required for the message header to travel between two directly connected router switches across a single network link.</li>
+</ul></li>
+<li><strong>Per-Word Transfer Time (<span class="math inline">\(t_w\)</span>)</strong>:
+<ul>
+<li>The time required to transmit a single word of data across a link.</li>
+<li>Governed by link bandwidth <span class="math inline">\(r\)</span> (words/second): <span class="math display">\[t_w = \frac{1}{r}\]</span></li>
+<li>Transmitting a message of <span class="math inline">\(m\)</span> words takes <span class="math inline">\(m \cdot t_w = m / r\)</span> seconds.</li>
+</ul></li>
+</ol>
+<h3 id="52-store-and-forward-vs-cut-through-wormhole-routing">5.2 Store-and-Forward vs. Cut-Through (Wormhole) Routing</h3>
+<ol type="1">
+<li><p><strong>Store-and-Forward Routing</strong>:</p>
+<ul>
+<li>Each intermediate switch along the path must receive and buffer the entire message of <span class="math inline">\(m\)</span> words before forwarding it to the next hop.</li>
+<li>Total time over <span class="math inline">\(l\)</span> links (hops): <span class="math display">\[\mathbf{T_{comm} = t_s + (l \times m \cdot t_w)}\]</span></li>
+<li><em>Severe Disadvantage</em>: Communication time scales multiplicatively with distance <span class="math inline">\(l\)</span>.</li>
+</ul></li>
+<li><p><strong>Cut-Through / Wormhole Routing (Modern Standard)</strong>:</p>
+<ul>
+<li>A message is divided into tiny flow control units called <strong>flits</strong> (a few bytes).</li>
+<li>As soon as the header flit arrives at an intermediate switch and determines the outgoing port, it is immediately forwarded. The remaining data flits follow in a pipelined stream.</li>
+<li>Total time over <span class="math inline">\(l\)</span> links for an <span class="math inline">\(m\)</span>-word message: <span class="math display">\[\mathbf{T_{comm} = t_s + l \cdot t_h + m \cdot t_w}\]</span></li>
+<li>In modern optical interconnects (InfiniBand), the switch latency is in nanoseconds (<span class="math inline">\(t_h \approx 10^{-8}\text{ s}\)</span>), while startup latency is in microseconds (<span class="math inline">\(t_s \approx 10^{-6}\text{ s}\)</span>).</li>
+<li>Because <span class="math inline">\(l \cdot t_h \ll t_s\)</span>, the per-hop latency is completely negligible!</li>
+<li><strong>Canonical Analytical Model for HPC Communication</strong>: <span class="math display">\[\mathbf{T_{comm} \approx t_s + m \cdot t_w}\]</span> Communication time is effectively <strong>distance-independent</strong>!</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="6-parallel-random-access-machine-pram-models">6. Parallel Random Access Machine (PRAM) Models</h2>
+<p>The <strong>PRAM</strong> is the theoretical foundation for analyzing parallel algorithmic complexity. It assumes <span class="math inline">\(p\)</span> processors connected to an ideal shared memory where all memory locations can be accessed in <strong>unit time (<span class="math inline">\(O(1)\)</span>)</strong>.</p>
+<h3 id="61-the-four-pram-variants">6.1 The Four PRAM Variants</h3>
+<ol type="1">
+<li><strong>Exclusive Read, Exclusive Write (EREW)</strong>:
+<ul>
+<li>No two processors can read or write to the same memory cell simultaneously.</li>
+<li>The most restrictive model.</li>
+</ul></li>
+<li><strong>Concurrent Read, Exclusive Write (CREW)</strong>:
+<ul>
+<li>Multiple processors can read the same memory location simultaneously.</li>
+<li>Only one processor can write to a given location at any time.</li>
+</ul></li>
+<li><strong>Exclusive Read, Concurrent Write (ERCW)</strong>:
+<ul>
+<li>Multiple writes allowed, but reads must be exclusive (rarely used).</li>
+</ul></li>
+<li><strong>Concurrent Read, Concurrent Write (CRCW)</strong>:
+<ul>
+<li>Multiple processors can concurrently read and write to the same memory cell.</li>
+</ul></li>
+</ol>
+<h3 id="62-conflict-resolution-rules-for-crcw-pram">6.2 Conflict Resolution Rules for CRCW PRAM</h3>
+<p>When multiple processors attempt to write to the same cell simultaneously, the conflict is resolved by one of three protocols:</p>
+<ol type="1">
+<li><strong>Common CRCW</strong>: Concurrent writes are permitted only if all processors write the <strong>exact same value</strong>. If values differ, an error occurs.</li>
+<li><strong>Arbitrary CRCW</strong>: One arbitrary processor's write succeeds, and its value is stored; all other writes are ignored.</li>
+<li><strong>Priority CRCW</strong>: Processors are assigned unique priority IDs (e.g., processor rank). The processor with the <strong>highest priority</strong> successfully writes its value.</li>
+</ol>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-13.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Computer Architecture, Memory Hierarchy & Cache Optimization</span>
+      </a>
+    
+      
+      <a href="chapter-15.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Parallel Program Design, Decomposition & Foster's Methodology</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

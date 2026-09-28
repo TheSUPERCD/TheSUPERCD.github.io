@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Krylov Subspace Methods I: Arnoldi, FOM & Lanczos | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-09" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-08.html" class="btn-nav-control" title="Previous: Projection Methods & the Method of Steepest Descent">← Prev</a>
+      <a href="chapter-10.html" class="btn-nav-control" title="Next: Krylov Subspace Methods II: Conjugate Gradient (CG)">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 09</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Krylov Subspace Methods I: Arnoldi, FOM & Lanczos</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-09" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-09-krylov-subspace-methods-i-arnoldi-fom--lanczos">Chapter 09: Krylov Subspace Methods I: Arnoldi, FOM &amp; Lanczos</h1>
+<hr/>
+<h2 id="1-krylov-subspaces-and-their-fundamental-properties">1. Krylov Subspaces and Their Fundamental Properties</h2>
+<p>Krylov subspace methods represent one of the top algorithmic developments in modern scientific computing. Instead of searching along single-variable directions (like Steepest Descent), they construct an expanding sequence of optimal polynomial approximation spaces.</p>
+<h3 id="11-mathematical-definition">1.1 Mathematical Definition</h3>
+<p>Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span> be a real matrix, and let <span class="math inline">\(v \in \mathbb{R}^n\)</span> be a non-zero vector. The <strong><span class="math inline">\(m\)</span>-th Krylov Subspace</strong> <span class="math inline">\(\mathcal{K}_m(A, v)\)</span> generated by <span class="math inline">\(A\)</span> and <span class="math inline">\(v\)</span> is the subspace spanned by the Krylov sequence: <span class="math display">\[\mathbf{\mathcal{K}_m(A, v) = \text{span}\{v, A v, A^2 v, A^3 v, \dots, A^{m-1} v\}}\]</span></p>
+<p>In polynomial notation, <span class="math inline">\(\mathcal{K}_m(A, v)\)</span> is the set of all vectors obtained by applying a polynomial in <span class="math inline">\(A\)</span> of degree at most <span class="math inline">\(m-1\)</span> to vector <span class="math inline">\(v\)</span>: <span class="math display">\[\mathbf{\mathcal{K}_m(A, v) = \{ p(A) v \mid p \in \mathcal{P}_{m-1} \}}\]</span> where <span class="math inline">\(\mathcal{P}_{m-1}\)</span> is the space of real polynomials of degree <span class="math inline">\(\le m-1\)</span>.</p>
+<h3 id="12-motivation-for-linear-systems-ax--b">1.2 Motivation for Linear Systems (<span class="math inline">\(Ax = b\)</span>)</h3>
+<p>When solving <span class="math inline">\(Ax = b\)</span> starting from initial guess <span class="math inline">\(x_0\)</span> with initial residual <span class="math inline">\(r_0 = b - Ax_0\)</span>, we choose the generating vector to be the initial residual <span class="math inline">\(v = r_0\)</span>: <span class="math display">\[\mathcal{K}_m(A, r_0) = \text{span}\{r_0, A r_0, A^2 r_0, \dots, A^{m-1} r_0\}\]</span> If candidate solutions are drawn from the affine subspace <span class="math inline">\(x_m \in x_0 + \mathcal{K}_m(A, r_0)\)</span>, then: <span class="math display">\[x_m = x_0 + q_{m-1}(A) r_0 \quad \text{for some } q_{m-1} \in \mathcal{P}_{m-1}\]</span> The corresponding residual is: <span class="math display">\[r_m = b - A x_m = b - A (x_0 + q_{m-1}(A) r_0) = (b - A x_0) - A q_{m-1}(A) r_0\]</span> <span class="math display">\[\mathbf{r_m = [I - A q_{m-1}(A)] r_0 = p_m(A) r_0}\]</span> where <span class="math inline">\(p_m(t) = 1 - t q_{m-1}(t)\)</span> is a polynomial of degree <span class="math inline">\(m\)</span> satisfying the crucial constraint: <span class="math display">\[\mathbf{p_m(0) = 1}\]</span> <strong>Core Insight</strong>: Krylov methods solve <span class="math inline">\(Ax = b\)</span> by finding an optimal polynomial <span class="math inline">\(p_m(t)\)</span> that satisfies <span class="math inline">\(p_m(0) = 1\)</span> while making the residual vector <span class="math inline">\(r_m = p_m(A) r_0\)</span> as small as possible!</p>
+<h3 id="13-minimal-polynomial-grade-and-invariance">1.3 Minimal Polynomial, Grade, and Invariance</h3>
+<ul>
+<li><strong>Grade of <span class="math inline">\(v\)</span> with respect to <span class="math inline">\(A\)</span> (<span class="math inline">\(\nu(v, A)\)</span>)</strong>: The smallest positive integer <span class="math inline">\(m\)</span> such that the vectors <span class="math inline">\(\{v, Av, \dots, A^m v\}\)</span> are linearly dependent.</li>
+<li><strong>Invariance</strong>: At step <span class="math inline">\(m = \nu\)</span>, the Krylov subspace becomes <strong>invariant under <span class="math inline">\(A\)</span></strong>: <span class="math display">\[A \mathcal{K}_m(A, v) \subseteq \mathcal{K}_m(A, v)\]</span></li>
+<li><strong>Cayley-Hamilton Theorem</strong>: Every matrix satisfies its own characteristic equation: <span class="math display">\[P_n(A) = \det(A - \lambda I) = \mathbf{0}\]</span> The minimal polynomial <span class="math inline">\(q(t)\)</span> is the monic polynomial of least degree such that <span class="math inline">\(q(A) = \mathbf{0}\)</span>.</li>
+<li><strong>Finite Termination Theorem</strong>: If <span class="math inline">\(m = \nu(r_0, A)\)</span>, the exact solution <span class="math inline">\(x^* = A^{-1} b\)</span> is contained <strong>strictly inside</strong> the affine space <span class="math inline">\(x_0 + \mathcal{K}_m(A, r_0)\)</span>. The exact solution is found in at most <span class="math inline">\(m \le n\)</span> steps!</li>
+</ul>
+<hr/>
+<h2 id="2-arnoldis-method">2. Arnoldi's Method</h2>
+<p>The natural basis <span class="math inline">\(\{r_0, A r_0, A^2 r_0, \dots\}\)</span> is notoriously ill-conditioned in practice (by the power iteration method, <span class="math inline">\(A^k r_0\)</span> rapidly aligns with the eigenvector of the dominant eigenvalue, becoming nearly parallel). <strong>Arnoldi's method</strong> constructs an <strong>orthonormal basis</strong> <span class="math inline">\(V_m = [v_1, v_2, \dots, v_m]\)</span> for <span class="math inline">\(\mathcal{K}_m(A, r_0)\)</span> using the Modified Gram-Schmidt process.</p>
+<h3 id="21-the-arnoldi-algorithm">2.1 The Arnoldi Algorithm</h3>
+<pre><code>Algorithm: Arnoldi's Modified Gram-Schmidt Procedure
+Input: Matrix A, initial vector r_0, dimension m
+Output: Orthonormal basis V_m = [v_1, ..., v_m], upper Hessenberg matrix H_m
+
+1. Initialize:
+   β = norm(r_0, 2)
+   if β == 0 then return x_0 end if
+   v_1 = r_0 / β
+
+2. For j = 1 to m do:
+       w = A * v_j                      // Matrix-vector product (SpMV)
+       for i = 1 to j do
+           h[i, j] = v_i^T * w          // Orthogonalization coefficients
+           w = w - h[i, j] * v_i        // Modified Gram-Schmidt subtraction
+       end for
+       h[j+1, j] = norm(w, 2)           // Subdiagonal entry
+       
+       if h[j+1, j] == 0 then
+           Breakdown at step j!         // Invariant subspace found!
+           return
+       end if
+       
+       v_{j+1} = w / h[j+1, j]          // Normalize new basis vector
+   end for</code></pre>
+<h3 id="22-the-hessenberg-matrix">2.2 The Hessenberg Matrix</h3>
+<p>The orthogonalization coefficients form an <strong>Upper Hessenberg matrix</strong> <span class="math inline">\(\bar{H}_m \in \mathbb{R}^{(m+1) \times m}\)</span>: <span class="math display">\[\bar{H}_m = \begin{bmatrix} h_{11} &amp; h_{12} &amp; h_{13} &amp; \dots &amp; h_{1m} \\ h_{21} &amp; h_{22} &amp; h_{23} &amp; \dots &amp; h_{2m} \\ 0 &amp; h_{32} &amp; h_{33} &amp; \dots &amp; h_{3m} \\ 0 &amp; 0 &amp; h_{43} &amp; \dots &amp; h_{4m} \\ \vdots &amp; \vdots &amp; \ddots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; \dots &amp; h_{m, m-1} &amp; h_{mm} \\ 0 &amp; 0 &amp; \dots &amp; 0 &amp; h_{m+1, m} \end{bmatrix}\]</span> Deleting the last row of <span class="math inline">\(\bar{H}_m\)</span> yields the square <span class="math inline">\(m \times m\)</span> upper Hessenberg matrix <span class="math inline">\(H_m\)</span>.</p>
+<h3 id="23-the-fundamental-arnoldi-relations">2.3 The Fundamental Arnoldi Relations</h3>
+<p>From the algorithm, at step <span class="math inline">\(j\)</span>: <span class="math display">\[A v_j = \sum_{i=1}^{j+1} h_{ij} v_i\]</span> Collecting these columns for <span class="math inline">\(j = 1, 2, \dots, m\)</span> yields the <strong>First Fundamental Arnoldi Relation</strong>: <span class="math display">\[\mathbf{A V_m = V_m H_m + h_{m+1, m} v_{m+1} e_m^T = V_{m+1} \bar{H}_m}\]</span> where <span class="math inline">\(e_m = [0, 0, \dots, 0, 1]^T \in \mathbb{R}^m\)</span>.</p>
+<p>Multiply from the left by <span class="math inline">\(V_m^T\)</span>. Since the columns of <span class="math inline">\(V_m\)</span> are orthonormal (<span class="math inline">\(V_m^T V_m = I_m\)</span>) and <span class="math inline">\(V_m^T v_{m+1} = \mathbf{0}\)</span>: <span class="math display">\[\mathbf{V_m^T A V_m = H_m}\]</span> <span class="math inline">\(H_m\)</span> is the <strong>orthogonal projection of operator <span class="math inline">\(A\)</span> onto the Krylov subspace <span class="math inline">\(\mathcal{K}_m\)</span></strong>!</p>
+<h3 id="24-the-lucky-breakdown">2.4 The "Lucky Breakdown"</h3>
+<p>If <span class="math inline">\(h_{j+1, j} = 0\)</span> at step <span class="math inline">\(j = m\)</span>: <span class="math display">\[A V_m = V_m H_m\]</span> This implies <span class="math inline">\(\mathcal{K}_m(A, r_0)\)</span> is strictly invariant under <span class="math inline">\(A\)</span>. The Krylov subspace contains the exact solution <span class="math inline">\(x^*\)</span>, and the algorithm terminates early with zero residual error!</p>
+<hr/>
+<h2 id="3-full-orthogonalization-method-fom">3. Full Orthogonalization Method (FOM)</h2>
+<p>The <strong>Full Orthogonalization Method (FOM)</strong> is an orthogonal projection (Galerkin) method for general linear systems <span class="math inline">\(Ax = b\)</span> using Arnoldi's basis.</p>
+<h3 id="31-mathematical-formulation">3.1 Mathematical Formulation</h3>
+<ul>
+<li>Search subspace: <span class="math inline">\(\mathcal{K}_m = \mathcal{K}_m(A, r_0)\)</span></li>
+<li>Constraint subspace: <span class="math inline">\(\mathcal{L}_m = \mathcal{K}_m(A, r_0)\)</span> (Galerkin condition: <span class="math inline">\(r_m \perp \mathcal{K}_m\)</span>)</li>
+</ul>
+<p>Express candidate solution: <span class="math display">\[x_m = x_0 + V_m y_m\]</span> Enforce orthogonality of residual <span class="math inline">\(r_m = r_0 - A V_m y_m\)</span> to <span class="math inline">\(V_m\)</span>: <span class="math display">\[V_m^T (r_0 - A V_m y_m) = \mathbf{0}\]</span> Substitute <span class="math inline">\(r_0 = \beta v_1 = \beta V_m e_1\)</span> and <span class="math inline">\(V_m^T A V_m = H_m\)</span>: <span class="math display">\[V_m^T (\beta V_m e_1) - (V_m^T A V_m) y_m = \mathbf{0}\]</span> <span class="math display">\[\beta I_m e_1 - H_m y_m = \mathbf{0}\]</span> <span class="math display">\[\mathbf{H_m y_m = \beta e_1}\]</span> Assuming <span class="math inline">\(H_m\)</span> is invertible: <span class="math display">\[\mathbf{y_m = H_m^{-1} (\beta e_1)}\]</span> The approximate solution is: <span class="math display">\[\mathbf{x_m = x_0 + V_m H_m^{-1} (\beta e_1)}\]</span></p>
+<h3 id="32-computational-characteristics-and-issues-with-fom">3.2 Computational Characteristics and Issues with FOM</h3>
+<ul>
+<li><strong>Linear Solve</strong>: The original massive <span class="math inline">\(n \times n\)</span> problem is converted to an <span class="math inline">\(m \times m\)</span> upper Hessenberg solve (<span class="math inline">\(H_m y_m = \beta e_1\)</span>), solved in <span class="math inline">\(O(m^2)\)</span> operations via Gaussian elimination without pivoting.</li>
+<li><strong>Potential Failure</strong>: Even if <span class="math inline">\(A\)</span> is non-singular, the projected matrix <span class="math inline">\(H_m\)</span> can occasionally be singular, causing FOM to break down (<span class="math inline">\(H_m^{-1}\)</span> does not exist).</li>
+<li><strong>Residual Behavior</strong>: Residual norm does not decrease monotonically; it can exhibit sharp spikes. This directly motivates <strong>GMRES</strong>.</li>
+</ul>
+<hr/>
+<h2 id="4-the-symmetric-lanczos-algorithm">4. The Symmetric Lanczos Algorithm</h2>
+<p>When matrix <span class="math inline">\(A\)</span> is <strong>symmetric</strong> (<span class="math inline">\(A = A^T\)</span>), Arnoldi’s method undergoes a dramatic simplification that eliminates long-term memory requirements!</p>
+<h3 id="41-symmetry-of-the-projected-matrix">4.1 Symmetry of the Projected Matrix</h3>
+<p>From the second Arnoldi relation: <span class="math display">\[H_m = V_m^T A V_m\]</span> Take the transpose of <span class="math inline">\(H_m\)</span>: <span class="math display">\[H_m^T = (V_m^T A V_m)^T = V_m^T A^T V_m = V_m^T A V_m = H_m\]</span> <span class="math inline">\(H_m\)</span> is <strong>both upper Hessenberg and symmetric</strong>!</p>
+<ul>
+<li>Being upper Hessenberg implies: <span class="math inline">\(h_{ij} = 0\)</span> for <span class="math inline">\(i &gt; j + 1\)</span>.</li>
+<li>Being symmetric implies: <span class="math inline">\(h_{ij} = h_{ji}\)</span>, so <span class="math inline">\(h_{ij} = 0\)</span> for <span class="math inline">\(j &gt; i + 1\)</span>. <strong>Fundamental Theorem</strong>: <span class="math inline">\(H_m\)</span> has non-zero entries <strong>only on the main diagonal and the immediately adjacent sub- and super-diagonals</strong>. It is a <strong>TRIDIAGONAL MATRIX</strong>, denoted <span class="math inline">\(T_m\)</span>!</li>
+</ul>
+<p><span class="math display">\[T_m = \begin{bmatrix} \alpha_1 &amp; \beta_1 &amp; &amp; &amp; \\ \beta_1 &amp; \alpha_2 &amp; \beta_2 &amp; &amp; \\ &amp; \beta_2 &amp; \alpha_3 &amp; \ddots &amp; \\ &amp; &amp; \ddots &amp; \ddots &amp; \beta_{m-1} \\ &amp; &amp; &amp; \beta_{m-1} &amp; \alpha_m \end{bmatrix}\]</span></p>
+<h3 id="42-the-3-term-lanczos-recurrence">4.2 The 3-Term Lanczos Recurrence</h3>
+<p>Because <span class="math inline">\(T_m\)</span> is tridiagonal, the column relation <span class="math inline">\(A v_j = \sum_{i=1}^{j+1} h_{ij} v_i\)</span> collapses to only <strong>three terms</strong>: <span class="math display">\[A v_j = \beta_{j-1} v_{j-1} + \alpha_j v_j + \beta_j v_{j+1}\]</span> Rearranging to solve for the next basis vector <span class="math inline">\(v_{j+1}\)</span>: <span class="math display">\[\mathbf{\beta_j v_{j+1} = A v_j - \alpha_j v_j - \beta_{j-1} v_{j-1}}\]</span> where: <span class="math display">\[\mathbf{\alpha_j = v_j^T A v_j}\]</span> <span class="math display">\[\mathbf{\beta_j = \|A v_j - \alpha_j v_j - \beta_{j-1} v_{j-1}\|_2}\]</span></p>
+<h3 id="43-the-symmetric-lanczos-algorithm">4.3 The Symmetric Lanczos Algorithm</h3>
+<pre><code>Algorithm: Symmetric Lanczos Procedure
+Input: Symmetric matrix A, vector r_0
+Output: Tridiagonal matrix T_m, Lanczos vectors v_j
+
+1. β_0 = 0, v_0 = 0
+   β = norm(r_0, 2)
+   v_1 = r_0 / β
+
+2. For j = 1 to m do:
+       w = A * v_j - β_{j-1} * v_{j-1}
+       α_j = v_j^T * w
+       w = w - α_j * v_j
+       β_j = norm(w, 2)
+       if β_j == 0 then break end if
+       v_{j+1} = w / β_j
+   end for</code></pre>
+<h3 id="44-the-direct-lanczos-d-lanczos-method-for-linear-systems">4.4 The Direct Lanczos (D-Lanczos) Method for Linear Systems</h3>
+<p>For symmetric systems, FOM solves: <span class="math display">\[T_m y_m = \beta e_1\]</span> Because <span class="math inline">\(T_m\)</span> is tridiagonal, it can be factored efficiently using an <span class="math inline">\(L D L^T\)</span> factorization without pivoting (using the Thomas algorithm / TDMA).</p>
+<ul>
+<li><strong>Avoidance of Basis Vector Storage</strong>: By factoring <span class="math inline">\(T_m\)</span> progressively, the approximate solution <span class="math inline">\(x_m\)</span> can be updated recursively from <span class="math inline">\(x_{m-1}\)</span> using auxiliary search directions <span class="math inline">\(p_m\)</span>: <span class="math display">\[x_m = x_{m-1} + \zeta_m p_m\]</span> This allows solving symmetric linear systems <strong>without storing previous basis vectors <span class="math inline">\(\{v_1, \dots, v_{m-1}\}\)</span> in memory</strong>!</li>
+<li>This formulation is algebraically identical to the celebrated <strong>Conjugate Gradient (CG) Method</strong>.</li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-08.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Projection Methods & the Method of Steepest Descent</span>
+      </a>
+    
+      
+      <a href="chapter-10.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Krylov Subspace Methods II: Conjugate Gradient (CG)</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

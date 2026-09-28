@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Orthogonalization, Gram-Schmidt & QR Factorization | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-07" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-06.html" class="btn-nav-control" title="Previous: Spectral Theory, SVD, Positive Definiteness & Condition Numbers">← Prev</a>
+      <a href="chapter-08.html" class="btn-nav-control" title="Next: Projection Methods & the Method of Steepest Descent">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 07</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Orthogonalization, Gram-Schmidt & QR Factorization</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-07" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-07-orthogonalization-the-gram-schmidt-process--qr-factorization">Chapter 07: Orthogonalization, the Gram-Schmidt Process &amp; QR Factorization</h1>
+<hr/>
+<h2 id="1-orthogonality-and-orthonormality">1. Orthogonality and Orthonormality</h2>
+<p>In numerical linear algebra, algorithms operating on orthogonal vectors are the gold standard because they do not amplify round-off errors and preserve vector norms.</p>
+<h3 id="11-definitions">1.1 Definitions</h3>
+<p>Let <span class="math inline">\(u, v \in \mathbb{R}^n\)</span>.</p>
+<ul>
+<li><strong>Inner Product (Dot Product)</strong>: <span class="math display">\[\langle u, v \rangle = u^T v = \sum_{i=1}^n u_i v_i\]</span></li>
+<li><strong>Orthogonality</strong>: Two vectors <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are <strong>orthogonal</strong> (<span class="math inline">\(u \perp v\)</span>) if: <span class="math display">\[u^T v = 0\]</span></li>
+<li><strong>Orthonormality</strong>: A set of vectors <span class="math inline">\(\{q_1, q_2, \dots, q_k\}\)</span> is <strong>orthonormal</strong> if: <span class="math display">\[q_i^T q_j = \delta_{ij} = \begin{cases} 1 &amp; \text{if } i = j \\ 0 &amp; \text{if } i \ne j \end{cases}\]</span> where <span class="math inline">\(\delta_{ij}\)</span> is the Kronecker delta.</li>
+</ul>
+<h3 id="12-properties-of-orthogonal-matrices">1.2 Properties of Orthogonal Matrices</h3>
+<p>A square matrix <span class="math inline">\(Q \in \mathbb{R}^{n \times n}\)</span> whose columns form an orthonormal basis is called an <strong>orthogonal matrix</strong>: <span class="math display">\[Q = [q_1, q_2, \dots, q_n] \implies Q^T Q = I_n \iff \mathbf{Q^{-1} = Q^T}\]</span></p>
+<h4 id="fundamental-invariances-of-orthogonal-matrices">Fundamental Invariances of Orthogonal Matrices</h4>
+<ol type="1">
+<li><strong>Preservation of the 2-Norm (Isometry)</strong>: <span class="math display">\[\|Q x\|_2^2 = (Q x)^T (Q x) = x^T (Q^T Q) x = x^T I x = x^T x = \|x\|_2^2 \implies \mathbf{\|Q x\|_2 = \|x\|_2}\]</span> Multiplying a vector by an orthogonal matrix causes zero distortion of its Euclidean length.</li>
+<li><strong>Preservation of Angles and Inner Products</strong>: <span class="math display">\[\langle Q x, Q y \rangle = (Q x)^T (Q y) = x^T Q^T Q y = x^T y = \langle x, y \rangle\]</span></li>
+<li><strong>Optimal Condition Number</strong>: All singular values of <span class="math inline">\(Q\)</span> are identically 1 (<span class="math inline">\(\sigma_1 = \dots = \sigma_n = 1\)</span>). Therefore: <span class="math display">\[\mathbf{\kappa_2(Q) = \frac{\sigma_{\max}}{\sigma_{\min}} = \frac{1}{1} = 1}\]</span> Orthogonal transformations are immune to numerical ill-conditioning!</li>
+</ol>
+<hr/>
+<h2 id="2-classical-gram-schmidt-cgs-algorithm">2. Classical Gram-Schmidt (CGS) Algorithm</h2>
+<p>Given a set of linearly independent vectors <span class="math inline">\(\{a_1, a_2, \dots, a_n\} \subset \mathbb{R}^m\)</span>, the Gram-Schmidt process constructs an orthonormal basis <span class="math inline">\(\{q_1, q_2, \dots, q_n\}\)</span> that spans the exact same hierarchy of subspaces: <span class="math display">\[\text{span}\{q_1, \dots, q_k\} = \text{span}\{a_1, \dots, a_k\}, \quad \text{for all } k = 1, \dots, n\]</span></p>
+<h3 id="21-derivation-of-cgs">2.1 Derivation of CGS</h3>
+<ol type="1">
+<li><strong>Step 1</strong>: Normalize <span class="math inline">\(a_1\)</span>: <span class="math display">\[v_1 = a_1, \quad r_{11} = \|v_1\|_2, \quad \mathbf{q_1 = \frac{v_1}{r_{11}}}\]</span></li>
+<li><strong>Step 2</strong>: Subtract the orthogonal projection of <span class="math inline">\(a_2\)</span> onto <span class="math inline">\(q_1\)</span>: <span class="math display">\[\text{proj}_{q_1}(a_2) = (q_1^T a_2) q_1\]</span> <span class="math display">\[v_2 = a_2 - (q_1^T a_2) q_1\]</span> <span class="math display">\[r_{22} = \|v_2\|_2, \quad \mathbf{q_2 = \frac{v_2}{r_{22}}}\]</span></li>
+<li><strong>Step <span class="math inline">\(j\)</span> (<span class="math inline">\(j = 2, 3, \dots, n\)</span>)</strong>: Subtract the projections of <span class="math inline">\(a_j\)</span> onto all previously determined basis vectors <span class="math inline">\(q_1, \dots, q_{j-1}\)</span>: <span class="math display">\[r_{ij} = q_i^T a_j \quad (i = 1, 2, \dots, j-1)\]</span> <span class="math display">\[\mathbf{v_j = a_j - \sum_{i=1}^{j-1} r_{ij} q_i}\]</span> <span class="math display">\[r_{jj} = \|v_j\|_2, \quad \mathbf{q_j = \frac{v_j}{r_{jj}}}\]</span></li>
+</ol>
+<h3 id="22-classical-gram-schmidt-pseudocode">2.2 Classical Gram-Schmidt Pseudocode</h3>
+<pre><code>Algorithm: Classical Gram-Schmidt (CGS)
+Input: Linearly independent vectors a_1, a_2, ..., a_n
+Output: Orthonormal vectors q_1, q_2, ..., q_n and upper triangular entries r_ij
+
+for j = 1 to n do
+    v_j = a_j
+    for i = 1 to j-1 do
+        r[i, j] = q_i^T * a_j       // Dot product with original a_j
+        v_j = v_j - r[i, j] * q_i   // Subtract projection
+    end for
+    r[j, j] = norm(v_j)
+    if r[j, j] == 0 then
+        error("Vectors are linearly dependent!")
+    end if
+    q_j = v_j / r[j, j]
+end for</code></pre>
+<hr/>
+<h2 id="3-loss-of-orthogonality-in-cgs--the-modified-gram-schmidt-mgs-method">3. Loss of Orthogonality in CGS &amp; The Modified Gram-Schmidt (MGS) Method</h2>
+<h3 id="31-the-catastrophic-failure-of-cgs-in-floating-point-arithmetic">3.1 The Catastrophic Failure of CGS in Floating-Point Arithmetic</h3>
+<p>In theoretical exact arithmetic, CGS is mathematically flawless. However, on finite-precision digital computers (IEEE 754):</p>
+<ul>
+<li>When vector <span class="math inline">\(a_j\)</span> is nearly collinear with the subspace spanned by <span class="math inline">\(\{q_1, \dots, q_{j-1}\}\)</span>, the vector difference: <span class="math display">\[v_j = a_j - \sum_{i=1}^{j-1} (q_i^T a_j) q_i\]</span> incurs severe <strong>subtractive cancellation</strong>.</li>
+<li>Small round-off errors committed during early projections are amplified.</li>
+<li>As <span class="math inline">\(j\)</span> increases, the newly generated vector <span class="math inline">\(q_j\)</span> catastrophically loses orthogonality with respect to early vectors: <span class="math display">\[|q_1^T q_j| \gg \epsilon_{\text{machine}}\]</span> In pathological cases, <span class="math inline">\(q_j\)</span> can become completely non-orthogonal (<span class="math inline">\(q_1^T q_j \sim 0.1\)</span> or higher!).</li>
+</ul>
+<pre><code>Loss of Orthogonality Progression:
+  Exact Math:           q_1 ┴ q_2 ┴ q_3 ┴ q_4 ... (perfect 90° angles)
+  CGS with Round-off:   q_1 ┴ q_2, but q_4 drifts, eventually angle(q_1, q_4) &lt;&lt; 90°!</code></pre>
+<h3 id="32-the-modified-gram-schmidt-mgs-formulation">3.2 The Modified Gram-Schmidt (MGS) Formulation</h3>
+<p>To prevent cancellation errors from corrupting the projections, MGS rearranges the order of projections. Instead of projecting the original vector <span class="math inline">\(a_j\)</span> against all <span class="math inline">\(q_i\)</span>, MGS takes the vector and <strong>sequentially projects it onto each <span class="math inline">\(q_i\)</span>, immediately replacing the vector with its updated orthogonalized residual</strong>:</p>
+<ol type="1">
+<li>Initialize working vectors: <span class="math display">\[v_j^{(1)} = a_j \quad \text{for } j = 1, 2, \dots, n\]</span></li>
+<li>At step <span class="math inline">\(i\)</span> (<span class="math inline">\(i = 1, \dots, n\)</span>): Normalize the pivot vector: <span class="math display">\[r_{ii} = \|v_i^{(i)}\|_2, \quad \mathbf{q_i = \frac{v_i^{(i)}}{r_{ii}}}\]</span> Immediately project <strong>all remaining unprocessed vectors</strong> <span class="math inline">\(v_j\)</span> (<span class="math inline">\(j = i+1, \dots, n\)</span>) onto the newly completed <span class="math inline">\(q_i\)</span>: <span class="math display">\[r_{ij} = q_i^T v_j^{(i)}\]</span> <span class="math display">\[\mathbf{v_j^{(i+1)} = v_j^{(i)} - r_{ij} q_i, \quad j = i+1, \dots, n}\]</span></li>
+</ol>
+<h3 id="33-modified-gram-schmidt-pseudocode">3.3 Modified Gram-Schmidt Pseudocode</h3>
+<pre><code>Algorithm: Modified Gram-Schmidt (MGS)
+Input: Vectors a_1, a_2, ..., a_n
+Output: Orthonormal basis q_1, q_2, ..., q_n and upper triangular entries r_ij
+
+for i = 1 to n do
+    v_i = a_i                     // Working vector initialization
+end for
+
+for i = 1 to n do
+    r[i, i] = norm(v_i)
+    q_i = v_i / r[i, i]
+    for j = i+1 to n do
+        r[i, j] = q_i^T * v_j     // Dot product with UPDATED v_j!
+        v_j = v_j - r[i, j] * q_i // Update v_j immediately
+    end for
+end for</code></pre>
+<h3 id="34-rigorous-comparison-cgs-vs-mgs">3.4 Rigorous Comparison: CGS vs. MGS</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Property</th>
+<th style="text-align: left;">Classical Gram-Schmidt (CGS)</th>
+<th style="text-align: left;">Modified Gram-Schmidt (MGS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Exact Arithmetic</strong></td>
+<td style="text-align: left;">Identical output to MGS</td>
+<td style="text-align: left;">Identical output to CGS</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Floating-Point Stability</strong></td>
+<td style="text-align: left;"><strong>Numerically Unstable</strong> (severe loss of orthogonality)</td>
+<td style="text-align: left;"><strong>Numerically Stable</strong> (<span class="math inline">\(|I - Q^T Q|_2 \approx O(\kappa(A) \epsilon)\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Projection Vector</strong></td>
+<td style="text-align: left;">Uses raw vector <span class="math inline">\(a_j\)</span> for all dot products</td>
+<td style="text-align: left;">Uses intermediate orthogonalized vector <span class="math inline">\(v_j^{(i)}\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Parallel Efficiency</strong></td>
+<td style="text-align: left;">Higher (dot products can be computed as matrix-vector <span class="math inline">\(Q^T a_j\)</span>)</td>
+<td style="text-align: left;">Lower (sequential dependencies between outer steps)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Role in Course</strong></td>
+<td style="text-align: left;">Pedagogical baseline</td>
+<td style="text-align: left;"><strong>Engine of Arnoldi &amp; GMRES algorithms</strong></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="4-the-qr-factorization-a--qr">4. The QR Factorization (<span class="math inline">\(A = QR\)</span>)</h2>
+<p>The Gram-Schmidt orthogonalization can be expressed cleanly as a matrix factorization.</p>
+<h3 id="41-matrix-representation">4.1 Matrix Representation</h3>
+<p>From the Gram-Schmidt relations: <span class="math display">\[a_1 = r_{11} q_1\]</span> <span class="math display">\[a_2 = r_{12} q_1 + r_{22} q_2\]</span> <span class="math display">\[a_3 = r_{13} q_1 + r_{23} q_2 + r_{33} q_3\]</span> <span class="math display">\[\vdots\]</span> <span class="math display">\[a_n = \sum_{i=1}^n r_{in} q_i\]</span></p>
+<p>In matrix form: <span class="math display">\[[a_1, a_2, \dots, a_n] = [q_1, q_2, \dots, q_n] \begin{bmatrix} r_{11} &amp; r_{12} &amp; \dots &amp; r_{1n} \\ 0 &amp; r_{22} &amp; \dots &amp; r_{2n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ 0 &amp; 0 &amp; \dots &amp; r_{nn} \end{bmatrix}\]</span> <span class="math display">\[\mathbf{A = Q R}\]</span> where:</p>
+<ul>
+<li><span class="math inline">\(Q \in \mathbb{R}^{m \times n}\)</span> has orthonormal columns (<span class="math inline">\(Q^T Q = I_n\)</span>).</li>
+<li><span class="math inline">\(R \in \mathbb{R}^{n \times n}\)</span> is <strong>upper triangular</strong> with strictly positive diagonal entries (<span class="math inline">\(r_{ii} &gt; 0\)</span>).</li>
+</ul>
+<h3 id="42-solving-ax--b-via-qr-factorization">4.2 Solving <span class="math inline">\(Ax = b\)</span> via QR Factorization</h3>
+<p>For a square invertible matrix <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span>: <span class="math display">\[A x = b \implies (Q R) x = b\]</span> Multiply by <span class="math inline">\(Q^T\)</span> on the left (since <span class="math inline">\(Q^{-1} = Q^T\)</span>): <span class="math display">\[Q^T Q R x = Q^T b \implies \mathbf{R x = Q^T b}\]</span> Since <span class="math inline">\(R\)</span> is upper triangular, <span class="math inline">\(x\)</span> is solved immediately by backward substitution in <span class="math inline">\(O(n^2)\)</span> FLOPs without any matrix inversion!</p>
+<h3 id="43-solving-linear-least-squares-problems">4.3 Solving Linear Least-Squares Problems</h3>
+<p>For an overdetermined rectangular system <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> (<span class="math inline">\(m &gt; n\)</span>): <span class="math display">\[\min_{x \in \mathbb{R}^n} \|Ax - b\|_2\]</span></p>
+<ul>
+<li><strong>Standard Normal Equations</strong>: <span class="math display">\[A^T A x = A^T b\]</span> <em>Severe Hazard</em>: The condition number of <span class="math inline">\(A^T A\)</span> is squared: <span class="math display">\[\kappa_2(A^T A) = [\kappa_2(A)]^2\]</span> If <span class="math inline">\(\kappa(A) = 10^5\)</span>, then <span class="math inline">\(\kappa(A^T A) = 10^{10}\)</span>, causing severe loss of accuracy!</li>
+<li><strong>The QR Approach</strong>: <span class="math display">\[\|Ax - b\|_2 = \|Q R x - b\|_2 = \|Q (R x - Q^T b)\|_2 = \|R x - Q^T b\|_2\]</span> The least-squares solution is obtained by solving the triangular system: <span class="math display">\[\mathbf{R x = Q^T b}\]</span> <em>Advantage</em>: Solves the least-squares problem with condition number <span class="math inline">\(\kappa_2(A)\)</span>, <strong>completely avoiding condition number squaring</strong>!</li>
+</ul>
+<hr/>
+<h2 id="5-alternative-orthogonalization-methods">5. Alternative Orthogonalization Methods</h2>
+<p>While Modified Gram-Schmidt computes <span class="math inline">\(Q\)</span> column-by-column, other methods compute QR factorization via orthogonal matrix transformations:</p>
+<h3 id="51-householder-reflections">5.1 Householder Reflections</h3>
+<p>A <strong>Householder reflection</strong> reflects any vector <span class="math inline">\(x \in \mathbb{R}^m\)</span> across a hyperplane orthogonal to unit vector <span class="math inline">\(v\)</span>: <span class="math display">\[H = I - 2 \frac{v v^T}{v^T v}\]</span></p>
+<ul>
+<li><span class="math inline">\(H\)</span> is symmetric (<span class="math inline">\(H = H^T\)</span>) and orthogonal (<span class="math inline">\(H^T H = I\)</span>).</li>
+<li><strong>Action</strong>: Can transform an arbitrary vector <span class="math inline">\(x\)</span> so that all entries below the first entry are zeroed out simultaneously: <span class="math display">\[H x = [\pm \|x\|_2, 0, 0, \dots, 0]^T\]</span></li>
+<li>Applied repeatedly, Householder reflections reduce <span class="math inline">\(A\)</span> to upper triangular form <span class="math inline">\(R\)</span>: <span class="math display">\[H_n \dots H_2 H_1 A = R \implies Q = H_1 H_2 \dots H_n\]</span></li>
+</ul>
+<h3 id="52-givens-rotations">5.2 Givens Rotations</h3>
+<p>A <strong>Givens plane rotation</strong> <span class="math inline">\(\Omega(i, j, \theta)\)</span> rotates vectors in the 2D plane spanned by coordinate axes <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>: <span class="math display">\[\Omega = \begin{bmatrix} 1 &amp; &amp; &amp; &amp; &amp; \\ &amp; \ddots &amp; &amp; &amp; &amp; \\ &amp; &amp; c &amp; s &amp; &amp; \\ &amp; &amp; -s &amp; c &amp; &amp; \\ &amp; &amp; &amp; &amp; \ddots &amp; \\ &amp; &amp; &amp; &amp; &amp; 1 \end{bmatrix}, \quad \text{where } c = \cos\theta, \, s = \sin\theta, \, c^2 + s^2 = 1\]</span></p>
+<ul>
+<li><strong>Action</strong>: Selects <span class="math inline">\(c\)</span> and <span class="math inline">\(s\)</span> to zero out <strong>one single entry</strong> at a specific row and column <span class="math inline">\((j, i)\)</span>: <span class="math display">\[c = \frac{x_i}{\sqrt{x_i^2 + x_j^2}}, \quad s = \frac{x_j}{\sqrt{x_i^2 + x_j^2}}\]</span></li>
+<li><strong>Significance in GMRES</strong>: In GMRES, an upper Hessenberg matrix has non-zeros only on the subdiagonal <span class="math inline">\(h_{i+1, i}\)</span>. Applying a sequence of <span class="math inline">\(m\)</span> Givens rotations zeroes out each subdiagonal element sequentially, transforming the Hessenberg least-squares problem into an upper triangular system with minimal work (<span class="math inline">\(O(m)\)</span> per step)!</li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-06.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Spectral Theory, SVD, Positive Definiteness & Condition Numbers</span>
+      </a>
+    
+      
+      <a href="chapter-08.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Projection Methods & the Method of Steepest Descent</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

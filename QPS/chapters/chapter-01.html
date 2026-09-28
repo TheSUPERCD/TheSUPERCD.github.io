@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Introduction & HPC Foundations | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-01" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      
+      <a href="chapter-02.html" class="btn-nav-control" title="Next: Mathematical Foundations: Linear Algebra & Vector Spaces">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 01</span><span class="hub-badge badge-primary">Part I</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Introduction & HPC Foundations</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-01" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-01-foundations-of-scientific-computing--high-performance-computing-hpc">Chapter 01: Foundations of Scientific Computing &amp; High-Performance Computing (HPC)</h1>
+<hr/>
+<h2 id="1-introduction-and-course-overview">1. Introduction and Course Overview</h2>
+<p>High Performance Scientific Computing (HPSC) lies at the intersection of three fundamental pillars:</p>
+<ol type="1">
+<li><strong>Domain Science &amp; Engineering</strong>: Physics, Chemistry, Biology, Mechanical Engineering, Fluid Dynamics, Materials Science, Astrophysics.</li>
+<li><strong>Mathematics &amp; Numerical Analysis</strong>: Partial Differential Equations (PDEs), Numerical Linear Algebra, Matrix Equations (<span class="math inline">\(Ax = b\)</span>), Optimization, Discretization Theory.</li>
+<li><strong>Computer Science &amp; Architecture</strong>: High Performance Computing (HPC) infrastructure, Multi-core Processors, Graphics Processing Units (GPUs), Memory Hierarchies, Caching Strategies, Parallel Programming Models (MPI, OpenMP, CUDA).</li>
+</ol>
+<p>The course is partitioned into two major intertwined modules:</p>
+<ul>
+<li><strong>Module A: Scientific Computing</strong>: Formulation, discretization, storage, conditioning, and algorithmic solution of large-scale linear systems of equations (<span class="math inline">\(Ax = b\)</span>) originating from physical continuum models.</li>
+<li><strong>Module B: High Performance &amp; Parallel Computing</strong>: Principles of parallel architecture, memory systems, interconnection networks, task decomposition, parallel algorithm design, scalability analysis, and parallel numerical linear algebra.</li>
+</ul>
+<hr/>
+<h2 id="2-serial-vs-parallel-computing--sequential-architecture">2. Serial vs. Parallel Computing &amp; Sequential Architecture</h2>
+<h3 id="21-the-sequential-von-neumann-computer-architecture">2.1 The Sequential (Von Neumann) Computer Architecture</h3>
+<p>A standard sequential computing node consists of three tightly coupled components communicating across a system bus:</p>
+<pre><code>┌───────────────────────────────────────────────┐
+│                     CPU                       │
+│  ┌─────────────────────────┐  ┌─────────────┐ │      Instruction Stream
+│  │        Registers        │  │   Control   │─┼──────────────────────┐
+│  ├─────────────────────────┤  │    Unit     │ │                      ▼
+│  │ Arithmetic &amp; Logic Unit │  │             │ │◄───────────────►┌───────────────┐
+│  │          (ALU)          │  │             │ │   Data Stream   │ Dynamic RAM   │
+│  └─────────────────────────┘  └─────────────┘ │                 │    (DRAM)     │
+└───────────────────────┬───────────────────────┘                 └───────────────┘
+                        │
+                        ▼
+         ┌───────────────────────────────┐
+         │ Input/Output (I/O) Controller │
+         └──────────────┬────────────────┘
+                        │
+    ┌───────────┬───────┴───┬──────────────┬────────────┐
+    ▼           ▼           ▼              ▼            ▼
+Hard Disk   Keyboard/   Network/       Display/    Experimental
+ / SSD        Mouse       Modem        Monitor      Instruments</code></pre>
+<h4 id="performance-driving-rules">Performance Driving Rules:</h4>
+<ol type="1">
+<li><strong>Processor Speed</strong>: For example, a <span class="math inline">\(1.0\text{ GHz}\)</span> processor cycle takes <span class="math inline">\(10^{-9}\text{ s}\)</span>. Executing 4 floating-point operations per cycle yields an ideal peak speed of <span class="math inline">\(4\text{ GigaFLOPS}\)</span>.</li>
+<li><strong>RAM Bandwidth</strong>: Rate at which data is transferred from DRAM into processor registers (bytes or words per cycle).</li>
+<li><strong>RAM Latency</strong>: Time elapsed between the CPU issuing a read/write memory request and the data arriving in registers.</li>
+<li><strong>Governing Law of Real Performance</strong>:
+<div class="important">
+<div class="title">
+<p>Important</p>
+</div>
+<p><em>Computer performance is strictly driven by both processor speed and RAM latency, whichever is smaller!</em> A fast CPU stalled on slow RAM operates only at memory-bus speeds (the "Memory Wall").</p>
+</div></li>
+</ol>
+<h3 id="22-serial-vs-parallel-computing-analogy">2.2 Serial vs. Parallel Computing Analogy</h3>
+<ul>
+<li><strong>Serial Paradigm</strong>: A computational problem is broken into a linear sequence of discrete instructions executed one after another on a single core.
+<ul>
+<li><em>Analogy</em>: One person solves a 2000-piece jigsaw puzzle alone <span class="math inline">\(\implies\)</span> takes <span class="math inline">\(10\text{ hours}\)</span>.</li>
+</ul></li>
+<li><strong>Parallel Paradigm</strong>: The problem is partitioned into concurrent tasks executed across multiple cooperative processing elements.
+<ul>
+<li><em>Analogy</em>: Two people collaborate to solve the 2000-piece puzzle <span class="math inline">\(\implies\)</span> takes <span class="math inline">\(5\text{ hours } 30\text{ minutes}\)</span>.</li>
+<li><em>Why not in 5 hours?</em> The extra <span class="math inline">\(30\text{ minutes}\)</span> is lost to <strong>parallel overhead</strong>: communication (discussing piece locations), coordination, synchronization, and contention for shared table space.</li>
+</ul></li>
+</ul>
+<hr/>
+<h2 id="3-physical-motivations-for-large-scale-computing">3. Physical Motivations for Large-Scale Computing</h2>
+<p>Scientific computing is indispensable because experimental investigations often reach fundamental physical, economic, or geometric limits:</p>
+<h3 id="31-limitations-of-experimental-methods-vs-theoreticalnumerical-studies">3.1 Limitations of Experimental Methods vs. Theoretical/Numerical Studies</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Metric / Aspect</th>
+<th style="text-align: left;">Experimental Methods</th>
+<th style="text-align: left;">Theoretical &amp; Numerical Simulation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Intrusiveness</strong></td>
+<td style="text-align: left;">Obtrusive (probes, Pitot tubes, thermocouples disrupt the flow field).</td>
+<td style="text-align: left;">Completely non-intrusive (field variables computed everywhere).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scale &amp; Scope</strong></td>
+<td style="text-align: left;">Limited to prototypes, wind tunnels, or scaled-down test benches.</td>
+<td style="text-align: left;">Capable of modeling full-scale, real-time astrophysical or nano-scale systems.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cost</strong></td>
+<td style="text-align: left;">Extremely expensive; often destructive (e.g., crash tests, explosive testing).</td>
+<td style="text-align: left;">Highly cost-effective once software and compute infrastructure are established.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Measurement Errors</strong></td>
+<td style="text-align: left;">Instrumentation drift, precision errors, calibration limits, human error.</td>
+<td style="text-align: left;">Governed strictly by discretization, truncation, and round-off errors.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Data Granularity</strong></td>
+<td style="text-align: left;">Gross parametric results at a sparse set of probe locations.</td>
+<td style="text-align: left;">High-fidelity, full-field spatial and temporal resolutions.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Visualization</strong></td>
+<td style="text-align: left;">Difficult to visualize internal 3D flow patterns and stresses.</td>
+<td style="text-align: left;">Comprehensive 3D volume rendering, streamlines, vorticity contours.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-multiscale-and-multiphysics-cascades">3.2 Multiscale and Multiphysics Cascades</h3>
+<h4 id="1-multiscale-modeling-of-brain-vasculature-perdikaris-et-al-2016">1. Multiscale Modeling of Brain Vasculature (Perdikaris et al., 2016)</h4>
+<p>Spans a profound cascade of spatial and temporal scales:</p>
+<ul>
+<li><strong>Protein Folding</strong>: Length <span class="math inline">\(\sim 10^{-8}\text{ m}\)</span>, Time <span class="math inline">\(\sim 10^{-8}\text{ s}\)</span> (Yotta/Zetta scale operations).</li>
+<li><strong>Cell Biomechanics</strong>: Molecular Dynamics (MD), Length <span class="math inline">\(\sim 10^{-6}\text{ m}\)</span>, Time <span class="math inline">\(\sim 10^{-6}\text{ s}\)</span>.</li>
+<li><strong>Cell Interactions</strong>: Dissipative Particle Dynamics (DPD), Length <span class="math inline">\(\sim 10^{-4}\text{ m}\)</span>, Time <span class="math inline">\(\sim 10^{-4}\text{ s}\)</span>.</li>
+<li><strong>Flow-Structure Interactions (FSI)</strong>: 3D/1D Continuum Mechanics, Spectral/<span class="math inline">\(hp\)</span> Element Methods, Length <span class="math inline">\(\sim 10^{-2}\text{ m}\)</span>, Time <span class="math inline">\(\sim 10^{-2}\text{ s}\)</span>.</li>
+</ul>
+<h4 id="2-multiscale-nanochannel-flow-simulation-oconnel--thomson-1995">2. Multiscale Nanochannel Flow Simulation (O'Connel &amp; Thomson, 1995)</h4>
+<p>Couples three spatial subdomains seamlessly:</p>
+<ul>
+<li><span class="math inline">\(\Omega_C\)</span>: Continuum fluid mechanics subdomain (Navier-Stokes equations).</li>
+<li><span class="math inline">\(\Omega_O\)</span>: Overlap handshake domain where velocity and flux boundary conditions match.</li>
+<li><span class="math inline">\(\Omega_A\)</span>: Atomistic molecular dynamics subdomain resolving microscopic wall interactions.</li>
+</ul>
+<hr/>
+<h2 id="4-quantitative-demand-estimation-turbulent-combustion-example">4. Quantitative Demand Estimation: Turbulent Combustion Example</h2>
+<p>Consider the Direct Numerical Simulation (DNS) of high-speed turbulent jet flame premixed combustion (<em>Gauding et al., Physics of Fluids, 2007</em>):</p>
+<h3 id="mathematical-derivation-of-flop--memory-requirements">Mathematical Derivation of FLOP &amp; Memory Requirements</h3>
+<ol type="1">
+<li><p><strong>Spatial Resolution (Kolmogorov Scale <span class="math inline">\(\eta\)</span>)</strong>:</p>
+<ul>
+<li>Smallest turbulent eddy scale scales as <span class="math inline">\(\eta / L \sim Re^{-3/4}\)</span>.</li>
+<li>To resolve all eddies in a 3D volume without empirical turbulence modeling: <span class="math display">\[N_{grid} \sim \left(\frac{L}{\eta}\right)^3 \sim \left(Re^{3/4}\right)^3 = Re^{9/4}\]</span></li>
+<li>For realistic turbulent combustion at <span class="math inline">\(Re \sim 10^6\)</span>: <span class="math display">\[N_{grid} \approx (10^6)^{9/4} = 10^{13.5} \approx 10^{13}\text{ to } 10^{14}\text{ grid points!}\]</span></li>
+</ul></li>
+<li><p><strong>Per-Time-Step Work</strong>:</p>
+<ul>
+<li>Solving coupled Navier-Stokes, energy, and multi-species chemical kinetics at each node requires: <span class="math display">\[\text{Work per step} \approx O(10^{13})\text{ FLOP}\]</span></li>
+</ul></li>
+<li><p><strong>Temporal Resolution (CFL Limit)</strong>:</p>
+<ul>
+<li>For numerical stability, <span class="math inline">\(\Delta t \sim 10^{-3}\text{ s}\)</span>. Simulating a modest <span class="math inline">\(10\text{ seconds}\)</span> physical event: <span class="math display">\[N_{steps} = \frac{10\text{ s}}{10^{-3}\text{ s}} = 10^4\text{ time steps}\]</span></li>
+</ul></li>
+<li><p><strong>Total Work &amp; Serial Wall-Clock Time</strong>: <span class="math display">\[\text{Total FLOPs} = 10^4\text{ steps} \times 10^{13}\text{ FLOP/step} = 10^{17}\text{ FLOP}\]</span></p>
+<ul>
+<li>On a top-tier uniprocessor delivering sustained <span class="math inline">\(10\text{ GFLOPS}\)</span> (<span class="math inline">\(10^{10}\text{ FLOP/s}\)</span>): <span class="math display">\[T_{serial} = \frac{10^{17}\text{ FLOP}}{10^{10}\text{ FLOP/s}} = 10^7\text{ seconds} \approx 317\text{ years!}\]</span></li>
+</ul></li>
+<li><p><strong>Memory Capacity Wall</strong>:</p>
+<ul>
+<li>Storing <span class="math inline">\(10^{13}\)</span> double-precision complex or coupled state vectors: <span class="math display">\[\text{Memory} = 10^{13} \times 16\text{ bytes} = 1.6 \times 10^{14}\text{ bytes} = 160\text{ Terabytes!}\]</span></li>
+<li>No single workstation RAM can hold this matrix, necessitating large-scale distributed-memory clusters.</li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="5-overview-of-discretization-methods">5. Overview of Discretization Methods</h2>
+<p>The journey from a continuum physical law to a digital solution proceeds by converting continuous differential equations into algebraic linear equations (<span class="math inline">\(Ax = b\)</span>).</p>
+<pre><code>Physical Governing Laws (PDEs)
+  (Mass, Momentum, Energy)
+          │
+          ▼
+Discretization Scheme
+  (FDM / FVM / FEM)
+          │
+          ▼
+System of Algebraic Equations
+         Ax = b
+          │
+          ▼
+Sparse Matrix Linear Solver
+  (Direct or Iterative)
+          │
+          ▼
+Physical Solution Field T(x, y, z, t)</code></pre>
+<h3 id="51-finite-difference-method-fdm">5.1 Finite Difference Method (FDM)</h3>
+<ul>
+<li><strong>Basis</strong>: Truncated Taylor series expansions approximating derivatives at discrete grid points.</li>
+<li><strong>Formulation</strong>: <span class="math display">\[\left.\frac{\partial^2 T}{\partial x^2}\right|_i \approx \frac{T_{i+1} - 2T_i + T_{i-1}}{\Delta x^2} + O(\Delta x^2)\]</span></li>
+<li><strong>Pros</strong>: Conceptually straightforward; easy to implement high-order schemes on structured grids.</li>
+<li><strong>Cons</strong>: Difficult to apply to complex, curved, or irregular geometries.</li>
+</ul>
+<h3 id="52-finite-volume-method-fvm">5.2 Finite Volume Method (FVM)</h3>
+<ul>
+<li><strong>Basis</strong>: Integral conservation laws applied across discrete control volumes.</li>
+<li><strong>Formulation</strong>: <span class="math display">\[\int_{\partial V} \mathbf{F} \cdot \mathbf{n} \, dA = \int_V S \, dV\]</span></li>
+<li><strong>Pros</strong>: Strictly conservative locally and globally; well-suited for fluid dynamics and convective transport.</li>
+<li><strong>Cons</strong>: Higher-order reconstructions on unstructured 3D meshes become mathematically complex.</li>
+</ul>
+<h3 id="53-finite-element-method-fem">5.3 Finite Element Method (FEM)</h3>
+<ul>
+<li><strong>Basis</strong>: Weak (variational) formulation of PDEs over unstructured subdivisions (elements).</li>
+<li><strong>Formulation</strong>: Residual error weighted with test functions <span class="math inline">\(\psi_i\)</span> and integrated over elements: <span class="math display">\[\int_\Omega \left( \nabla \psi_i \cdot \nabla T - \psi_i f \right) d\Omega = 0\]</span></li>
+<li><strong>Pros</strong>: Exceptional geometric flexibility; mathematically rigorous; handles anisotropic boundary conditions naturally.</li>
+<li><strong>Cons</strong>: High memory and computational cost for stiffness matrix assembly and solution.</li>
+</ul>
+<hr/>
+<h2 id="6-numerical-errors-stability-and-optimal-discretization">6. Numerical Errors, Stability, and Optimal Discretization</h2>
+<p>Every numerical solution inevitably incurs errors. In an exam, distinguishing the exact categories of error is essential:</p>
+<h3 id="61-classification-of-numerical-errors">6.1 Classification of Numerical Errors</h3>
+<ol type="1">
+<li><strong>Modeling Error</strong>: Difference between the true physical phenomenon and the formulated mathematical equations (e.g., assuming laminar flow when turbulence exists, or assuming ideal gas behavior).</li>
+<li><strong>Discretization / Truncation Error</strong>: Error introduced by replacing continuous differential operators with discrete algebraic approximations (e.g., dropping higher-order terms in a Taylor series). <span class="math display">\[\text{Error}_{trunc} = O(\Delta x^p)\]</span>
+<ul>
+<li><em>Behavior</em>: Decreases monotonically as grid spacing <span class="math inline">\(\Delta x \to 0\)</span> (or number of grid points <span class="math inline">\(N \to \infty\)</span>).</li>
+</ul></li>
+<li><strong>Round-Off Error</strong>: Error caused by the finite precision representation of real numbers in computer hardware (IEEE 754 floating point standard).
+<ul>
+<li><em>Behavior</em>: Accumulates with every floating-point operation. As <span class="math inline">\(\Delta x\)</span> decreases, the total number of operations <span class="math inline">\(N\)</span> surges, causing round-off error to <strong>increase</strong>!</li>
+</ul></li>
+</ol>
+<h3 id="62-total-error-and-the-optimal-grid-spacing">6.2 Total Error and the Optimal Grid Spacing</h3>
+<p>The total computational error is the superposition of truncation error and round-off error: <span class="math display">\[\text{Error}_{total}(\Delta x) = \text{Error}_{discretization}(\Delta x) + \text{Error}_{round-off}(\Delta x) \approx C_1 (\Delta x)^p + \frac{C_2}{\Delta x^q}\]</span></p>
+<pre><code>Error
+  ▲
+  │ \                                           /  Round-off Error
+  │  \                                         /   (accumulates with ops)
+  │   \                                       /
+  │    \             Total Error             /
+  │     \           \___________/           /
+  │      \                │                /
+  │       \               ▼               /
+  │        \_        Optimal Point       /
+  │          \______       •       _____/
+  │                 \____     ____/
+  │                      \___/
+  │                       │
+  │ Discretization Error  │
+  │ (vanishes as Δx -&gt; 0) │
+  └───────────────────────┼────────────────────────► Grid Spacing (Δx)
+                      Δx_optimal</code></pre>
+<ul>
+<li><strong>Optimal Solution (<span class="math inline">\(\Delta x_{optimal}\)</span>)</strong>: The grid spacing at which the total error achieves its global minimum. Refining beyond this threshold leads to numerical degradation due to round-off error domination.</li>
+<li><strong>Grid-Independent Solution</strong>: A numerical solution where further refinement of <span class="math inline">\(\Delta x\)</span> changes the solution by less than a prescribed tolerance <span class="math inline">\(\epsilon_{tol}\)</span>, confirming that discretization error is sufficiently minimized.</li>
+</ul>
+<hr/>
+<h2 id="7-verification-vs-validation-vv">7. Verification vs. Validation (V&amp;V)</h2>
+<pre><code>               Real World Physical Phenomenon
+                            │
+               Modeling     ▼
+               Conceptual Mathematical Model (PDEs)
+                            │
+            Discretization  ▼
+               Computer Code / Numerical Solver
+                            │
+               Simulation   ▼
+                    Numerical Result</code></pre>
+<h3 id="71-verification-solving-the-equations-right">7.1 Verification ("Solving the equations right")</h3>
+<ul>
+<li><strong>Definition</strong>: Confirming that the numerical code accurately reflects the conceptual mathematical model.</li>
+<li><strong>Grid Convergence Study</strong>: Plotting error versus grid spacing on log-log coordinates: <span class="math display">\[\log(\text{Error}) = p \cdot \log(\Delta x) + \text{constant}\]</span></li>
+<li><strong>Slide 14 Benchmark</strong>: For 2D flow past a cylinder at <span class="math inline">\(Re = 100\)</span>:
+<ul>
+<li>Measuring drag coefficient <span class="math inline">\(C_d\)</span> and recirculation length <span class="math inline">\(x_s\)</span> across varying <span class="math inline">\(\Delta x\)</span>.</li>
+<li>On a plot of <span class="math inline">\(\log(|\text{error}|)\)</span> vs. <span class="math inline">\(\log(dx)\)</span>, the computed slopes verify the code's spatial accuracy:
+<ul>
+<li><strong>Slope = 1</strong>: First-order scheme verification.</li>
+<li><strong>Slope = 2</strong>: Second-order central-difference scheme verification.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="72-validation-solving-the-right-equations">7.2 Validation ("Solving the right equations")</h3>
+<ul>
+<li><strong>Definition</strong>: Determining that the mathematical model adequately represents the true physical reality for its intended purpose.</li>
+<li><strong>Quantitative Comparison</strong>:
+<ul>
+<li>Plotting normalized axial and radial velocity profiles <span class="math inline">\(V/V_T\)</span> vs. normalized radius <span class="math inline">\(r/R\)</span>.</li>
+<li>Direct overlay of laser Doppler velocimetry (LDV) experimental data points against computational curves across multiple axial stations.</li>
+</ul></li>
+</ul>
+<hr/>
+<h2 id="8-high-performance-computing-infrastructure--supercomputing-systems">8. High Performance Computing Infrastructure &amp; Supercomputing Systems</h2>
+<h3 id="81-performance-metrics-flops--energy-efficiency">8.1 Performance Metrics: FLOPS &amp; Energy Efficiency</h3>
+<ul>
+<li><strong>Ideal Peak Processor Speed</strong>: <span class="math display">\[\text{Peak FLOPS} = \text{Cores} \times \text{Clock Frequency (Hz)} \times \frac{\text{FLOPs}}{\text{Cycle}}\]</span></li>
+<li><strong>Power Usage Effectiveness (PUE)</strong>: Supercomputers consume immense electrical power, generating massive thermal loads: <span class="math display">\[\text{PUE} = \frac{\text{Total Facility Energy Requirement}}{\text{Energy Requirement of IT Components (CPUs, GPUs, Network, Storage)}}\]</span>
+<ul>
+<li>For leading high-efficiency green supercomputers: <span class="math inline">\(\text{PUE} \approx 1.1\text{ to } 1.2\)</span>.</li>
+<li>For typical enterprise supercomputers: <span class="math inline">\(\text{PUE} \approx 1.5\)</span>.</li>
+</ul></li>
+</ul>
+<h3 id="82-top500-global-supercomputers-july-2026-standing">8.2 Top500 Global Supercomputers (July 2026 Standing)</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Rank</th>
+<th style="text-align: left;">System</th>
+<th style="text-align: left;">Specifications &amp; Interconnect</th>
+<th style="text-align: left;">Cores</th>
+<th style="text-align: left;"><span class="math inline">\(R_{max}\)</span> (PFLOPS)</th>
+<th style="text-align: left;"><span class="math inline">\(R_{peak}\)</span> (PFLOPS)</th>
+<th style="text-align: left;">Power (kW)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;"><strong>LineShine</strong> (China)</td>
+<td style="text-align: left;">LingKun LX2 304C 1.55 GHz, LingQi, Kylin OS</td>
+<td style="text-align: left;">13,789,440</td>
+<td style="text-align: left;"><strong>2,198.40</strong></td>
+<td style="text-align: left;">2,735.82</td>
+<td style="text-align: left;">42,220</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;"><strong>El Capitan</strong> (LLNL, US)</td>
+<td style="text-align: left;">HPE Cray EX255a, AMD EPYC 24C + MI300A, Slingshot-11</td>
+<td style="text-align: left;">11,340,000</td>
+<td style="text-align: left;"><strong>1,809.00</strong></td>
+<td style="text-align: left;">2,821.10</td>
+<td style="text-align: left;">29,685</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;"><strong>Frontier</strong> (ORNL, US)</td>
+<td style="text-align: left;">HPE Cray EX235a, AMD EPYC 64C + MI250X, Slingshot-11</td>
+<td style="text-align: left;">9,066,176</td>
+<td style="text-align: left;"><strong>1,353.00</strong></td>
+<td style="text-align: left;">2,055.72</td>
+<td style="text-align: left;">24,607</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4</strong></td>
+<td style="text-align: left;"><strong>Aurora</strong> (ANL, US)</td>
+<td style="text-align: left;">HPE Cray EX, Intel Xeon Max 9470 + Data Center GPU Max</td>
+<td style="text-align: left;">9,264,128</td>
+<td style="text-align: left;"><strong>1,012.00</strong></td>
+<td style="text-align: left;">1,980.01</td>
+<td style="text-align: left;">38,698</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5</strong></td>
+<td style="text-align: left;"><strong>JUPITER Booster</strong> (FZJ, EU)</td>
+<td style="text-align: left;">BullSequana XH3000, NVIDIA GH200 Grace Hopper, NDR200</td>
+<td style="text-align: left;">4,801,344</td>
+<td style="text-align: left;"><strong>1,000.00</strong></td>
+<td style="text-align: left;">1,226.28</td>
+<td style="text-align: left;">15,794</td>
+</tr>
+</tbody>
+</table>
+<h3 id="83-indian-supercomputing-ecosystem-national-supercomputing-mission---nsm">8.3 Indian Supercomputing Ecosystem (National Supercomputing Mission - NSM)</h3>
+<p>Funded at ₹4,500 Crores under NSM to deploy indigenous petascale infrastructure:</p>
+<ol type="1">
+<li><strong>AIRAWAT - PSAI</strong> (C-DAC Pune): Rank 188, <span class="math inline">\(R_{max} = 8.50\text{ PFLOPS}\)</span>, <span class="math inline">\(R_{peak} = 13.17\text{ PFLOPS}\)</span>.</li>
+<li><strong>Arka</strong> (IITM Pune, Earth Sciences): Rank 196, <span class="math inline">\(R_{max} = 5.94\text{ PFLOPS}\)</span>, <span class="math inline">\(R_{peak} = 7.40\text{ PFLOPS}\)</span>.</li>
+<li><strong>Arunika</strong> (NCMRWF): Rank 251, <span class="math inline">\(R_{max} = 5.94\text{ PFLOPS}\)</span>.</li>
+<li><strong>Pratyush</strong> (Cray XC40, IITM): Rank 338, <span class="math inline">\(R_{max} = 3.76\text{ PFLOPS}\)</span>.</li>
+<li><strong>Mihir</strong> (Cray XC40, NCMRWF): <span class="math inline">\(R_{max} = 2.57\text{ PFLOPS}\)</span>.</li>
+<li><strong>PARAM Shivay</strong> (IIT BHU): First NSM supercomputer inaugurated Feb 2019.</li>
+<li><strong>PARAM Shakti (IIT Kharagpur)</strong>:
+<ul>
+<li>Peak Performance: <strong><span class="math inline">\(1.66\text{ PFLOPS}\)</span></strong>.</li>
+<li><strong>CPU-Only Compute Nodes (384 nodes)</strong>:
+<ul>
+<li><span class="math inline">\(2\times\)</span> Intel Xeon SKL G-6148 (40 cores/node, 2.4 GHz).</li>
+<li>Memory: 192 GB DDR4 2666 MHz per node. Total Cores = 15,360; Total RAM = 73,728 GB. Local SSD scratch = 480 GB.</li>
+</ul></li>
+<li><strong>High-Memory Compute Nodes (36 nodes)</strong>:
+<ul>
+<li><span class="math inline">\(2\times\)</span> Intel Xeon SKL G-6148. Memory: 768 GB DDR4 per node. Total Cores = 1,440; Total RAM = 27,648 GB.</li>
+</ul></li>
+<li><strong>GPU Compute Nodes (22 nodes)</strong>:
+<ul>
+<li><span class="math inline">\(2\times\)</span> Intel Xeon SKL G-6148 (880 total CPU cores), 192 GB RAM.</li>
+<li><span class="math inline">\(2\times\)</span> NVIDIA Tesla V100 (16 GB HBM2) per node (44 GPUs total).</li>
+<li>GPU Cores per node = <span class="math inline">\(2 \times 5,120 = 10,240\)</span> CUDA cores; <span class="math inline">\(2 \times 640 = 1,280\)</span> Tensor cores.</li>
+</ul></li>
+</ul></li>
+</ol>
+<hr/>
+<h2 id="9-real-world-hpc-scientific--biomedical-case-studies">9. Real-World HPC Scientific &amp; Biomedical Case Studies</h2>
+<h3 id="91-vesicle-fusion-in-binary-lipid-mixtures-kohlmayer-2011">9.1 Vesicle Fusion in Binary Lipid Mixtures (Kohlmayer, 2011)</h3>
+<ul>
+<li><strong>Problem</strong>: Simulating vesicle fusion and lipid phase separation in computational biochemistry.</li>
+<li><strong>Workload</strong>: 4 million particles per vesicle + solvent system using the <strong>LAMMPS</strong> molecular dynamics engine.</li>
+<li><strong>Compute Resources</strong>: 30 million CPU-hours on the <strong>Cray XT5 Jaguar</strong> supercomputer (224,256 cores, 1.75 PFLOPS).</li>
+</ul>
+<h3 id="92-black-hole-grazing-collisions--gravitational-waves-alcubierre-et-al-2001-ott-et-al-2008">9.2 Black Hole Grazing Collisions &amp; Gravitational Waves (Alcubierre et al., 2001; Ott et al., 2008)</h3>
+<ul>
+<li><strong>Problem</strong>: 3D numerical relativity solving Einstein field equations for binary black hole mergers.</li>
+<li><strong>Code</strong>: <span class="math inline">\(100^3\)</span> grid WaveToy benchmark on the <strong>Abe</strong> supercomputer.</li>
+<li><strong>Scaling Comparison</strong>: Pure MPI (<strong>PUGH</strong>) vs. Hybrid MPI+OpenMP (<strong>Carpet</strong> adaptive mesh refinement) demonstrating sustained parallel scaling up to 4,096 processor cores.</li>
+</ul>
+<h3 id="93-gpu-interactive-cloud-dynamics-harris-et-al-2003-acm-siggraph">9.3 GPU Interactive Cloud Dynamics (Harris et al., 2003, ACM SIGGRAPH)</h3>
+<p>Demonstrated early GPU acceleration for solving the 2D/3D pressure Poisson equation (<span class="math inline">\(\nabla^2 p = S\)</span>): | Poisson Solver Algorithm | Convergence / msec | Relative Convergence (100 iters) | Time for 100 iters (msec) | | :--- | :--- | :--- | :--- | | <strong>Jacobi 2D</strong> | 0.50 | 0.078 | 45.9 ms | | <strong>Red-Black Gauss-Seidel 2D</strong> | 0.85 | 0.124 | 45.3 ms | | <strong>Vectorized Jacobi 2D</strong> | <strong>1.00</strong> | <strong>0.079</strong> | <strong>17.3 ms</strong> (<span class="math inline">\(2.65\times\)</span> speedup) | | <strong>Jacobi 3D</strong> | N/C | N/C | 110.0 ms | | <strong>Vectorized Jacobi 3D</strong> | N/C | N/C | <strong>49.0 ms</strong> (<span class="math inline">\(2.24\times\)</span> speedup) |</p>
+<h3 id="94-impeller-mixing-in-chemical-stirred-tanks">9.4 Impeller Mixing in Chemical Stirred Tanks</h3>
+<ul>
+<li><strong>Problem</strong>: 3D turbulent scalar mixing across axial planes (<span class="math inline">\(z/R = -0.5, 0.0, 1.0, 2.0\)</span>) with rotating blades.</li>
+<li><strong>Discretization</strong>: 3.8 million grid points executed across 1,000 parallel processors over 60,000 iterations.</li>
+<li><strong>Runtime</strong>: 2 months continuous execution. Illustrates sublinear speedup scaling due to all-to-all communication at blade-baffle interfaces.</li>
+</ul>
+<h3 id="95-biomedical-pulsatile-blood-flow-in-stenosed-arteries">9.5 Biomedical Pulsatile Blood Flow in Stenosed Arteries</h3>
+<ul>
+<li><strong>Clinical Motivation</strong>: Severe arterial narrowing (<span class="math inline">\(58\%\)</span> stenosis) induces disturbed post-stenotic vortex shedding and abnormal Time-Averaged Wall Shear Stress (TAWSS: <span class="math inline">\(0.002 - 0.022\text{ Pa}\)</span>), triggering thrombus formation.</li>
+<li><strong>Computational Benchmark</strong>: Immersed Boundary (IB) solver comparing <span class="math inline">\(2\times 16\)</span>-core Intel Xeon E5-2698 v3 (2.3 GHz) vs. NVIDIA Tesla P100 (16 GB):
+<ul>
+<li>At 4,000 time steps: Sequential CPU (<span class="math inline">\(\sim 30,000\text{ s}\)</span>) <span class="math inline">\(\to\)</span> Multicore OpenACC (<span class="math inline">\(\sim 5,000\text{ s}\)</span>) <span class="math inline">\(\to\)</span> GPU OpenACC (<span class="math inline">\(\sim 500\text{ s}\)</span>, <strong><span class="math inline">\(60\times\)</span> overall acceleration</strong>).</li>
+</ul></li>
+</ul>
+<hr/>
+<h2 id="10-course-structure--reference-textbooks">10. Course Structure &amp; Reference Textbooks</h2>
+<h3 id="textbooks-for-module-1-scientific-computing--linear-algebra">Textbooks for Module 1 (Scientific Computing &amp; Linear Algebra)</h3>
+<ol type="1">
+<li><strong>Gilbert Strang</strong>, <em>Introduction to Linear Algebra</em>, 4th Edition, Cengage / Wellesley-Cambridge Press (2006).</li>
+<li><strong>Yousef Saad</strong>, <em>Iterative Methods for Sparse Linear Systems</em>, 2nd Edition, SIAM (2003).</li>
+</ol>
+<h3 id="textbooks-for-module-2-parallel-computing--gpu-programming">Textbooks for Module 2 (Parallel Computing &amp; GPU Programming)</h3>
+<ol type="1">
+<li><strong>Ananth Grama, Anshul Gupta, George Karypis, Vipin Kumar</strong>, <em>Introduction to Parallel Computing</em>, 2nd Edition, Addison-Wesley / Pearson (2003).</li>
+<li><strong>Michael J. Quinn</strong>, <em>Parallel Programming in C with MPI and OpenMP</em>, McGraw-Hill (2004).</li>
+<li><strong>William Gropp, Ewing Lusk, Anthony Skjellum</strong>, <em>Using MPI: Portable Parallel Programming with the Message-Passing Interface</em>, 3rd Edition, MIT Press.</li>
+<li><strong>Miguel Hermanns</strong>, <em>Parallel Programming in Fortran 95 using OpenMP</em>, Universidad Politécnica de Madrid.</li>
+<li><strong>Blaise Barney</strong>, <em>Introduction to Parallel Computing Tutorial</em>, Lawrence Livermore National Laboratory (LLNL).</li>
+</ol>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      <div></div>
+      
+      <a href="chapter-02.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Mathematical Foundations: Linear Algebra & Vector Spaces</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Comprehensive Exam Review, Master Synthesis & Formula Cheatsheet | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-18" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-17.html" class="btn-nav-control" title="Previous: Parallel Numerical Linear Algebra & Memory Management">← Prev</a>
+      <a href="chapter-19.html" class="btn-nav-control" title="Next: The Ultimate Last-Night Cramming Guide & Complete Notation Decryptor">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 18</span><span class="hub-badge badge-primary">Part III</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Comprehensive Exam Review, Master Synthesis & Formula Cheatsheet</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-18" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-18-comprehensive-exam-review-master-synthesis--formula-cheatsheet">Chapter 18: Comprehensive Exam Review, Master Synthesis &amp; Formula Cheatsheet</h1>
+<hr/>
+<h2 id="1-master-formula-cheatsheet">1. Master Formula Cheatsheet</h2>
+<h3 id="11-computer-architecture--memory-performance">1.1 Computer Architecture &amp; Memory Performance</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">Mathematical Formula</th>
+<th style="text-align: left;">Key Variables &amp; Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Peak Processor Speed</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\text{Peak FLOPS} = \text{Cores} \times f \times \frac{\text{FLOPs}}{\text{Cycle}}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(f = \text{frequency (Hz)}\)</span>. E.g., <span class="math inline">\(1\text{ GHz} \times 4\text{ ops} = 4\text{ GFLOPS}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cycle Time</strong></td>
+<td style="text-align: left;"><span class="math inline">\(t_{cycle} = \frac{1}{f}\)</span></td>
+<td style="text-align: left;">At <span class="math inline">\(1\text{ GHz}\)</span>, <span class="math inline">\(t_{cycle} = 10^{-9}\text{ s} = 1\text{ ns}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Uncached Effective Speed</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\text{Effective Speed} = \frac{1}{t_{latency}}\)</span></td>
+<td style="text-align: left;">At <span class="math inline">\(100\text{ ns}\)</span> DRAM latency, effective speed = <span class="math inline">\(10\text{ MFLOPS}\)</span> (<span class="math inline">\(400\times\)</span> drop!).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Effective Access Time (EAT)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\text{EAT} = H \cdot t_{cache} + (1 - H) \cdot t_{DRAM}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(H\)</span> = Cache Hit Ratio (<span class="math inline">\(0 \le H \le 1\)</span>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cache Line Size</strong></td>
+<td style="text-align: left;">Standard = <span class="math inline">\(64\text{ bytes}\)</span></td>
+<td style="text-align: left;">Holds exactly <span class="math inline">\(8\)</span> double-precision (64-bit) floats.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="12-discretization--numerical-pdes">1.2 Discretization &amp; Numerical PDEs</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">Mathematical Formula</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Central Difference (2nd Deriv.)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\left.\frac{d^2 T}{dx^2}\right|_i = \frac{T_{i+1} - 2T_i + T_{i-1}}{\Delta x^2} - \frac{\Delta x^2}{12} T^{(4)}(\xi)\)</span></td>
+<td style="text-align: left;">Second-order accurate symmetric stencil (<span class="math inline">\(O(\Delta x^2)\)</span> leading error).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2D Laplace 5-Point Stencil</strong></td>
+<td style="text-align: left;"><span class="math inline">\(4T_{i, j} - T_{i+1, j} - T_{i-1, j} - T_{i, j+1} - T_{i, j-1} = 0\)</span></td>
+<td style="text-align: left;">Uniform grid (<span class="math inline">\(\Delta x = \Delta y\)</span>). Pentadiagonal matrix.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Lexicographical 1D Index</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\text{ipt}(i, j) = (j - 1)N_x + i\)</span></td>
+<td style="text-align: left;">Maps <span class="math inline">\((i, j) \to \text{ipt}\)</span>; neighbors at <span class="math inline">\(\pm 1\)</span> and <span class="math inline">\(\pm N_x\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3D Poisson 7-Point Stencil</strong></td>
+<td style="text-align: left;"><span class="math inline">\(6T_{\text{ipt}} - \sum_{\text{neighbors}} T = \Delta x^2 f_{\text{ipt}}\)</span></td>
+<td style="text-align: left;">Septadiagonal matrix; index <span class="math inline">\(\text{ipt} = i + (j-1)N_x + (k-1)N_x N_y\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>FEM 1D Linear Shape Functions</strong></td>
+<td style="text-align: left;"><span class="math inline">\(N_1(\xi) = 1 - \xi, \quad N_2(\xi) = \xi\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\xi = (x - x_m)/\Delta x \in [0, 1]\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>FEM 1D Element Stiffness</strong></td>
+<td style="text-align: left;"><span class="math inline">\(k^e = \frac{1}{\Delta x} \begin{bmatrix} 1 &amp; -1 \\ -1 &amp; 1 \end{bmatrix}\)</span></td>
+<td style="text-align: left;">Assembles to standard central difference stencil!</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CSR Storage Requirement</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\text{Storage} = 2 N_{nz} + N + 1\)</span></td>
+<td style="text-align: left;"><code>val</code> (<span class="math inline">\(N_{nz}\)</span>), <code>col_ind</code> (<span class="math inline">\(N_{nz}\)</span>), <code>row_ptr</code> (<span class="math inline">\(N+1\)</span>).</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="13-linear-algebra-foundations--spectral-theory">1.3 Linear Algebra Foundations &amp; Spectral Theory</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">Mathematical Formula</th>
+<th style="text-align: left;">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Orthogonal Complement</strong></td>
+<td style="text-align: left;"><span class="math inline">\(N(A) = (C(A^T))^\perp, \quad N(A^T) = (C(A))^\perp\)</span></td>
+<td style="text-align: left;">Fundamental Theorem of Linear Algebra.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rank-Nullity Theorem</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\dim C(A^T) + \dim N(A) = n\)</span></td>
+<td style="text-align: left;">For <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> with rank <span class="math inline">\(r\)</span>: <span class="math inline">\(r + (n - r) = n\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Solvability Condition</strong></td>
+<td style="text-align: left;"><span class="math inline">\(Ax = b \text{ solvable} \iff b \perp N(A^T)\)</span></td>
+<td style="text-align: left;">Fredholm alternative (<span class="math inline">\(b \in C(A)\)</span>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Right Inverse (Existence)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(C = A^T (A A^T)^{-1}\)</span></td>
+<td style="text-align: left;">Exists iff <span class="math inline">\(A\)</span> has full row rank (<span class="math inline">\(r = m \le n\)</span>). <span class="math inline">\(AC = I_m\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Left Inverse (Uniqueness)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(B = (A^T A)^{-1} A^T\)</span></td>
+<td style="text-align: left;">Exists iff <span class="math inline">\(A\)</span> has full column rank (<span class="math inline">\(r = n \le m\)</span>). <span class="math inline">\(BA = I_n\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rayleigh Quotient</strong></td>
+<td style="text-align: left;"><span class="math inline">\(R(x) = \frac{x^T A x}{x^T x}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\lambda_{\min} \le R(x) \le \lambda_{\max}\)</span> for symmetric <span class="math inline">\(A\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Spectral Condition Number</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\kappa_2(A) = \frac{\sigma_{\max}}{\sigma_{\min}} \quad (\text{or } \frac{\lambda_{\max}}{\lambda_{\min}} \text{ for SPD})\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\frac{|\delta x|}{|x|} \le \kappa(A) \frac{|\delta b|}{|b|}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sylvester's Criterion</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\det(A_k) &gt; 0 \quad \text{for all } k = 1, \dots, n\)</span></td>
+<td style="text-align: left;">Necessary &amp; sufficient test for Positive Definiteness.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="14-direct-solvers--tdma">1.4 Direct Solvers &amp; TDMA</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Method / Theorem</th>
+<th style="text-align: left;">Mathematical Formulation</th>
+<th style="text-align: left;">Complexity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Gaussian Elimination / LU</strong></td>
+<td style="text-align: left;"><span class="math inline">\(A = L U \implies L y = b \text{ then } U x = y\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\frac{2}{3} N^3\)</span> FLOPs (Dense); severe fill-in for sparse PDEs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cholesky Factorization</strong></td>
+<td style="text-align: left;"><span class="math inline">\(A = L L^T \implies l_{jj} = \sqrt{a_{jj} - \sum l_{jk}^2}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\frac{1}{3} N^3\)</span> FLOPs (Exactly half of LU!); SPD matrices only.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TDMA Forward Recurrences</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\beta_i = b_i - \frac{a_i c_{i-1}}{\beta_{i-1}}, \quad \gamma_i = \frac{d_i - a_i \gamma_{i-1}}{\beta_i}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\beta_1 = b_1, \quad \gamma_1 = d_1 / b_1\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TDMA Backward Substitution</strong></td>
+<td style="text-align: left;"><span class="math inline">\(T_N = \gamma_N, \quad T_i = \gamma_i - \frac{c_i}{\beta_i} T_{i+1}\)</span></td>
+<td style="text-align: left;"><strong><span class="math inline">\(O(N)\)</span> operations!</strong> (<span class="math inline">\(10\)</span> ops for <span class="math inline">\(5 \times 5\)</span> vs <span class="math inline">\(75\)</span> for Gauss).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TDMA Stability Condition</strong></td>
+<td style="text-align: left;">$</td>
+<td style="text-align: left;">b_i</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Sherman-Morrison Formula</strong></td>
+<td style="text-align: left;"><span class="math inline">\((A + u v^T)^{-1} = A^{-1} - \frac{A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u}\)</span></td>
+<td style="text-align: left;">Solves rank-1 perturbed &amp; cyclic tridiagonal systems in <span class="math inline">\(O(N)\)</span>.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="15-classical-iterative-solvers--convergence-theory">1.5 Classical Iterative Solvers &amp; Convergence Theory</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">Iteration Matrix (<span class="math inline">\(G\)</span>) &amp; Step</th>
+<th style="text-align: left;">Convergence Condition &amp; Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>General Splitting</strong></td>
+<td style="text-align: left;"><span class="math inline">\(x^{(k+1)} = G x^{(k)} + f, \quad G = M^{-1} N\)</span></td>
+<td style="text-align: left;">Converges <span class="math inline">\(\iff \rho(G) &lt; 1\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Asymptotic Rate</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\tau = -\ln \rho(G)\)</span></td>
+<td style="text-align: left;">Iterations for <span class="math inline">\(\epsilon\)</span>: <span class="math inline">\(k \ge \frac{-\ln \epsilon}{\tau}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Jacobi Method</strong></td>
+<td style="text-align: left;"><span class="math inline">\(G_J = D^{-1}(E + F) = I - D^{-1} A\)</span></td>
+<td style="text-align: left;">Converges if <span class="math inline">\(A\)</span> is Strictly Diagonally Dominant.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Gauss-Seidel Method</strong></td>
+<td style="text-align: left;"><span class="math inline">\(G_{GS} = (D - E)^{-1} F\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\rho(G_{GS}) = [\rho(G_J)]^2 \implies \tau_{GS} = 2 \tau_J\)</span> (<span class="math inline">\(2\times\)</span> faster!).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SOR Method</strong></td>
+<td style="text-align: left;"><span class="math inline">\(G_{SOR} = (D - \omega E)^{-1} [(1 - \omega) D + \omega F]\)</span></td>
+<td style="text-align: left;">Ostrowski-Reich: Converges for SPD <span class="math inline">\(A \iff 0 &lt; \omega &lt; 2\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Optimal SOR Parameter</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbf{\omega_{opt} = \frac{2}{1 + \sqrt{1 - \rho(G_J)^2}}}\)</span></td>
+<td style="text-align: left;">Optimal spectral radius: <span class="math inline">\(\rho(G_{SOR, opt}) = \omega_{opt} - 1\)</span>.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="16-projection-steepest-descent--krylov-subspace-solvers">1.6 Projection, Steepest Descent &amp; Krylov Subspace Solvers</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Solver</th>
+<th style="text-align: left;">Key Mathematical Formulas</th>
+<th style="text-align: left;">Optimization / Convergence Property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Petrov-Galerkin</strong></td>
+<td style="text-align: left;"><span class="math inline">\(x_m \in x_0 + \mathcal{K}_m, \quad (b - A x_m) \perp \mathcal{L}_m\)</span></td>
+<td style="text-align: left;">Fundamental framework for all modern iterative solvers.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Steepest Descent (SD)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\alpha_k = \frac{r_k^T r_k}{r_k^T A r_k}, \quad x_{k+1} = x_k + \alpha_k r_k\)</span></td>
+<td style="text-align: left;">Successive residuals are orthogonal (<span class="math inline">\(r_{k+1} \perp r_k\)</span>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SD Convergence Bound</strong></td>
+<td style="text-align: left;"><span class="math inline">\(|e_{k+1}|_A \le \left( \frac{\kappa - 1}{\kappa + 1} \right) |e_k|_A\)</span></td>
+<td style="text-align: left;">Kantorovich inequality; zigzags when <span class="math inline">\(\kappa \gg 1\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Arnoldi Relation</strong></td>
+<td style="text-align: left;"><span class="math inline">\(A V_m = V_m H_m + h_{m+1, m} v_{m+1} e_m^T = V_{m+1} \bar{H}_m\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(V_m^T A V_m = H_m\)</span> (Upper Hessenberg matrix).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Lanczos 3-Term Recur.</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\beta_j v_{j+1} = A v_j - \alpha_j v_j - \beta_{j-1} v_{j-1}\)</span></td>
+<td style="text-align: left;">Symmetric <span class="math inline">\(A \implies H_m = T_m\)</span> is <strong>tridiagonal</strong>!</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Conjugate Gradient (CG)</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\alpha_k = \frac{r_k^T r_k}{p_k^T A p_k}, \quad \beta_k = \frac{r_{k+1}^T r_{k+1}}{r_k^T r_k}\)</span></td>
+<td style="text-align: left;">Directions are <span class="math inline">\(A\)</span>-conjugate (<span class="math inline">\(p_i^T A p_j = 0\)</span>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CG Convergence Bound</strong></td>
+<td style="text-align: left;"><span class="math inline">\(|e_m|_A \le 2 \left( \frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1} \right)^m |e_0|_A\)</span></td>
+<td style="text-align: left;">Chebyshev bound; vastly faster than Steepest Descent!</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GMRES Least-Squares</strong></td>
+<td style="text-align: left;"><span class="math inline">\(y_m = \arg\min_y |\beta e_1 - \bar{H}_m y|_2\)</span></td>
+<td style="text-align: left;">Transformed via Givens rotations: <span class="math inline">\(\mathbf{|r_m|_2 = |\gamma_{m+1}|}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BiCGSTAB Step</strong></td>
+<td style="text-align: left;"><span class="math inline">\(s_j = r_j - \alpha_j A p_j, \quad \omega_j = \frac{\langle A s_j, s_j \rangle}{|A s_j|_2^2}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(r_{j+1} = s_j - \omega_j A s_j\)</span>; 2 SpMVs, no <span class="math inline">\(A^T\)</span>, smooth.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>PCG Preconditioned Step</strong></td>
+<td style="text-align: left;"><span class="math inline">\(M z_{k+1} = r_{k+1}, \quad \beta_k = \frac{r_{k+1}^T z_{k+1}}{r_k^T z_k}\)</span></td>
+<td style="text-align: left;">Solves <span class="math inline">\(M z = r\)</span> once per step; preserves SPD symmetry!</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h3 id="17-parallel-computing-architecture--scalability-laws">1.7 Parallel Computing Architecture &amp; Scalability Laws</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Law / Metric</th>
+<th style="text-align: left;">Mathematical Expression</th>
+<th style="text-align: left;">Asymptotic Limits &amp; Physical Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Parallel Speedup</strong></td>
+<td style="text-align: left;"><span class="math inline">\(S(p) = \frac{T_s}{T_p}\)</span></td>
+<td style="text-align: left;">Linear: <span class="math inline">\(S = p\)</span>. Sublinear: <span class="math inline">\(S &lt; p\)</span>. Superlinear: <span class="math inline">\(S &gt; p\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Parallel Efficiency</strong></td>
+<td style="text-align: left;"><span class="math inline">\(E(p) = \frac{S(p)}{p} = \frac{T_s}{p T_p}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(E = \frac{1}{1 + T_o / T_s} \le 1\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Total Overhead</strong></td>
+<td style="text-align: left;"><span class="math inline">\(T_o(W, p) = p T_p - T_s\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(T_p = \frac{T_s + T_o}{p}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Isoefficiency Function</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbf{W = K \cdot T_o(W, p)}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(K = \frac{E}{1 - E}\)</span>. Growth rate of <span class="math inline">\(W\)</span> to keep <span class="math inline">\(E\)</span> constant.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Amdahl's Law</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbf{S(p) \le \frac{1}{f + \frac{1-f}{p}}}\)</span></td>
+<td style="text-align: left;">Serial fraction <span class="math inline">\(f = \Phi_s / T_s\)</span>. Upper bound: <span class="math inline">\(\mathbf{S_{\max} = 1/f}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Gustafson's Law</strong></td>
+<td style="text-align: left;"><span class="math inline">\(\mathbf{S_{\text{scaled}}(p) = p - (p - 1) s}\)</span></td>
+<td style="text-align: left;">Scaled speedup (weak scaling); linear scaling preserved!</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Wormhole Routing Time</strong></td>
+<td style="text-align: left;"><span class="math inline">\(T_{comm} \approx t_s + m \cdot t_w\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(t_s\)</span> = startup latency, <span class="math inline">\(m\)</span> = words, <span class="math inline">\(t_w = 1/\text{bandwidth}\)</span>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cannon's Matrix Multiply</strong></td>
+<td style="text-align: left;"><span class="math inline">\(T_p = \frac{2n^3}{p} + 2\sqrt{p} \, t_s + 2\frac{n^2}{\sqrt{p}} \, t_w\)</span></td>
+<td style="text-align: left;">2D Torus algorithm; Isoefficiency <span class="math inline">\(W = O(p^{1.5})\)</span>.</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="2-master-comparison-matrix-of-linear-system-solvers">2. Master Comparison Matrix of Linear System Solvers</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">Target Matrix Restrictions</th>
+<th style="text-align: left;">Subspaces <span class="math inline">\(\mathcal{K}_m, \mathcal{L}_m\)</span></th>
+<th style="text-align: left;">Minimization Property</th>
+<th style="text-align: center;">Recurrence Length</th>
+<th style="text-align: left;">Work per Iteration</th>
+<th style="text-align: center;">Storage Vectors</th>
+<th style="text-align: left;">Numerical Stability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Gauss-Seidel</strong></td>
+<td style="text-align: left;">Diagonally dominant or SPD</td>
+<td style="text-align: left;">Fixed-point splitting</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">1 SpMV</td>
+<td style="text-align: center;"><span class="math inline">\(1n\)</span> (in-place)</td>
+<td style="text-align: left;">Stable; poor parallelism</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>SOR</strong></td>
+<td style="text-align: left;">SPD (<span class="math inline">\(0 &lt; \omega &lt; 2\)</span>)</td>
+<td style="text-align: left;">Accelerated splitting</td>
+<td style="text-align: left;">None</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">1 SpMV</td>
+<td style="text-align: center;"><span class="math inline">\(1n\)</span> (in-place)</td>
+<td style="text-align: left;">Fast at <span class="math inline">\(\omega_{opt}\)</span>; serial chain</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>TDMA (Thomas)</strong></td>
+<td style="text-align: left;">Tridiagonal, Diag. Dominant</td>
+<td style="text-align: left;">Direct Elimination</td>
+<td style="text-align: left;">Exact solve</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;"><span class="math inline">\(8N\)</span> ops total</td>
+<td style="text-align: center;"><span class="math inline">\(O(N)\)</span> arrays</td>
+<td style="text-align: left;">Unconditionally stable</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Steepest Descent</strong></td>
+<td style="text-align: left;">Symmetric Positive Definite</td>
+<td style="text-align: left;"><span class="math inline">\(\mathcal{K}_1 = r_k, \mathcal{L}_1 = r_k\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(J(x)\)</span> along line <span class="math inline">\(r_k\)</span></td>
+<td style="text-align: center;">1</td>
+<td style="text-align: left;">1 SpMV, 2 dots, 2 AXPYs</td>
+<td style="text-align: center;"><span class="math inline">\(3n\)</span></td>
+<td style="text-align: left;">Severe zigzagging (<span class="math inline">\(\kappa \gg 1\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Conjugate Gradient</strong></td>
+<td style="text-align: left;">Symmetric Positive Definite</td>
+<td style="text-align: left;"><span class="math inline">\(\mathcal{K}_m = \mathcal{K}_m(A, r_0), \mathcal{L}_m = \mathcal{K}_m\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(|x - x^*|_A\)</span> over <span class="math inline">\(\mathcal{K}_m\)</span></td>
+<td style="text-align: center;">2 (short)</td>
+<td style="text-align: left;">1 SpMV, 2 dots, 3 AXPYs</td>
+<td style="text-align: center;"><span class="math inline">\(4n\)</span></td>
+<td style="text-align: left;"><strong>Optimal for SPD</strong>; Chebyshev</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>PCG</strong></td>
+<td style="text-align: left;">Symmetric Positive Definite</td>
+<td style="text-align: left;">Split <span class="math inline">\(\tilde{A} = L^{-1} A L^{-T}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(|x - x^*|_A\)</span> (preconditioned)</td>
+<td style="text-align: center;">2 (short)</td>
+<td style="text-align: left;">1 SpMV, 1 Solve <span class="math inline">\(M z = r\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(5n\)</span></td>
+<td style="text-align: left;">Fast; reduces <span class="math inline">\(\kappa \to 1\)</span></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>FOM</strong></td>
+<td style="text-align: left;">Any Non-Singular Square</td>
+<td style="text-align: left;"><span class="math inline">\(\mathcal{K}_m = \mathcal{K}_m(A, r_0), \mathcal{L}_m = \mathcal{K}_m\)</span></td>
+<td style="text-align: left;">Galerkin (<span class="math inline">\(r_m \perp \mathcal{K}_m\)</span>)</td>
+<td style="text-align: center;"><span class="math inline">\(m\)</span> (full)</td>
+<td style="text-align: left;">1 SpMV, <span class="math inline">\(m\)</span> dots, <span class="math inline">\(m\)</span> AXPYs</td>
+<td style="text-align: center;"><span class="math inline">\((m+2)n\)</span></td>
+<td style="text-align: left;">Can break down if <span class="math inline">\(H_m\)</span> singular</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GMRES</strong></td>
+<td style="text-align: left;">Any Non-Singular Square</td>
+<td style="text-align: left;"><span class="math inline">\(\mathcal{K}_m = \mathcal{K}_m(A, r_0), \mathcal{L}_m = A \mathcal{K}_m\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(|r_m|_2\)</span> over <span class="math inline">\(\mathcal{K}_m\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(m\)</span> (full)</td>
+<td style="text-align: left;">1 SpMV, <span class="math inline">\(m\)</span> dots, Givens</td>
+<td style="text-align: center;"><span class="math inline">\((m+2)n\)</span></td>
+<td style="text-align: left;"><strong>Monotonic decrease</strong>; <span class="math inline">\(O(mn)\)</span> memory</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>GMRES(<span class="math inline">\(m\)</span>)</strong></td>
+<td style="text-align: left;">Any Non-Singular Square</td>
+<td style="text-align: left;">Restarted every <span class="math inline">\(m\)</span> steps</td>
+<td style="text-align: left;">Local <span class="math inline">\(|r_m|_2\)</span> minimum</td>
+<td style="text-align: center;"><span class="math inline">\(m\)</span> (capped)</td>
+<td style="text-align: left;">1 SpMV, <span class="math inline">\(m\)</span> dots</td>
+<td style="text-align: center;"><span class="math inline">\((m+2)n\)</span></td>
+<td style="text-align: left;">Fixed memory; risk of stagnation</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BiCG</strong></td>
+<td style="text-align: left;">Any Non-Singular Square</td>
+<td style="text-align: left;"><span class="math inline">\(\mathcal{K}_m(A), \mathcal{L}_m = \mathcal{K}_m(A^T)\)</span></td>
+<td style="text-align: left;">Oblique Petrov-Galerkin</td>
+<td style="text-align: center;">2 (short)</td>
+<td style="text-align: left;">2 SpMVs (<span class="math inline">\(A, A^T\)</span>), 2 dots</td>
+<td style="text-align: center;"><span class="math inline">\(6n\)</span></td>
+<td style="text-align: left;">Erratic; requires <span class="math inline">\(A^T\)</span>; breakdowns</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CGS</strong></td>
+<td style="text-align: left;">Any Non-Singular Square</td>
+<td style="text-align: left;">Squared polynomial <span class="math inline">\(\phi_j^2(A)\)</span></td>
+<td style="text-align: left;">None (squared contraction)</td>
+<td style="text-align: center;">2 (short)</td>
+<td style="text-align: left;">2 SpMVs (no <span class="math inline">\(A^T\)</span>!), 2 dots</td>
+<td style="text-align: center;"><span class="math inline">\(7n\)</span></td>
+<td style="text-align: left;">Fast; extreme round-off amplification</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>BiCGSTAB</strong></td>
+<td style="text-align: left;">Any Non-Singular Square</td>
+<td style="text-align: left;">Stabilized polynomial <span class="math inline">\(\psi_j \phi_j\)</span></td>
+<td style="text-align: left;">Local 1D SD residual norm</td>
+<td style="text-align: center;">2 (short)</td>
+<td style="text-align: left;">2 SpMVs (no <span class="math inline">\(A^T\)</span>!), 4 dots</td>
+<td style="text-align: center;"><span class="math inline">\(7n\)</span></td>
+<td style="text-align: left;"><strong>Industry standard for non-symmetric</strong></td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="3-high-yield-exam-questions--comprehensive-answers">3. High-Yield Exam Questions &amp; Comprehensive Answers</h2>
+<h3 id="question-1-why-does-a-serial-calculation-of-turbulent-combustion-take-lifetimes-and-how-does-parallel-computing-overcome-this">Question 1: Why does a serial calculation of turbulent combustion take lifetimes, and how does parallel computing overcome this?</h3>
+<ul>
+<li><strong>Answer</strong>: In Direct Numerical Simulation (DNS) of 3D turbulent combustion, spatial grid resolution scales as <span class="math inline">\((L/\eta)^3 \sim Re^{9/4}\)</span>, requiring <span class="math inline">\(N \approx 10^9 - 10^{11}\)</span> nodes. Simulating <span class="math inline">\(10\text{ seconds}\)</span> at <span class="math inline">\(\Delta t = 10^{-3}\text{ s}\)</span> demands <span class="math inline">\(10^4\)</span> time steps. At <span class="math inline">\(O(10^{13})\text{ FLOP/step}\)</span>, total work is <span class="math inline">\(10^{17}\text{ FLOP}\)</span>. A single-core <span class="math inline">\(10\text{ GFLOPS}\)</span> processor requires <span class="math inline">\(10^7\text{ seconds} \approx 3.17\text{ years}\)</span> (and fine grids of <span class="math inline">\(10^{13}\)</span> floats require up to <span class="math inline">\(317\text{ years}\)</span>). Furthermore, storing <span class="math inline">\(10^{13}\)</span> double-precision floats requires <span class="math inline">\(160\text{ Terabytes}\)</span> of RAM, exceeding uniprocessor capacity. Parallel HPC clusters overcome this by:
+<ol type="1">
+<li>Aggregating hundreds of Terabytes of distributed memory across thousands of nodes.</li>
+<li>Delivering sustained PetaFLOPS throughput (<span class="math inline">\(10^{16}\text{ FLOP/s}\)</span>), reducing runtime from lifetimes down to minutes.</li>
+</ol></li>
+</ul>
+<hr/>
+<h3 id="question-2-state-the-exact-differences-between-verification-and-validation-vv">Question 2: State the exact differences between Verification and Validation (V&amp;V).</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ul>
+<li><strong>Verification ("Solving the equations right")</strong>: The process of determining that a computational model correctly implements and solves the intended mathematical model. It evaluates numerical correctness, consistency, grid convergence (<span class="math inline">\(O(\Delta x^2)\)</span>), and absence of programming bugs (e.g., using the Method of Manufactured Solutions).</li>
+<li><strong>Validation ("Solving the right equations")</strong>: The process of determining the degree to which a mathematical model accurately represents the real physical world from the perspective of the intended engineering application. It evaluates physics fidelity by comparing numerical results directly against high-precision laboratory experiments.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-3-why-does-total-numerical-error-increase-if-the-grid-spacing-delta-x-is-made-excessively-small">Question 3: Why does total numerical error increase if the grid spacing <span class="math inline">\(\Delta x\)</span> is made excessively small?</h3>
+<ul>
+<li><strong>Answer</strong>: Total numerical error is the sum of discretization/truncation error and floating-point round-off error: <span class="math display">\[\text{Error}_{total} = \text{Error}_{truncation} + \text{Error}_{round-off} \approx C_1 (\Delta x)^p + \frac{C_2}{\Delta x^q}\]</span> Truncation error vanishes monotonically as <span class="math inline">\(\Delta x \to 0\)</span>. However, reducing <span class="math inline">\(\Delta x\)</span> increases the total number of grid points and required floating-point operations. Because each operation on a digital computer incurs finite precision round-off (IEEE 754), round-off errors accumulate with the number of operations. Below an optimal threshold <span class="math inline">\(\Delta x_{optimal}\)</span>, round-off error dominates, causing total error to explode.</li>
+</ul>
+<hr/>
+<h3 id="question-4-state-the-fundamental-theorem-of-linear-algebra-and-prove-that-na-perp-cat">Question 4: State the Fundamental Theorem of Linear Algebra and prove that <span class="math inline">\(N(A) \perp C(A^T)\)</span>.</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ul>
+<li><strong>Part 1 (Dimensions)</strong>: For <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> with rank <span class="math inline">\(r\)</span>: <span class="math inline">\(\dim C(A) = \dim C(A^T) = r\)</span>, <span class="math inline">\(\dim N(A) = n - r\)</span>, and <span class="math inline">\(\dim N(A^T) = m - r\)</span>.</li>
+<li><strong>Part 2 (Orthogonality)</strong>: <span class="math inline">\(N(A) = (C(A^T))^\perp\)</span> in <span class="math inline">\(\mathbb{R}^n\)</span>, and <span class="math inline">\(N(A^T) = (C(A))^\perp\)</span> in <span class="math inline">\(\mathbb{R}^m\)</span>.</li>
+<li><strong>Proof of <span class="math inline">\(N(A) \perp C(A^T)\)</span></strong>: Let <span class="math inline">\(x \in N(A) \implies Ax = \mathbf{0}\)</span>. Writing <span class="math inline">\(A\)</span> in terms of its rows <span class="math inline">\(r_1^T, \dots, r_m^T\)</span>: <span class="math display">\[Ax = \begin{bmatrix} r_1^T x \\ \vdots \\ r_m^T x \end{bmatrix} = \begin{bmatrix} 0 \\ \vdots \\ 0 \end{bmatrix} \implies r_i \cdot x = 0 \quad \text{for all } i = 1, \dots, m\]</span> Any vector <span class="math inline">\(v \in C(A^T)\)</span> is a linear combination of rows: <span class="math inline">\(v = \sum_{i=1}^m c_i r_i\)</span>. Taking the dot product: <span class="math display">\[v \cdot x = \left( \sum_{i=1}^m c_i r_i \right) \cdot x = \sum_{i=1}^m c_i (r_i \cdot x) = \sum_{i=1}^m c_i (0) = 0\]</span> Since <span class="math inline">\(\dim C(A^T) + \dim N(A) = r + (n - r) = n\)</span>, <span class="math inline">\(N(A)\)</span> is the complete orthogonal complement of <span class="math inline">\(C(A^T)\)</span>.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-5-when-does-a-rectangular-matrix-have-a-right-inverse-vs-a-left-inverse-what-are-their-implications-for-ax--b">Question 5: When does a rectangular matrix have a Right Inverse vs. a Left Inverse? What are their implications for <span class="math inline">\(Ax = b\)</span>?</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ul>
+<li><strong>Right Inverse (<span class="math inline">\(AC = I_m\)</span>)</strong>: Exists if and only if <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> has <strong>full row rank</strong> (<span class="math inline">\(r = m \le n\)</span>). Formula: <span class="math inline">\(C = A^T (A A^T)^{-1}\)</span>. Implication: A solution to <span class="math inline">\(Ax = b\)</span> <strong>always exists</strong> for any <span class="math inline">\(b\)</span> (<span class="math inline">\(x = Cb\)</span>), but is non-unique (infinitely many solutions if <span class="math inline">\(m &lt; n\)</span>).</li>
+<li><strong>Left Inverse (<span class="math inline">\(BA = I_n\)</span>)</strong>: Exists if and only if <span class="math inline">\(A \in \mathbb{R}^{m \times n}\)</span> has <strong>full column rank</strong> (<span class="math inline">\(r = n \le m\)</span>). Formula: <span class="math inline">\(B = (A^T A)^{-1} A^T\)</span>. Implication: If a solution to <span class="math inline">\(Ax = b\)</span> exists, it is <strong>strictly unique</strong> (<span class="math inline">\(x = Bb\)</span>). If <span class="math inline">\(b \notin C(A)\)</span>, no exact solution exists, and <span class="math inline">\(x = Bb\)</span> provides the unique Ordinary Least Squares solution.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-6-prove-that-all-eigenvalues-of-a-real-symmetric-matrix-are-real">Question 6: Prove that all eigenvalues of a real symmetric matrix are real.</h3>
+<ul>
+<li><strong>Answer</strong>: Let <span class="math inline">\(A = A^T \in \mathbb{R}^{n \times n}\)</span>. Let <span class="math inline">\(Ax = \lambda x\)</span> with <span class="math inline">\(x \ne \mathbf{0}\)</span>. Take the conjugate transpose: <span class="math inline">\(x^H A^H = \bar{\lambda} x^H\)</span>. Since <span class="math inline">\(A\)</span> is real and symmetric, <span class="math inline">\(A^H = A^T = A \implies x^H A = \bar{\lambda} x^H\)</span>. Multiply first equation by <span class="math inline">\(x^H\)</span> on left: <span class="math inline">\(x^H A x = \lambda x^H x\)</span>. Multiply conjugate equation by <span class="math inline">\(x\)</span> on right: <span class="math inline">\(x^H A x = \bar{\lambda} x^H x\)</span>. Subtracting yields: <span class="math display">\[0 = (\lambda - \bar{\lambda}) (x^H x)\]</span> Since <span class="math inline">\(x \ne \mathbf{0}\)</span>, <span class="math inline">\(x^H x = \|x\|_2^2 &gt; 0\)</span>. Dividing by <span class="math inline">\(\|x\|_2^2\)</span> gives <span class="math inline">\(\lambda - \bar{\lambda} = 0 \implies \lambda = \bar{\lambda} \implies \lambda \in \mathbb{R}\)</span>.</li>
+</ul>
+<hr/>
+<h3 id="question-7-why-is-gaussian-elimination--lu-decomposition-avoided-for-large-3d-pde-systems">Question 7: Why is Gaussian Elimination / LU decomposition avoided for large 3D PDE systems?</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ol type="1">
+<li><strong>Arithmetic FLOP Explosion</strong>: Dense elimination scales as <span class="math inline">\(O(N^3)\)</span>. For a 3D grid with <span class="math inline">\(N = 10^6\)</span>, <span class="math inline">\(\frac{2}{3} N^3 \sim 10^{18}\text{ FLOPs}\)</span> (years of runtime).</li>
+<li><strong>Fill-In and Memory Explosion</strong>: Even though <span class="math inline">\(A\)</span> has only 7 non-zeros per row, Gaussian elimination introduces non-zero entries into zero positions within the band. In 3D (bandwidth <span class="math inline">\(W \sim N^{2/3}\)</span>), fill-in requires <span class="math inline">\(O(N^{5/3})\)</span> memory, exceeding physical RAM.</li>
+<li><strong>Round-Off Accumulation</strong>: Accumulation of rounding errors over <span class="math inline">\(O(N^3)\)</span> operations destroys numerical precision unless expensive pivoting is used, which ruins parallel scalability.</li>
+</ol></li>
+</ul>
+<hr/>
+<h3 id="question-8-why-is-the-thomas-algorithm-tdma-unconditionally-stable-without-pivoting-for-diagonally-dominant-matrices">Question 8: Why is the Thomas Algorithm (TDMA) unconditionally stable without pivoting for diagonally dominant matrices?</h3>
+<ul>
+<li><strong>Answer</strong>: The forward recurrence computes <span class="math inline">\(\beta_i = b_i - \frac{a_i c_{i-1}}{\beta_{i-1}}\)</span>. For a strictly diagonally dominant matrix, <span class="math inline">\(|b_1| &gt; |c_1| \implies |\beta_1| &gt; |c_1| \implies \frac{|c_1|}{|\beta_1|} &lt; 1\)</span>. By induction, if <span class="math inline">\(|\beta_{i-1}| &gt; |c_{i-1}|\)</span>, then: <span class="math display">\[|\beta_i| = \left| b_i - a_i \frac{c_{i-1}}{\beta_{i-1}} \right| \ge |b_i| - |a_i| \frac{|c_{i-1}|}{|\beta_{i-1}|} &gt; |b_i| - |a_i| \ge |c_i|\]</span> Thus, <span class="math inline">\(|\beta_i| &gt; |c_i|\)</span> for all <span class="math inline">\(i\)</span>, which guarantees:
+<ol type="1">
+<li><span class="math inline">\(\beta_i \ne 0\)</span> (division by zero is impossible).</li>
+<li>The backward multiplier <span class="math inline">\(|c_i / \beta_i| &lt; 1\)</span>, preventing any amplification of round-off error during back-substitution!</li>
+</ol></li>
+</ul>
+<hr/>
+<h3 id="question-9-state-the-sherman-morrison-formula-and-explain-its-application-to-periodic-boundary-conditions">Question 9: State the Sherman-Morrison formula and explain its application to periodic boundary conditions.</h3>
+<ul>
+<li><strong>Answer</strong>: <span class="math display">\[(A + u v^T)^{-1} = A^{-1} - \frac{A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u}\]</span> Under periodic boundary conditions (<span class="math inline">\(T(0) = T(L)\)</span>), the matrix is cyclic tridiagonal, having non-zero corner elements <span class="math inline">\(a_1\)</span> and <span class="math inline">\(c_N\)</span>. This breaks standard TDMA. By expressing <span class="math inline">\(A_{cyclic} = A_{tridiag} + u v^T\)</span> (where <span class="math inline">\(u = [\alpha, 0, \dots, \beta]^T\)</span> and <span class="math inline">\(v = [1, 0, \dots, \gamma]^T\)</span>), the system can be solved by performing <strong>two standard TDMA passes</strong> on <span class="math inline">\(A_{tridiag}\)</span> and updating the result via the vector formula, preserving optimal <span class="math inline">\(O(N)\)</span> complexity!</li>
+</ul>
+<hr/>
+<h3 id="question-10-prove-that-gauss-seidel-converges-twice-as-fast-as-jacobi-for-consistently-ordered-matrices">Question 10: Prove that Gauss-Seidel converges twice as fast as Jacobi for consistently ordered matrices.</h3>
+<ul>
+<li><strong>Answer</strong>: By David Young's Theorem, the eigenvalues <span class="math inline">\(\lambda \in \sigma(G_{SOR})\)</span> and <span class="math inline">\(\mu \in \sigma(G_J)\)</span> satisfy: <span class="math display">\[(\lambda + \omega - 1)^2 = \lambda \omega^2 \mu^2\]</span> Setting <span class="math inline">\(\omega = 1\)</span> for Gauss-Seidel: <span class="math display">\[\lambda^2 = \lambda \mu^2 \implies \lambda = \mu^2\]</span> Taking the maximum modulus across all eigenvalues: <span class="math display">\[\rho(G_{GS}) = \max |\lambda| = \max |\mu|^2 = \left[ \rho(G_J) \right]^2\]</span> The asymptotic rate of convergence is: <span class="math display">\[\tau_{GS} = -\ln \rho(G_{GS}) = -\ln [\rho(G_J)]^2 = -2 \ln \rho(G_J) = 2 \tau_J\]</span> Because <span class="math inline">\(\tau_{GS} = 2 \tau_J\)</span>, Gauss-Seidel requires exactly half the iterations of Jacobi to achieve the same error reduction!</li>
+</ul>
+<hr/>
+<h3 id="question-11-write-the-formula-for-the-optimal-sor-parameter-omega_opt-and-state-its-behavior-at-the-limits">Question 11: Write the formula for the optimal SOR parameter <span class="math inline">\(\omega_{opt}\)</span> and state its behavior at the limits.</h3>
+<ul>
+<li><strong>Answer</strong>: <span class="math display">\[\omega_{opt} = \frac{2}{1 + \sqrt{1 - \rho(G_J)^2}}\]</span>
+<ul>
+<li>If <span class="math inline">\(\rho(G_J) \to 0\)</span> (well-conditioned/decoupled): <span class="math inline">\(\omega_{opt} \to \frac{2}{1 + 1} = 1\)</span> (SOR reduces to standard Gauss-Seidel).</li>
+<li>If <span class="math inline">\(\rho(G_J) \to 1\)</span> (infinitely refined mesh): <span class="math inline">\(\omega_{opt} \to \frac{2}{1 + 0} = 2\)</span>.</li>
+<li>For any SPD matrix, if <span class="math inline">\(\omega \ge 2\)</span>, SOR unconditionally diverges.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-12-why-is-classical-gram-schmidt-cgs-avoided-in-numerical-computing-and-how-does-modified-gram-schmidt-mgs-fix-it">Question 12: Why is Classical Gram-Schmidt (CGS) avoided in numerical computing, and how does Modified Gram-Schmidt (MGS) fix it?</h3>
+<ul>
+<li><strong>Answer</strong>: In floating-point arithmetic, when projecting a vector <span class="math inline">\(a_j\)</span> that is nearly parallel to the existing basis, CGS subtracts projections based on the original raw vector <span class="math inline">\(a_j\)</span>, suffering catastrophic subtractive cancellation. As <span class="math inline">\(j\)</span> increases, newly generated vectors lose orthogonality to early basis vectors (<span class="math inline">\(q_1^T q_j \gg \epsilon\)</span>). MGS fixes this by sequentially projecting the <strong>working intermediate vector</strong> onto each <span class="math inline">\(q_i\)</span> and updating the vector in-place before the next projection. This maintains orthogonality to near machine precision.</li>
+</ul>
+<hr/>
+<h3 id="question-13-prove-that-successive-residuals-in-steepest-descent-are-orthogonal-r_k1-perp-r_k">Question 13: Prove that successive residuals in Steepest Descent are orthogonal (<span class="math inline">\(r_{k+1} \perp r_k\)</span>).</h3>
+<ul>
+<li><strong>Answer</strong>: In Steepest Descent, <span class="math inline">\(x_{k+1} = x_k + \alpha_k r_k\)</span> with <span class="math inline">\(\alpha_k = \frac{r_k^T r_k}{r_k^T A r_k}\)</span>. The new residual is <span class="math inline">\(r_{k+1} = b - A x_{k+1} = r_k - \alpha_k A r_k\)</span>. Taking the inner product: <span class="math display">\[r_{k+1}^T r_k = (r_k - \alpha_k A r_k)^T r_k = r_k^T r_k - \alpha_k (r_k^T A r_k)\]</span> Substituting <span class="math inline">\(\alpha_k\)</span>: <span class="math display">\[r_{k+1}^T r_k = r_k^T r_k - \left( \frac{r_k^T r_k}{r_k^T A r_k} \right) (r_k^T A r_k) = r_k^T r_k - r_k^T r_k = 0\]</span> Thus, <span class="math inline">\(r_{k+1}\)</span> is strictly orthogonal to <span class="math inline">\(r_k\)</span>.</li>
+</ul>
+<hr/>
+<h3 id="question-14-explain-the-zigzagging-pathology-of-steepest-descent">Question 14: Explain the "zigzagging" pathology of Steepest Descent.</h3>
+<ul>
+<li><strong>Answer</strong>: When <span class="math inline">\(\kappa_2(A) = \lambda_{\max}/\lambda_{\min} \gg 1\)</span>, the iso-contours of the quadratic functional <span class="math inline">\(J(x)\)</span> are extremely eccentric, needle-thin ellipsoidal valleys. Because consecutive search directions are strictly orthogonal (<span class="math inline">\(r_{k+1} \perp r_k\)</span>), the trajectory bounces back and forth across the valley walls at <span class="math inline">\(90^\circ\)</span> angles rather than pointing along the valley floor toward the minimum <span class="math inline">\(x^*\)</span>. The error contracts by factor <span class="math inline">\(\frac{\kappa - 1}{\kappa + 1} \approx 1 - \frac{2}{\kappa} \to 1\)</span>, causing progress to stall.</li>
+</ul>
+<hr/>
+<h3 id="question-15-how-does-conjugate-gradient-eliminate-zigzagging-state-its-optimality-property">Question 15: How does Conjugate Gradient eliminate zigzagging? State its optimality property.</h3>
+<ul>
+<li><strong>Answer</strong>: Conjugate Gradient replaces Euclidean orthogonality with <strong><span class="math inline">\(A\)</span>-conjugacy (<span class="math inline">\(p_i^T A p_j = 0\)</span> for <span class="math inline">\(i \ne j\)</span>)</strong>.
+<ul>
+<li><strong>Optimality</strong>: In CG, minimizing <span class="math inline">\(J(x)\)</span> along direction <span class="math inline">\(p_k\)</span> does not degrade the minimization achieved along previous directions. At step <span class="math inline">\(k\)</span>, <span class="math inline">\(x_k\)</span> is the exact minimizer of the error in the <span class="math inline">\(A\)</span>-norm (<span class="math inline">\(\|x - x^*\|_A\)</span>) over the entire <span class="math inline">\(k\)</span>-dimensional Krylov subspace <span class="math inline">\(x_0 + \mathcal{K}_k(A, r_0)\)</span>. It never repeats a direction, eliminating zigzagging and converging in at most <span class="math inline">\(n\)</span> steps in exact arithmetic.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-16-contrast-the-convergence-bounds-of-steepest-descent-and-conjugate-gradient">Question 16: Contrast the convergence bounds of Steepest Descent and Conjugate Gradient.</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ul>
+<li>Steepest Descent: <span class="math inline">\(\|e_k\|_A \le \left( \frac{\kappa - 1}{\kappa + 1} \right)^k \|e_0\|_A\)</span>.</li>
+<li>Conjugate Gradient: <span class="math inline">\(\|e_k\|_A \le 2 \left( \frac{\sqrt{\kappa} - 1}{\sqrt{\kappa} + 1} \right)^k \|e_0\|_A\)</span>.</li>
+<li>For <span class="math inline">\(\kappa = 10,000\)</span>:
+<ul>
+<li>SD contraction factor: <span class="math inline">\(\frac{9999}{10001} \approx 0.9998\)</span> (requires <span class="math inline">\(\sim 35,000\)</span> iterations).</li>
+<li>CG contraction factor: <span class="math inline">\(\frac{100 - 1}{100 + 1} = \frac{99}{101} \approx 0.9802\)</span> (requires <span class="math inline">\(\sim 350\)</span> iterations — <strong><span class="math inline">\(100\times\)</span> faster!</strong>).</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-17-how-does-gmres-monitor-convergence-without-explicitly-calculating-the-solution-vector-x_m">Question 17: How does GMRES monitor convergence without explicitly calculating the solution vector <span class="math inline">\(x_m\)</span>?</h3>
+<ul>
+<li><strong>Answer</strong>: In GMRES, the least-squares problem <span class="math inline">\(\min \|\beta e_1 - \bar{H}_m y\|_2\)</span> is transformed via accumulated Givens plane rotations <span class="math inline">\(Q_m\)</span> into: <span class="math display">\[\|Q_m (\beta e_1 - \bar{H}_m y)\|_2^2 = \|g_m - R_m y\|_2^2 + |\gamma_{m+1}|^2\]</span> Setting <span class="math inline">\(R_m y = g_m\)</span> sets the first term to zero. The minimum residual norm is <strong>strictly equal to the scalar <span class="math inline">\(|\gamma_{m+1}|\)</span></strong>: <span class="math display">\[\|r_m\|_2 = |\gamma_{m+1}|\]</span> Because <span class="math inline">\(|\gamma_{m+1}|\)</span> is computed as a byproduct of updating the Givens rotation at step <span class="math inline">\(m\)</span>, the solver tracks the exact residual norm <strong>WITHOUT solving <span class="math inline">\(R_m y = g_m\)</span> and WITHOUT forming <span class="math inline">\(x_m = x_0 + V_m y\)</span></strong>, saving massive memory and arithmetic bandwidth.</li>
+</ul>
+<hr/>
+<h3 id="question-18-why-is-bicgstab-preferred-over-cgs-for-non-symmetric-systems">Question 18: Why is BiCGSTAB preferred over CGS for non-symmetric systems?</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ul>
+<li>CGS squares the BiCG contraction polynomial (<span class="math inline">\(r_j = \phi_j^2(A) r_0\)</span>) to eliminate <span class="math inline">\(A^T\)</span>. However, squaring also squares the round-off errors and residual oscillations, leading to wild spikes and numerical overflow.</li>
+<li>BiCGSTAB stabilizes the iteration by setting <span class="math inline">\(r_j = \psi_j(A) \phi_j(A) r_0\)</span>, where <span class="math inline">\(\psi_j(t) = (1 - \omega_j t) \psi_{j-1}(t)\)</span>. Parameter <span class="math inline">\(\omega_j\)</span> is computed at every step via an exact 1D Steepest Descent line search to minimize the residual norm <span class="math inline">\(\|r_{j+1}\|_2\)</span>. This smooths out oscillations, maintains stability, avoids <span class="math inline">\(A^T\)</span>, and requires only 2 SpMVs per iteration.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-19-why-is-split-preconditioning-mandatory-for-conjugate-gradient-and-how-does-pcg-eliminate-explicit-factor-solves">Question 19: Why is Split Preconditioning mandatory for Conjugate Gradient, and how does PCG eliminate explicit factor solves?</h3>
+<ul>
+<li><strong>Answer</strong>: Conjugate Gradient mathematically requires an SPD matrix. If left preconditioning (<span class="math inline">\(M^{-1} A\)</span>) is applied, <span class="math inline">\(M^{-1} A\)</span> is non-symmetric even if both <span class="math inline">\(A\)</span> and <span class="math inline">\(M\)</span> are symmetric! Split preconditioning factors <span class="math inline">\(M = L L^T\)</span> and solves <span class="math inline">\(\tilde{A} \tilde{x} = \tilde{b}\)</span> where <span class="math inline">\(\tilde{A} = L^{-1} A L^{-T}\)</span>. <span class="math inline">\(\tilde{A}\)</span> is strictly symmetric positive definite. PCG eliminates explicit factorizations of <span class="math inline">\(L\)</span> by substituting auxiliary vector <span class="math inline">\(z_k = M^{-1} r_k\)</span>. The entire algorithm is expressed using only original matrix <span class="math inline">\(A\)</span> and a single solve <span class="math inline">\(M z = r\)</span> per step.</li>
+</ul>
+<hr/>
+<h3 id="question-20-what-is-the-difference-between-ilu0-and-ilut">Question 20: What is the difference between ILU(0) and ILUT?</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ul>
+<li><strong>ILU(0)</strong>: Performs incomplete LU factorization where fill-in elements are discarded if <span class="math inline">\(a_{ij} = 0\)</span> in the original matrix <span class="math inline">\(A\)</span>. Memory footprint is strictly identical to matrix <span class="math inline">\(A\)</span>.</li>
+<li><strong>ILUT(<span class="math inline">\(p, \tau\)</span>)</strong>: A threshold-based incomplete LU. An element is retained only if its magnitude exceeds drop tolerance <span class="math inline">\(\tau \cdot \|a_i\|\)</span>, and at most <span class="math inline">\(p\)</span> largest non-zero entries are kept per row. Provides higher accuracy at the cost of variable memory.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-21-what-is-false-sharing-in-multi-core-shared-memory-and-how-is-it-prevented">Question 21: What is False Sharing in multi-core shared memory, and how is it prevented?</h3>
+<ul>
+<li><strong>Answer</strong>: False sharing occurs when two independent threads modify distinct logical variables that reside on the <strong>same 64-byte physical cache line</strong>. Whenever thread 0 writes to its variable, the cache coherency hardware marks the entire 64-byte line invalid in thread 1's cache, forcing continuous cache line invalidations and bus ping-ponging ("cache thrashing") despite zero logical data sharing. <strong>Prevention</strong>: Pad variables to 64 bytes (<code>alignas(64)</code>), or allocate thread-private arrays so distinct threads never share a cache line.</li>
+</ul>
+<hr/>
+<h3 id="question-22-in-fortran-why-is-column-wise-matrix-vector-multiplication-2times-faster-than-row-wise-access">Question 22: In Fortran, why is column-wise matrix-vector multiplication <span class="math inline">\(2\times\)</span> faster than row-wise access?</h3>
+<ul>
+<li><strong>Answer</strong>: Fortran stores 2D arrays in <strong>Column-Major order</strong> (adjacent elements of the same column are contiguous in memory). In column-wise access (<span class="math inline">\(\sum_j A_{ji} x_j\)</span>), stepping along index <span class="math inline">\(i\)</span> accesses memory with <strong>stride-1</strong>. When <span class="math inline">\(A_{1i}\)</span> is fetched, the next 7 floats are automatically brought into the 64-byte L1 cache line, yielding <span class="math inline">\(87.5\%\)</span> cache hits. In row-wise access (<span class="math inline">\(\sum_j A_{ij} x_j\)</span>), stepping along <span class="math inline">\(j\)</span> jumps by <span class="math inline">\(M\)</span> words (<span class="math inline">\(M \times 8\text{ bytes}\)</span>). For large <span class="math inline">\(M\)</span>, each access misses the cache, forcing continuous high-latency DRAM stalls.</li>
+</ul>
+<hr/>
+<h3 id="question-23-state-amdahls-law-and-derive-the-maximum-speedup-on-an-infinite-number-of-processors">Question 23: State Amdahl’s Law and derive the maximum speedup on an infinite number of processors.</h3>
+<ul>
+<li><strong>Answer</strong>: Let sequential time be <span class="math inline">\(T_s = \Phi_s + \Psi\)</span>, where <span class="math inline">\(\Phi_s = f T_s\)</span> is non-parallelizable and <span class="math inline">\(\Psi = (1 - f) T_s\)</span> is parallelizable. Parallel execution time: <span class="math inline">\(T_p \ge f T_s + \frac{(1 - f) T_s}{p}\)</span>. Speedup: <span class="math display">\[S(p) = \frac{T_s}{T_p} \le \frac{1}{f + \frac{1 - f}{p}}\]</span> As <span class="math inline">\(p \to \infty\)</span>: <span class="math display">\[\mathbf{S_{\max} = \lim_{p \to \infty} S(p) = \frac{1}{f + 0} = \frac{1}{f}}\]</span> If <span class="math inline">\(5\%\)</span> of a code is sequential (<span class="math inline">\(f = 0.05\)</span>), the maximum possible speedup on any supercomputer is <span class="math inline">\(\frac{1}{0.05} = 20\times\)</span>.</li>
+</ul>
+<hr/>
+<h3 id="question-24-what-is-the-isoefficiency-function-and-what-does-w--op-log-p-signify">Question 24: What is the Isoefficiency Function, and what does <span class="math inline">\(W = O(p \log p)\)</span> signify?</h3>
+<ul>
+<li><strong>Answer</strong>: The Isoefficiency Function <span class="math inline">\(W = K \cdot T_o(W, p)\)</span> (where <span class="math inline">\(K = \frac{E}{1 - E}\)</span>) defines the rate at which problem size <span class="math inline">\(W\)</span> must increase as a function of processor count <span class="math inline">\(p\)</span> to keep parallel efficiency <span class="math inline">\(E\)</span> strictly constant. <span class="math inline">\(W = O(p \log p)\)</span> signifies a <strong>highly scalable parallel algorithm</strong> (e.g., parallel reduction or FFT). It means that when the processor count <span class="math inline">\(p\)</span> is doubled, the problem size <span class="math inline">\(W\)</span> only needs to increase by slightly more than double (<span class="math inline">\(p \log p\)</span>) to maintain the exact same parallel efficiency.</li>
+</ul>
+<hr/>
+<h3 id="question-25-describe-cannons-algorithm-for-parallel-matrix-multiplication-and-state-its-communication-complexity">Question 25: Describe Cannon’s Algorithm for parallel matrix multiplication and state its communication complexity.</h3>
+<ul>
+<li><strong>Answer</strong>: Cannon’s algorithm multiplies <span class="math inline">\(C = AB\)</span> on a 2D Torus network of <span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span> processors:
+<ol type="1">
+<li><strong>Preskewing</strong>: Row <span class="math inline">\(i\)</span> of <span class="math inline">\(A\)</span> is circularly shifted left by <span class="math inline">\(i\)</span>; column <span class="math inline">\(j\)</span> of <span class="math inline">\(B\)</span> is circularly shifted up by <span class="math inline">\(j\)</span>.</li>
+<li><strong>Multiply-Shift Loop (<span class="math inline">\(\sqrt{p}\)</span> stages)</strong>:
+<ul>
+<li>Local block multiply: <span class="math inline">\(C_{i, j} \mathrel{+}= A_{i, j} B_{i, j}\)</span>.</li>
+<li>Shift <span class="math inline">\(A\)</span> left by 1 block; shift <span class="math inline">\(B\)</span> up by 1 block.</li>
+</ul></li>
+</ol>
+<ul>
+<li><strong>Total Runtime</strong>: <span class="math display">\[\mathbf{T_p = \frac{2n^3}{p} + 2\sqrt{p} \, t_s + 2\frac{n^2}{\sqrt{p}} \, t_w}\]</span></li>
+<li><strong>Isoefficiency</strong>: <span class="math inline">\(W = O(p^{1.5})\)</span>.</li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-26-compare-the-convergence-and-iteration-scaling-of-jacobi-gauss-seidel-sor-steepest-descent-and-conjugate-gradient-on-2d-poisson-systems-slide-221">Question 26: Compare the convergence and iteration scaling of Jacobi, Gauss-Seidel, SOR, Steepest Descent, and Conjugate Gradient on 2D Poisson systems (Slide 221).</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ul>
+<li><strong>Empirical Iteration Comparison (Slide 221 at <span class="math inline">\(N = 256\)</span>, residual <span class="math inline">\(\approx 10^{-10}\)</span>)</strong>:
+<ul>
+<li><strong>Jacobi</strong>: <span class="math inline">\(215,057\)</span> iterations.</li>
+<li><strong>Gauss-Seidel</strong>: <span class="math inline">\(107,466\)</span> iterations (<span class="math inline">\(\approx 2\times\)</span> fewer than Jacobi, verifying <span class="math inline">\(R_\infty(GS) = 2 R_\infty(J)\)</span>).</li>
+<li><strong>Steepest Descent</strong>: <span class="math inline">\(247,067\)</span> iterations (poor performance due to orthogonal zigzagging).</li>
+<li><strong>SOR (at <span class="math inline">\(\omega_{opt}\)</span>)</strong>: <span class="math inline">\(38,221\)</span> iterations.</li>
+<li><strong>Conjugate Gradient</strong>: <strong><span class="math inline">\(484\)</span> iterations</strong> (<span class="math inline">\(444\times\)</span> fewer than Jacobi, <span class="math inline">\(79\times\)</span> fewer than SOR!).</li>
+</ul></li>
+<li><strong>Scaling with Mesh Refinement (<span class="math inline">\(h = 1/N\)</span>)</strong>:
+<ul>
+<li>Jacobi &amp; Gauss-Seidel: <span class="math inline">\(O(N^2) = O(h^{-2})\)</span> iterations (doubling grid quadruples iterations).</li>
+<li>SOR: <span class="math inline">\(O(N) = O(h^{-1})\)</span> iterations (doubling grid doubles iterations).</li>
+<li>Conjugate Gradient: <span class="math inline">\(O(\sqrt{\kappa(A)}) = O(N) = O(h^{-1})\)</span> iterations, but with a vastly smaller constant factor.</li>
+</ul></li>
+<li><strong>Floating Point Count per Iteration (Dense)</strong>:
+<ul>
+<li>SOR: <span class="math inline">\(n^2 + 4n\)</span> FLOPs.</li>
+<li>Steepest Descent: <span class="math inline">\(n^2 + 3n\)</span> FLOPs.</li>
+<li>Conjugate Gradient: <span class="math inline">\(n^2 + n\)</span> FLOPs.</li>
+</ul></li>
+</ul></li>
+</ul>
+<hr/>
+<h3 id="question-27-a-parallel-program-with-workload-w-running-on-p-processors-has-total-overhead-t_o--p34-w34-find-its-isoefficiency-function-if-w-increases-by-factor-m-by-what-factor-must-p-increase-to-preserve-efficiency-slide-380">Question 27: A parallel program with workload <span class="math inline">\(W\)</span> running on <span class="math inline">\(p\)</span> processors has total overhead <span class="math inline">\(T_o = p^{3/4} W^{3/4}\)</span>. Find its isoefficiency function. If <span class="math inline">\(W\)</span> increases by factor <span class="math inline">\(m\)</span>, by what factor must <span class="math inline">\(p\)</span> increase to preserve efficiency? (Slide 380).</h3>
+<ul>
+<li><strong>Answer</strong>:
+<ol type="1">
+<li>The isoefficiency relationship is <span class="math inline">\(W = K \cdot T_o(W, p)\)</span> where <span class="math inline">\(K = \frac{E}{1 - E}\)</span>: <span class="math display">\[W = K p^{3/4} W^{3/4} \implies W^{1/4} = K p^{3/4} \implies \mathbf{W = K^4 p^3 = O(p^3)}\]</span></li>
+<li>To find the processor growth required for a workload increase: <span class="math display">\[p = \left(\frac{W}{K^4}\right)^{1/3} \propto W^{1/3}\]</span> If <span class="math inline">\(W\)</span> increases by a factor of <span class="math inline">\(m\)</span> (<span class="math inline">\(W_{\text{new}} = m W\)</span>): <span class="math display">\[p_{\text{new}} \propto (m W)^{1/3} = m^{1/3} W^{1/3} = \mathbf{m^{1/3} p}\]</span> The number of processors must increase by <strong><span class="math inline">\(m^{1/3}\)</span></strong>.</li>
+</ol></li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-17.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Parallel Numerical Linear Algebra & Memory Management</span>
+      </a>
+    
+      
+      <a href="chapter-19.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">The Ultimate Last-Night Cramming Guide & Complete Notation Decryptor</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>

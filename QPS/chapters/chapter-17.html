@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Parallel Numerical Linear Algebra & Memory Management | HPSC Master Notes</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .standalone-nav-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--topbar-height);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      z-index: 900;
+      box-shadow: var(--shadow-sm);
+    }
+    [data-theme="dark"] .standalone-nav-bar {
+      background: rgba(17, 24, 39, 0.92);
+    }
+    .chapter-nav-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 3rem 0 2rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 640px) {
+      .chapter-nav-cards { grid-template-columns: 1fr; }
+    }
+    .nav-card {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .nav-card-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    .nav-card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+    .nav-next {
+      text-align: right;
+    }
+    .btn-hub-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--primary);
+      color: #ffffff;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .btn-hub-link:hover {
+      background: var(--primary-hover);
+      color: #ffffff;
+    }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\(', '\)']],
+        displayMath: [['25335', '25335'], ['\[', '\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script src="../js/mathjax-bundle.js" defer></script>
+</head>
+<body id="top">
+  <div id="reading-progress"></div>
+
+  <nav class="standalone-nav-bar" aria-label="Navigation">
+    <div class="nav-left">
+      <a href="../INDEX.html#chapter-17" class="btn-hub-link">
+        <span>🏠</span>
+        <span>Master Hub</span>
+      </a>
+      <a href="chapter-16.html" class="btn-nav-control" title="Previous: Parallel Performance Analysis, Amdahl's Law & Isoefficiency">← Prev</a>
+      <a href="chapter-18.html" class="btn-nav-control" title="Next: Comprehensive Exam Review, Master Synthesis & Formula Cheatsheet">Next →</a>
+    </div>
+    <div class="nav-right">
+      <button id="btn-theme-toggle" class="btn-nav-control" onclick="toggleTheme()" title="Toggle dark/light theme" type="button">
+        <span id="theme-icon">🌓</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="master-wrapper" style="margin-top: 1rem;">
+    <article class="chapter-card" style="border-top: 4px solid var(--primary);">
+      <header class="chapter-card-header">
+        <div class="chapter-header-left">
+          <div class="chapter-badge-row">
+            <span class="hub-badge badge-primary">Chapter 17</span><span class="hub-badge badge-primary">Part II</span>
+          </div>
+          <h1 class="chapter-title-heading" style="margin: 0; font-size: 1.6rem;">Parallel Numerical Linear Algebra & Memory Management</h1>
+        </div>
+        <div class="chapter-actions">
+          <a href="../INDEX.html#chapter-17" class="btn-action">🏠 Master Hub</a>
+          <a href="#top" class="btn-action">⬆ Top</a>
+        </div>
+      </header>
+
+      <div class="chapter-card-body">
+        
+<h1 id="chapter-17-parallel-numerical-linear-algebra--memory-management">Chapter 17: Parallel Numerical Linear Algebra &amp; Memory Management</h1>
+<hr/>
+<h2 id="1-fundamentals-of-parallel-matrix-computations">1. Fundamentals of Parallel Matrix Computations</h2>
+<p>Linear algebra computations—vector dot products, matrix-vector products (<span class="math inline">\(y = Ax\)</span>), and matrix-matrix multiplications (<span class="math inline">\(C = AB\)</span>)—constitute <span class="math inline">\(&gt; 90\%\)</span> of the floating-point execution time in scientific PDE simulations. Achieving near-peak performance on parallel supercomputers requires:</p>
+<ol type="1">
+<li>Decomposing data arrays across processors to balance arithmetic loads.</li>
+<li>Minimizing communication volume and frequency across the interconnect network.</li>
+<li>Structuring local memory accesses to maximize cache line reuse and avoid false sharing.</li>
+</ol>
+<hr/>
+<h2 id="2-parallel-vector-operations">2. Parallel Vector Operations</h2>
+<h3 id="21-parallel-vector-inner-product-dot-product">2.1 Parallel Vector Inner Product (Dot Product)</h3>
+<p>Compute scalar <span class="math inline">\(\alpha = x^T y = \sum_{i=1}^n x_i y_i\)</span> for <span class="math inline">\(x, y \in \mathbb{R}^n\)</span>.</p>
+<pre><code>       Processor 0:   [x_0..x_{n/p-1}] · [y_0..y_{n/p-1}]  ──► Local Sum s_0
+       Processor 1:   [...           ] · [...           ]  ──► Local Sum s_1
+       ...
+       Processor p-1: [...           ] · [...           ]  ──► Local Sum s_{p-1}
+                             │
+                             ▼  Binary Tree Reduction (MPI_Allreduce)
+                      Global Sum α = Σ s_k (broadcast to all)</code></pre>
+<h4 id="distributed-memory-implementation">Distributed Memory Implementation</h4>
+<ol type="1">
+<li><strong>Data Distribution</strong>: Vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are partitioned into contiguous blocks of size <span class="math inline">\(n/p\)</span> across <span class="math inline">\(p\)</span> processors (block distribution).</li>
+<li><strong>Local Computation</strong>: Each processor computes the dot product of its local vectors: <span class="math display">\[s_k = \sum_{i=1}^{n/p} x_{k, i} y_{k, i} \quad \left[\text{Work: } \frac{2n}{p}\text{ FLOPs}\right]\]</span></li>
+<li><strong>Global Communication</strong>: A global reduction tree (<code>MPI_Allreduce</code>) aggregates the local partial sums <span class="math inline">\(s_k\)</span> into the global scalar <span class="math inline">\(\alpha\)</span> and broadcasts it to all processors.
+<ul>
+<li>Using a binary reduction tree, communication requires <span class="math inline">\(\log_2 p\)</span> steps.</li>
+<li>Message size is a single floating-point word (<span class="math inline">\(m = 1\)</span>).</li>
+<li>Communication time: <span class="math display">\[T_{comm} = (t_s + t_w) \log_2 p\]</span></li>
+</ul></li>
+<li><strong>Total Parallel Execution Time</strong>: <span class="math display">\[\mathbf{T_p = \frac{2n}{p} + (t_s + t_w) \log_2 p}\]</span></li>
+</ol>
+<h4 id="shared-memory-implementation-pitfalls--solutions-slides-467468">Shared Memory Implementation Pitfalls &amp; Solutions (Slides 467–468)</h4>
+<p>Consider <span class="math inline">\(np\)</span> processors, each assigned <span class="math inline">\(m = n/np\)</span> elements of vectors <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>:</p>
+<ol type="1">
+<li><p><strong>The Naive Shared-Memory Flaw (Slide 467)</strong>: If all processors directly accumulate into a single shared scalar variable <span class="math inline">\(c\)</span>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode fortran"><code class="sourceCode fortranfixed"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="co">! Executed concurrently by all np processors</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a><span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, m</span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a>    c <span class="kw">=</span> c <span class="kw">+</span> a(proc_id <span class="kw">*</span> m <span class="kw">+</span> i) <span class="kw">*</span> b(proc_id <span class="kw">*</span> m <span class="kw">+</span> i)</span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="kw">end do</span></span></code></pre></div>
+<ul>
+<li><strong>Hazard</strong>: Every write to <span class="math inline">\(c\)</span> forces the hardware cache coherency controller to broadcast an invalidation across the shared bus.</li>
+<li>All other caches holding <span class="math inline">\(c\)</span> are invalidated, causing extreme <strong>bus contention, false sharing, and serialization</strong>! The program runs significantly <em>slower</em> than a single-threaded loop.</li>
+</ul></li>
+<li><p><strong>The Correct Memory Management Scheme (Slide 468)</strong>:</p>
+<ul>
+<li>Each processor computes its partial dot product into a <strong>private local variable <span class="math inline">\(\hat{c}\)</span></strong> residing in its local registers/cache: <span class="math display">\[\hat{c}_{procid} = \sum_{k=1}^m \hat{a}_k \hat{b}_k\]</span></li>
+<li>Once local accumulations are complete, processors participate in a structured <strong>Binary Tree Reduction (<code>MPI_Allreduce</code> / OpenMP reduction)</strong> to accumulate the global scalar: <span class="math display">\[c = \sum_{procid=0}^{np-1} \hat{c}_{procid}\]</span></li>
+<li>This completely eliminates bus thrashing during the <span class="math inline">\(O(n/p)\)</span> arithmetic loop, restricting synchronization to a single <span class="math inline">\(O(\log_2 p)\)</span> step at the end.</li>
+</ul></li>
+</ol>
+<hr/>
+<h3 id="22-vector-update-axpy">2.2 Vector Update (AXPY)</h3>
+<p>Compute <span class="math inline">\(y \leftarrow y + \alpha x\)</span> where <span class="math inline">\(\alpha\)</span> is a scalar and <span class="math inline">\(x, y \in \mathbb{R}^n\)</span>.</p>
+<ul>
+<li><strong>Communication Cost</strong>: <strong>ZERO</strong> (Embarrassingly parallel).</li>
+<li>Each processor updates its local <span class="math inline">\(n/p\)</span> elements in-place: <span class="math display">\[\mathbf{T_p = \frac{2n}{p}}\]</span></li>
+</ul>
+<hr/>
+<h2 id="3-parallel-matrix-vector-multiplication-y--ax">3. Parallel Matrix-Vector Multiplication (<span class="math inline">\(y = Ax\)</span>)</h2>
+<p>Let <span class="math inline">\(A \in \mathbb{R}^{n \times n}\)</span>, <span class="math inline">\(x \in \mathbb{R}^n\)</span>, and <span class="math inline">\(y \in \mathbb{R}^n\)</span>. Total sequential work is <span class="math inline">\(2n^2\)</span> FLOPs.</p>
+<h3 id="31-1d-row-wise-block-striping-slide-470">3.1 1D Row-Wise Block Striping (Slide 470)</h3>
+<ul>
+<li><strong>Data Distribution</strong>:
+<ul>
+<li>Matrix <span class="math inline">\(A\)</span> is sliced into horizontal bands: each processor owns <span class="math inline">\(n/p\)</span> rows of <span class="math inline">\(A\)</span>.</li>
+<li>Vector <span class="math inline">\(x\)</span> is initially partitioned so that processor <span class="math inline">\(k\)</span> owns local subvector <span class="math inline">\(x_k\)</span> of length <span class="math inline">\(n/p\)</span>.</li>
+</ul></li>
+</ul>
+<pre><code>       Processor 0:   [  Row Band 0 (n/p × n)  ]   ×   [ Full Vector x (n × 1) ] ──► y_0 (n/p)
+       Processor 1:   [  Row Band 1 (n/p × n)  ]   ×   [ Full Vector x (n × 1) ] ──► y_1 (n/p)
+       ...
+       Processor p-1: [  Row Band p-1          ]   ×   [ Full Vector x (n × 1) ] ──► y_{p-1} (n/p)</code></pre>
+<h4 id="execution-steps-and-complexity">Execution Steps and Complexity</h4>
+<ol type="1">
+<li><strong>Communication Phase (All-Gather)</strong>: To compute the row dot product <span class="math inline">\(y_i = \sum_{j=1}^n a_{ij} x_j\)</span>, processor <span class="math inline">\(k\)</span> requires <strong>all <span class="math inline">\(n\)</span> elements of vector <span class="math inline">\(x\)</span></strong>! Therefore, each processor must broadcast its local <span class="math inline">\(n/p\)</span> chunk of <span class="math inline">\(x\)</span> to all other <span class="math inline">\(p-1\)</span> processors using an <strong>All-Gather (all-to-all broadcast)</strong> collective call: <span class="math display">\[T_{comm} = t_s \log_2 p + t_w \left( \frac{p - 1}{p} \right) n \approx \mathbf{t_s \log_2 p + t_w n}\]</span></li>
+<li><strong>Computation Phase</strong>: Each processor multiplies its <span class="math inline">\(n/p\)</span> rows by the fully assembled vector <span class="math inline">\(x\)</span>: <span class="math display">\[T_{comp} = \frac{n}{p} \times (2n) = \mathbf{\frac{2n^2}{p}}\]</span></li>
+<li><strong>Total Parallel Time</strong>: <span class="math display">\[\mathbf{T_p = \frac{2n^2}{p} + t_s \log_2 p + t_w n}\]</span></li>
+</ol>
+<hr/>
+<h3 id="32-1d-column-wise-block-striping">3.2 1D Column-Wise Block Striping</h3>
+<ul>
+<li><strong>Data Distribution</strong>: Each processor owns <span class="math inline">\(n/p\)</span> vertical columns of <span class="math inline">\(A\)</span> and local subvector <span class="math inline">\(x_k\)</span> (size <span class="math inline">\(n/p\)</span>).</li>
+<li><strong>Computation Phase (Zero Initial Communication)</strong>: Each processor computes a partial contribution to the entire output vector: <span class="math display">\[y^{(k)} = A^{(k)} x^{(k)} \quad \left[\text{Work: } \frac{2n^2}{p}\text{ FLOPs}\right]\]</span></li>
+<li><strong>Communication Phase (Reduce-Scatter / All-to-One)</strong>: The global vector <span class="math inline">\(y = \sum_{k=0}^{p-1} y^{(k)}\)</span> is accumulated via a global vector reduction across the network. <span class="math display">\[T_{comm} \approx t_s \log_2 p + t_w n\]</span></li>
+</ul>
+<hr/>
+<h3 id="33-2d-block-decomposition-on-a-sqrtp-times-sqrtp-mesh">3.3 2D Block Decomposition on a <span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span> Mesh</h3>
+<p>For massive processor counts (<span class="math inline">\(p &gt; 10,000\)</span>), 1D row striping causes communication time to dominate because message size scales as <span class="math inline">\(O(n)\)</span>. <strong>2D Block Partitioning</strong> drastically reduces communication by dividing both rows and columns:</p>
+<ul>
+<li>Processors are arranged as a 2D logical grid of size <span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span>.</li>
+<li>Processor <span class="math inline">\((i, j)\)</span> holds a submatrix block <span class="math inline">\(A_{i, j}\)</span> of size <span class="math inline">\(\frac{n}{\sqrt{p}} \times \frac{n}{\sqrt{p}}\)</span>.</li>
+</ul>
+<pre><code>       Processor Grid (√p × √p):
+       ┌──────────┬──────────┬──────────┐
+       │ A_00     │ A_01     │ A_02     │   ◄── Row Group 0
+       ├──────────┼──────────┼──────────┤
+       │ A_10     │ A_11     │ A_12     │   ◄── Row Group 1
+       ├──────────┼──────────┼──────────┤
+       │ A_20     │ A_21     │ A_22     │   ◄── Row Group 2
+       └──────────┴──────────┴──────────┘
+            ▲          ▲          ▲
+       Col Group 0 Col Group 1 Col Group 2</code></pre>
+<h4 id="three-step-algorithm">Three-Step Algorithm</h4>
+<ol type="1">
+<li><strong>Column Broadcast</strong>: Processors on the diagonal broadcast their vector chunk <span class="math inline">\(x_j\)</span> (size <span class="math inline">\(n/\sqrt{p}\)</span>) vertically along their column group of <span class="math inline">\(\sqrt{p}\)</span> processors: <span class="math display">\[T_{comm, 1} = t_s \log_2 \sqrt{p} + t_w \left(\frac{n}{\sqrt{p}}\right) \log_2 \sqrt{p}\]</span></li>
+<li><strong>Local Matrix Multiply</strong>: Each processor multiplies its <span class="math inline">\((n/\sqrt{p}) \times (n/\sqrt{p})\)</span> block by the column-replicated vector: <span class="math display">\[T_{comp} = 2 \left(\frac{n}{\sqrt{p}}\right)^2 = \mathbf{\frac{2n^2}{p}}\]</span></li>
+<li><strong>Row Reduction</strong>: Partial product vectors are summed horizontally along each row group of <span class="math inline">\(\sqrt{p}\)</span> processors: <span class="math display">\[T_{comm, 2} = t_s \log_2 \sqrt{p} + t_w \left(\frac{n}{\sqrt{p}}\right) \log_2 \sqrt{p}\]</span></li>
+<li><strong>Decisive Scalability Advantage</strong>: Total communication time scales as <span class="math inline">\(\mathbf{O\left(\frac{n}{\sqrt{p}} \log p\right)}\)</span>, which is <strong>substantially smaller</strong> than the <span class="math inline">\(O(n)\)</span> communication time of 1D striping!</li>
+</ol>
+<hr/>
+<h2 id="4-parallel-matrix-matrix-multiplication-c--ab">4. Parallel Matrix-Matrix Multiplication (<span class="math inline">\(C = AB\)</span>)</h2>
+<p>Multiplying two dense matrices <span class="math inline">\(A, B \in \mathbb{R}^{n \times n}\)</span> requires <span class="math inline">\(2n^3\)</span> FLOPs.</p>
+<h3 id="41-cannons-algorithm-on-a-2d-torus">4.1 Cannon's Algorithm on a 2D Torus</h3>
+<p>Cannon’s Algorithm (1969) is the classic memory-optimal parallel algorithm for dense matrix multiplication on distributed-memory machines arranged as a 2D Torus network (<span class="math inline">\(\sqrt{p} \times \sqrt{p}\)</span>).</p>
+<h4 id="data-layout">Data Layout</h4>
+<ul>
+<li>Let <span class="math inline">\(q = \sqrt{p}\)</span>.</li>
+<li>Matrices <span class="math inline">\(A, B, C\)</span> are partitioned into <span class="math inline">\(q \times q\)</span> square blocks: <span class="math display">\[A_{i, j}, B_{i, j}, C_{i, j} \in \mathbb{R}^{(n/q) \times (n/q)}\]</span> assigned to processor <span class="math inline">\(P_{i, j}\)</span> where <span class="math inline">\(i, j \in \{0, 1, \dots, q-1\}\)</span>.</li>
+</ul>
+<pre><code>       Phase 1: Initial Preskewing
+         Row i of A shifted LEFT by i steps.
+         Column j of B shifted UP by j steps.
+                               │
+                               ▼
+       Phase 2: Shift-Multiply Loop (repeated √p times)
+         1. Local Multiply: C_ij += A_ij * B_ij
+         2. Shift A left by 1 step (circular)
+         3. Shift B up by 1 step (circular)</code></pre>
+<hr/>
+<h3 id="42-complete-step-by-step-derivation-of-cannons-algorithm">4.2 Complete Step-by-Step Derivation of Cannon's Algorithm</h3>
+<ol type="1">
+<li><p><strong>Initial Preskewing (Alignment Phase)</strong>: Initially, processor <span class="math inline">\(P_{i, j}\)</span> holds <span class="math inline">\(A_{i, j}\)</span> and <span class="math inline">\(B_{i, j}\)</span>. But to compute <span class="math inline">\(C_{i, j}\)</span>, it needs <span class="math inline">\(A_{i, k} B_{k, j}\)</span>. To ensure every processor begins with compatible blocks:</p>
+<ul>
+<li>Circularly shift row <span class="math inline">\(i\)</span> of matrix <span class="math inline">\(A\)</span> <strong>to the left by <span class="math inline">\(i\)</span> positions</strong>: <span class="math display">\[A_{i, j} \leftarrow A_{i, (j + i) \pmod q}\]</span></li>
+<li>Circularly shift column <span class="math inline">\(j\)</span> of matrix <span class="math inline">\(B\)</span> <strong>upwards by <span class="math inline">\(j\)</span> positions</strong>: <span class="math display">\[B_{i, j} \leftarrow B_{(i + j) \pmod q, j}\]</span> Now, processor <span class="math inline">\(P_{i, j}\)</span> holds blocks whose inner indices match (<span class="math inline">\(k = (i + j) \pmod q\)</span>)!</li>
+</ul></li>
+<li><p><strong>The Iterative Multiply-and-Shift Loop</strong>: Execute the following two steps <span class="math inline">\(q = \sqrt{p}\)</span> times:</p>
+<ul>
+<li><strong>Local Block Multiply</strong>: Each processor computes the matrix product of its currently resident blocks and accumulates into <span class="math inline">\(C_{i, j}\)</span>: <span class="math display">\[C_{i, j} \leftarrow C_{i, j} + A_{i, j} B_{i, j}\]</span> Computational cost per stage: <span class="math display">\[\text{Work} = 2 \left(\frac{n}{\sqrt{p}}\right)^3 = \frac{2n^3}{p^{3/2}}\text{ FLOPs}\]</span></li>
+<li><strong>Circular Shift</strong>:
+<ul>
+<li>Circularly shift each block of <span class="math inline">\(A\)</span> <strong>left by 1 processor</strong> along its row.</li>
+<li>Circularly shift each block of <span class="math inline">\(B\)</span> <strong>up by 1 processor</strong> along its column.</li>
+</ul></li>
+</ul></li>
+<li><p><strong>Restoration (Optional)</strong>: After <span class="math inline">\(\sqrt{p}\)</span> stages, <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are shifted back to their original positions.</p></li>
+</ol>
+<hr/>
+<h3 id="43-total-execution-time-derivation-of-cannons-algorithm">4.3 Total Execution Time Derivation of Cannon's Algorithm</h3>
+<ol type="1">
+<li><strong>Computational Time</strong>: Across all <span class="math inline">\(\sqrt{p}\)</span> stages: <span class="math display">\[T_{comp} = \sqrt{p} \times \left[ 2 \left(\frac{n}{\sqrt{p}}\right)^3 \right] = \mathbf{\frac{2n^3}{p}}\]</span></li>
+<li><strong>Communication Time</strong>:
+<ul>
+<li>Initial preskewing requires at most <span class="math inline">\(\sqrt{p}-1\)</span> shifts of size <span class="math inline">\((n/\sqrt{p})^2 = n^2/p\)</span>.</li>
+<li>The main loop requires <span class="math inline">\(\sqrt{p}-1\)</span> single-hop shifts of size <span class="math inline">\(n^2/p\)</span>.</li>
+<li>Combining both phases (sending 1 block of <span class="math inline">\(A\)</span> and 1 block of <span class="math inline">\(B\)</span> per shift): <span class="math display">\[T_{comm} \approx 2 \sqrt{p} \cdot t_s + 2 \sqrt{p} \cdot \left(\frac{n^2}{p}\right) t_w = \mathbf{2 \sqrt{p} \, t_s + 2 \frac{n^2}{\sqrt{p}} \, t_w}\]</span></li>
+</ul></li>
+<li><strong>Total Parallel Time</strong>: <span class="math display">\[\mathbf{T_p = \frac{2n^3}{p} + 2 \sqrt{p} \, t_s + 2 \frac{n^2}{\sqrt{p}} \, t_w}\]</span></li>
+</ol>
+<ul>
+<li><strong>Isoefficiency of Cannon’s Algorithm</strong>: <span class="math display">\[\frac{T_o}{W} = \frac{p T_p - W}{W} = \frac{2 p^{1.5} t_s + 2 n^2 \sqrt{p} t_w}{2n^3} = \text{const} \implies \mathbf{W = O(p^{1.5})}\]</span> Cannon’s algorithm exhibits excellent scalability (<span class="math inline">\(O(p^{1.5})\)</span>), vastly outperforming naive 1D striping.</li>
+</ul>
+<hr/>
+<h2 id="5-shared-memory-matrix-multiplication--cache-tiling">5. Shared Memory Matrix Multiplication &amp; Cache Tiling</h2>
+<p>On multi-core shared memory CPUs and GPUs, all threads share the physical memory space (Slides 471–472).</p>
+<pre><code>       Naive 3-Loop (Cache thrashing):       Tiled / Blocked (Cache-friendly):
+       for i = 1 to N                         for ii = 1 to N step B
+         for j = 1 to N                         for jj = 1 to N step B
+           for k = 1 to N                         for kk = 1 to N step B
+             C[i,j] += A[i,k] * B[k,j]              // Sub-block BxB fits entirely in L1!
+                                                    Multiply_Block(A, B, C)</code></pre>
+<h3 id="51-pitfalls-of-naive-shared-memory-multiplication">5.1 Pitfalls of Naive Shared Memory Multiplication</h3>
+<ol type="1">
+<li><strong>Cache Thrashing in Column Access</strong>: When evaluating <span class="math inline">\(C_{ij} = \sum_k A_{ik} B_{kj}\)</span>, accessing <span class="math inline">\(B_{kj}\)</span> traverses down columns. In C (row-major), this causes a cache miss on every access!</li>
+<li><strong>Thread Contention and False Sharing</strong>: If multiple threads concurrently update adjacent entries of <span class="math inline">\(C\)</span> residing on the same 64-byte line, false sharing destroys performance.</li>
+</ol>
+<h3 id="52-cache-tiling-loop-blocking">5.2 Cache Tiling (Loop Blocking)</h3>
+<ul>
+<li>Matrix multiplication is reordered into <span class="math inline">\(B \times B\)</span> sub-blocks (tiles), where <span class="math inline">\(B\)</span> is chosen such that three <span class="math inline">\(B \times B\)</span> tiles (<span class="math inline">\(A_{tile}, B_{tile}, C_{tile}\)</span>) fit entirely within the fast on-chip L1 data cache: <span class="math display">\[3 \times B^2 \times 8\text{ bytes} \le \text{Size of L1 Cache (e.g., 32 KB)} \implies B \approx 32 \text{ to } 64\]</span></li>
+<li>Data is brought into L1 cache once, reused <span class="math inline">\(B\)</span> times, and written back to DRAM only once.</li>
+<li>Reduces DRAM memory bandwidth traffic by a factor of <span class="math inline">\(B\)</span> (<span class="math inline">\(32\times\)</span> reduction!), allowing the CPU to execute at near-peak arithmetic speed.</li>
+</ul>
+<h3 id="53-staggered--red-black-scheduling-to-prevent-bus-contention-slide-472">5.3 Staggered / Red-Black Scheduling to Prevent Bus Contention (Slide 472)</h3>
+<ul>
+<li>In shared-memory systems, even with tiling, if multiple cores attempt to write to contiguous block tiles <span class="math inline">\(C(i_1-i_2, j_1-j_2)\)</span> simultaneously, severe interconnect and cache coherency traffic occurs.</li>
+<li><strong>Red-Black / Checkerboard Scheduling</strong>:
+<ul>
+<li>The matrix tiles are partitioned into alternating "Red" and "Black" blocks (like a chessboard).</li>
+<li>Processors update only "Red" tiles during Phase 1, and "Black" tiles during Phase 2.</li>
+<li>This ensures that adjacent memory blocks are never modified concurrently, eliminating false sharing, reducing bus contention, and maximizing memory bandwidth utilization.</li>
+</ul></li>
+</ul>
+
+      </div>
+    </article>
+
+    <div class="chapter-nav-cards">
+      
+      <a href="chapter-16.html" class="nav-card nav-prev">
+        <span class="nav-card-label">← Previous Chapter</span>
+        <span class="nav-card-title">Parallel Performance Analysis, Amdahl's Law & Isoefficiency</span>
+      </a>
+    
+      
+      <a href="chapter-18.html" class="nav-card nav-next">
+        <span class="nav-card-label">Next Chapter →</span>
+        <span class="nav-card-title">Comprehensive Exam Review, Master Synthesis & Formula Cheatsheet</span>
+      </a>
+    
+    </div>
+  </main>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      var newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      try {
+        localStorage.setItem('hpsc_theme', newTheme);
+      } catch(e) {}
+    }
+
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('hpsc_theme');
+        if (savedTheme) {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch(e) {}
+    })();
+
+    // Progress Bar
+    window.addEventListener('scroll', function() {
+      var docEl = document.documentElement;
+      var scrollTotal = docEl.scrollHeight - docEl.clientHeight;
+      var scrollCurrent = docEl.scrollTop || document.body.scrollTop;
+      var progress = (scrollTotal > 0) ? (scrollCurrent / scrollTotal) * 100 : 0;
+      var progressBar = document.getElementById('reading-progress');
+      if (progressBar) {
+        progressBar.style.width = Math.min(100, Math.max(0, progress)) + '%';
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>
