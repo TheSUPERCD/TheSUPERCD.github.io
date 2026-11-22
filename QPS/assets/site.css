@@ -2,7 +2,7 @@
   --bg:#0b0f14; --bg2:#111820; --panel:#151d27; --panel2:#1b2531;
   --text:#e6edf3; --muted:#9aa8b6; --line:#263241;
   --accent:#2dd4bf; --accent2:#f59e0b; --exam:#f87171; --tip:#34d399;
-  --trap:#fb7185; --code:#93c5fd; --revise:#a78bfa;
+  --trap:#fb7185; --code:#93c5fd; --revise:#a78bfa; --question:#38bdf8;
   --intuition:#fbbf24; --background:#60a5fa; --analogy:#c084fc; --source:#94a3b8;
   --shadow:0 10px 30px rgba(0,0,0,.35); --radius:14px;
   --sidebar:292px; --content:1000px;
@@ -14,7 +14,7 @@ html[data-theme="light"]{
   --bg:#f6f8fb; --bg2:#eef3f8; --panel:#ffffff; --panel2:#f1f5f9;
   --text:#0f172a; --muted:#52637a; --line:#dbe4ee;
   --accent:#0f766e; --accent2:#b45309; --exam:#b91c1c; --tip:#047857;
-  --trap:#be123c; --code:#1d4ed8; --revise:#6d28d9;
+  --trap:#be123c; --code:#1d4ed8; --revise:#6d28d9; --question:#0284c7;
   --intuition:#b45309; --background:#1d4ed8; --analogy:#7e22ce; --source:#475569;
   --shadow:0 10px 28px rgba(15,23,42,.10);
 }
@@ -137,12 +137,15 @@ math{font-family:var(--serif);font-size:1.22em;line-height:1.15}
 .callout.analogy{border-left-color:var(--analogy);background:color-mix(in srgb,var(--analogy) 7%,var(--panel))} .callout.analogy .callout-title{color:var(--analogy)}
 .callout.source{border-left-color:var(--source);background:color-mix(in srgb,var(--source) 5%,var(--panel))} .callout.source .callout-title{color:var(--source)}
 .callout.source a{font-weight:600}
+.callout.question{border-left-color:var(--question);background:color-mix(in srgb,var(--question) 8%,var(--panel));border:1px solid color-mix(in srgb,var(--question) 28%,var(--line));border-left-width:4px}
+.callout.question .callout-title{color:var(--question);font-size:11.8px;letter-spacing:1.1px}
 .pill{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.8px;padding:2px 7px;border-radius:999px;margin-right:5px}
 .pill-exam{background:color-mix(in srgb,var(--exam) 18%,transparent);color:var(--exam);border:1px solid color-mix(in srgb,var(--exam) 40%,transparent)}
 .pill-tip{background:color-mix(in srgb,var(--tip) 18%,transparent);color:var(--tip);border:1px solid color-mix(in srgb,var(--tip) 40%,transparent)}
 .pill-trap{background:color-mix(in srgb,var(--trap) 18%,transparent);color:var(--trap);border:1px solid color-mix(in srgb,var(--trap) 40%,transparent)}
 .pill-code{background:color-mix(in srgb,var(--code) 18%,transparent);color:var(--code);border:1px solid color-mix(in srgb,var(--code) 40%,transparent)}
 .pill-revise{background:color-mix(in srgb,var(--revise) 18%,transparent);color:var(--revise);border:1px solid color-mix(in srgb,var(--revise) 40%,transparent)}
+.pill-question{background:color-mix(in srgb,var(--question) 18%,transparent);color:var(--question);border:1px solid color-mix(in srgb,var(--question) 40%,transparent)}
 
 /* ---------- chapter intro, diagrams, plain-language aids ---------- */
 .chapter-intro{margin:18px 0 22px;padding:18px 20px 17px;border:1px solid var(--line);border-radius:14px;
